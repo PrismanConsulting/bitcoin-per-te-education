@@ -46,7 +46,7 @@ const BitcoinPage = () => (
       <div className="mb-10">
         <p className="label-section mb-2">FONDAMENTALI</p>
         <h1 className="text-3xl md:text-4xl font-bold font-heading text-foreground">Cos'è Bitcoin?</h1>
-        <p className="text-muted-foreground mt-2">Non una valuta come le altre. Un protocollo.</p>
+        <p className="text-muted-foreground text-lg mt-2">Non una valuta come le altre. Un protocollo.</p>
       </div>
 
       {/* Cards */}
@@ -60,7 +60,7 @@ const BitcoinPage = () => (
             className="card-surface p-6"
           >
             <h3 className="text-sm font-bold font-heading text-primary mb-3 tracking-wide">{card.title}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
+            <p className="text-base text-muted-foreground leading-[1.7]">{card.text}</p>
           </motion.div>
         ))}
       </div>
@@ -69,10 +69,10 @@ const BitcoinPage = () => (
       <Accordion type="single" collapsible className="max-w-3xl">
         {faqs.map((faq, i) => (
           <AccordionItem key={i} value={`faq-${i}`} className="border-border">
-            <AccordionTrigger className="text-sm font-heading text-foreground hover:text-primary">
+            <AccordionTrigger className="text-base font-heading text-foreground hover:text-primary">
               {faq.q}
             </AccordionTrigger>
-            <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+            <AccordionContent className="text-base text-muted-foreground leading-[1.7]">
               {faq.a}
             </AccordionContent>
           </AccordionItem>
@@ -81,7 +81,7 @@ const BitcoinPage = () => (
 
       {/* Nav arrow */}
       <div className="mt-10">
-        <Link to="/blockchain" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors font-heading">
+        <Link to="/blockchain" className="inline-flex items-center gap-2 text-base text-muted-foreground hover:text-primary transition-colors font-heading">
           Blockchain <ArrowRight size={16} />
         </Link>
       </div>

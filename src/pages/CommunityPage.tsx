@@ -30,73 +30,73 @@ const CommunityPage = () => {
               </h1>
             </div>
 
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-base text-muted-foreground leading-[1.7]">
               BitcoinPerTe nasce dall'entusiasmo di Prisman Consulting per la tecnologia Bitcoin.
               Non un servizio finanziario, non una piattaforma di trading. Un luogo dove approfondire,
               confrontarsi e costruire una community di persone che vogliono capire davvero.
             </p>
 
             <div className="border-t border-border pt-4 space-y-1">
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-[13px] text-muted-foreground">
                 Prisman Consulting · Francavilla al Mare, Abruzzo
               </p>
-              <a href="https://prismanconsulting.it" target="_blank" rel="noopener noreferrer" className="text-[11px] text-primary hover:underline inline-flex items-center gap-1">
+              <a href="https://prismanconsulting.it" target="_blank" rel="noopener noreferrer" className="text-[13px] text-primary hover:underline inline-flex items-center gap-1">
                 prismanconsulting.it <ExternalLink size={10} />
               </a>
-              <p className="text-[11px] text-muted-foreground">info@prismanconsulting.it</p>
+              <p className="text-[13px] text-muted-foreground">info@prismanconsulting.it</p>
             </div>
 
             <div className="flex gap-4">
               {["X / Twitter", "Telegram", "LinkedIn"].map((s) => (
-                <span key={s} className="text-[11px] text-muted-foreground/50 border border-border rounded px-2.5 py-1">{s}</span>
+                <span key={s} className="text-[13px] text-muted-foreground/50 border border-border rounded px-2.5 py-1">{s}</span>
               ))}
             </div>
           </div>
 
           {/* Right - Form */}
           <div className="card-surface p-6">
-            <h3 className="text-lg font-bold font-heading text-foreground mb-1">Scrivici</h3>
-            <p className="text-sm text-muted-foreground mb-5">
+            <h3 className="text-xl font-bold font-heading text-foreground mb-1">Scrivici</h3>
+            <p className="text-base text-muted-foreground mb-5">
               Per approfondimenti, collaborazioni editoriali o scambio di idee su Bitcoin e tecnologia distribuita.
             </p>
 
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Nome</label>
+                <label className="text-sm text-muted-foreground mb-1 block">Nome</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
+                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
                 />
               </div>
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Email</label>
+                <label className="text-sm text-muted-foreground mb-1 block">Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
+                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
                 />
               </div>
               <div>
-                <label className="text-xs text-muted-foreground mb-1 block">Messaggio</label>
+                <label className="text-sm text-muted-foreground mb-1 block">Messaggio</label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
-                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50 resize-none"
+                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50 resize-none"
                 />
               </div>
               <button
                 type="submit"
-                className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors font-heading"
+                className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-base font-medium hover:bg-primary/90 transition-colors font-heading"
               >
                 Invia
               </button>
             </form>
 
-            <p className="text-[11px] text-muted-foreground/50 mt-4">
+            <p className="text-[13px] text-muted-foreground/50 mt-4">
               Dati usati solo per rispondere alla tua richiesta ·{" "}
               <button onClick={() => setPrivacyOpen(true)} className="text-primary hover:underline">Privacy Policy</button>{" · "}
               <button onClick={() => setTermsOpen(true)} className="text-primary hover:underline">Termini d'uso</button>

@@ -96,7 +96,7 @@ const QuizPage = () => {
         <div className="mb-8 text-center">
           <p className="label-section mb-2">VERIFICA LE TUE CONOSCENZE</p>
           <h1 className="text-2xl md:text-3xl font-bold font-heading text-foreground">Quanto conosci Bitcoin?</h1>
-          <p className="text-muted-foreground text-sm mt-2">6 domande sui fondamentali tecnici. Niente prezzi, niente rendimenti.</p>
+          <p className="text-muted-foreground text-base mt-2">6 domande sui fondamentali tecnici. Niente prezzi, niente rendimenti.</p>
         </div>
 
         <div className="card-surface p-6 md:p-8">
@@ -112,7 +112,7 @@ const QuizPage = () => {
                     transition={{ duration: 0.3 }}
                   />
                 </div>
-                <span className="text-xs font-mono text-muted-foreground">{current + 1}/{questions.length}</span>
+                <span className="text-[13px] font-mono text-muted-foreground">{current + 1}/{questions.length}</span>
               </div>
 
               <AnimatePresence mode="wait">
@@ -140,7 +140,7 @@ const QuizPage = () => {
                           key={i}
                           onClick={() => handleSelect(i)}
                           disabled={selected !== null}
-                          className={`w-full text-left px-4 py-3 rounded-md border text-sm transition-all flex items-center gap-3 ${borderClass}`}
+                          className={`w-full text-left px-4 py-3 rounded-md border text-base transition-all flex items-center gap-3 ${borderClass}`}
                         >
                           <span className="text-muted-foreground flex-1">{opt}</span>
                           {selected !== null && isCorrect && <Check size={16} className="text-green-500" />}
@@ -152,10 +152,10 @@ const QuizPage = () => {
 
                   {selected !== null && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 space-y-3">
-                      <p className="text-sm text-muted-foreground">{q.explanation}</p>
+                      <p className="text-base text-muted-foreground leading-[1.7]">{q.explanation}</p>
                       <button
                         onClick={next}
-                        className="bg-primary text-primary-foreground px-5 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+                        className="bg-primary text-primary-foreground px-5 py-2 rounded-md text-base font-medium hover:bg-primary/90 transition-colors"
                       >
                         {current + 1 < questions.length ? "Prossima →" : "Risultato"}
                       </button>
@@ -167,10 +167,10 @@ const QuizPage = () => {
           ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-5">
               <p className="text-5xl font-mono font-bold text-primary">{score}/{questions.length}</p>
-              <p className="text-muted-foreground">{getMessage()}</p>
+              <p className="text-base text-muted-foreground">{getMessage()}</p>
               <button
                 onClick={restart}
-                className="inline-flex items-center gap-2 border border-primary/30 text-primary px-5 py-2 rounded-md text-sm font-medium hover:bg-primary/10 transition-colors"
+                className="inline-flex items-center gap-2 border border-primary/30 text-primary px-5 py-2 rounded-md text-base font-medium hover:bg-primary/10 transition-colors"
               >
                 <RotateCcw size={14} /> Ricomincia
               </button>

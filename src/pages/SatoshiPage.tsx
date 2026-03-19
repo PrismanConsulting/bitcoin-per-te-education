@@ -31,14 +31,14 @@ const SatoshiPage = () => {
               <h1 className="text-3xl md:text-4xl font-bold font-heading text-foreground">Il Satoshi</h1>
             </div>
 
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-base text-muted-foreground leading-[1.7]">
               Come il centesimo è la denominazione base dell'euro, il satoshi è l'unità indivisibile di Bitcoin.
               1 BTC = 100.000.000 satoshi. Tutte le transazioni sulla rete avvengono in satoshi.
             </p>
 
             <div className="border-l-[3px] border-primary pl-4 py-3 card-surface !border-t-0 !border-r-0 !border-b-0 !rounded-none">
-              <p className="text-xs font-heading text-primary mb-1 font-semibold">Lo sapevi?</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm font-heading text-primary mb-1 font-semibold">Lo sapevi?</p>
+              <p className="text-base text-muted-foreground leading-[1.7]">
                 Il satoshi prende il nome da Satoshi Nakamoto, lo pseudonimo del creatore — o dei creatori — di Bitcoin.
                 La sua identità rimane sconosciuta dal 2008.
               </p>
@@ -48,20 +48,20 @@ const SatoshiPage = () => {
           {/* Right - 55% */}
           <div className="lg:col-span-5">
             <div className="card-surface p-6 border-primary/20">
-              <h3 className="text-lg font-bold font-heading text-foreground mb-1">Calcolatore Didattico</h3>
-              <p className="text-[12px] text-muted-foreground mb-5">
+              <h3 className="text-xl font-bold font-heading text-foreground mb-1">Calcolatore Didattico</h3>
+              <p className="text-[13px] text-muted-foreground mb-5">
                 Valore di riferimento fisso: 1 BTC = €100.000 · Solo uso educativo
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs text-muted-foreground mb-1.5 block">Inserisci un importo in €</label>
+                  <label className="text-sm text-muted-foreground mb-1.5 block">Inserisci un importo in €</label>
                   <input
                     type="number"
                     value={euros}
                     onChange={(e) => setEuros(e.target.value)}
                     placeholder="100"
-                    className="w-full bg-card-elevated border border-border rounded px-4 py-3 font-mono text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
+                    className="w-full bg-card-elevated border border-border rounded px-4 py-3 font-mono text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
                   />
                 </div>
 
@@ -72,17 +72,17 @@ const SatoshiPage = () => {
                     className="space-y-3"
                   >
                     <div className="bg-background border border-primary/30 rounded p-4 text-center">
-                      <p className="text-xs text-muted-foreground mb-1">Equivalgono a</p>
+                      <p className="text-sm text-muted-foreground mb-1">Equivalgono a</p>
                       <p className="text-2xl md:text-3xl font-mono font-bold text-primary">
                         {result.sats.toLocaleString("it-IT")} <span className="text-sm text-muted-foreground">sat</span>
                       </p>
                     </div>
-                    <p className="text-[11px] font-mono text-muted-foreground text-center">{result.formula}</p>
+                    <p className="text-[13px] font-mono text-muted-foreground text-center">{result.formula}</p>
                   </motion.div>
                 )}
               </div>
 
-              <p className="text-[11px] text-muted-foreground/60 mt-5">
+              <p className="text-[13px] text-muted-foreground/60 mt-5">
                 Strumento didattico con valore fisso. Non riflette il prezzo corrente di mercato.
               </p>
             </div>

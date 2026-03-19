@@ -55,7 +55,7 @@ const BlockchainPage = () => {
         <div className="mb-8">
           <p className="label-section mb-2">TECNOLOGIA</p>
           <h1 className="text-3xl md:text-4xl font-bold font-heading text-foreground">La Blockchain</h1>
-          <p className="text-muted-foreground mt-2">Un registro pubblico, trasparente, condiviso — e inviolabile.</p>
+          <p className="text-muted-foreground text-lg mt-2">Un registro pubblico, trasparente, condiviso — e inviolabile.</p>
         </div>
 
         {/* Chain visualization */}
@@ -64,25 +64,25 @@ const BlockchainPage = () => {
             {blocks.map((block, i) => (
               <div key={i} className="flex items-center gap-2">
                 <div className="card-elevated p-4 min-w-[160px] hover:border-primary/40 transition-colors group">
-                  <p className="text-xs text-primary font-mono font-bold mb-2">#{block.num}</p>
+                  <p className="text-sm text-primary font-mono font-bold mb-2">#{block.num}</p>
                   <div
                     className="relative"
                     onMouseEnter={() => setHoveredField("hash")}
                     onMouseLeave={() => setHoveredField(null)}
                   >
-                    <p className="text-[11px] text-muted-foreground font-mono cursor-help">Hash: {block.hash}</p>
+                    <p className="text-[13px] text-muted-foreground font-mono cursor-help">Hash: {block.hash}</p>
                   </div>
                   <div
                     onMouseEnter={() => setHoveredField("time")}
                     onMouseLeave={() => setHoveredField(null)}
                   >
-                    <p className="text-[11px] text-muted-foreground font-mono cursor-help mt-1">{block.time}</p>
+                    <p className="text-[13px] text-muted-foreground font-mono cursor-help mt-1">{block.time}</p>
                   </div>
                   <div
                     onMouseEnter={() => setHoveredField("tx")}
                     onMouseLeave={() => setHoveredField(null)}
                   >
-                    <p className="text-[11px] text-muted-foreground font-mono cursor-help mt-1">Tx: {block.tx}</p>
+                    <p className="text-[13px] text-muted-foreground font-mono cursor-help mt-1">Tx: {block.tx}</p>
                   </div>
                 </div>
                 {i < blocks.length - 1 && (
@@ -103,26 +103,26 @@ const BlockchainPage = () => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-xs text-primary/80 mb-4 max-w-xl"
+            className="text-sm text-primary/80 mb-4 max-w-xl"
           >
             {tooltips[hoveredField]}
           </motion.p>
         )}
 
-        <p className="text-sm text-muted-foreground mb-8 max-w-2xl">
+        <p className="text-base text-muted-foreground mb-8 max-w-2xl leading-[1.7]">
           Modifica un solo byte in un blocco passato: l'hash cambia. E con lui, tutti i blocchi successivi.
           Questo è il meccanismo che rende la manipolazione computazionalmente proibitiva.
         </p>
 
         {/* Hash widget */}
         <div className="card-surface p-5 max-w-xl mb-10">
-          <p className="text-xs font-heading text-muted-foreground mb-3">Prova tu — digita qualcosa e guarda l'hash:</p>
+          <p className="text-sm font-heading text-muted-foreground mb-3">Prova tu — digita qualcosa e guarda l'hash:</p>
           <input
             type="text"
             value={hashInput}
             onChange={(e) => setHashInput(e.target.value)}
             placeholder="Digita qualcosa..."
-            className="w-full bg-card-elevated border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 mb-3"
+            className="w-full bg-card-elevated border border-border rounded px-3 py-2 text-base text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 mb-3"
           />
           {hashOutput && (
             <motion.div
@@ -130,8 +130,8 @@ const BlockchainPage = () => {
               animate={{ opacity: 1 }}
               className="bg-background border border-border rounded p-3"
             >
-              <p className="text-[10px] text-muted-foreground mb-1">SHA-256</p>
-              <p className="text-xs font-mono text-primary break-all leading-relaxed">{hashOutput}</p>
+              <p className="text-[12px] text-muted-foreground mb-1">SHA-256</p>
+              <p className="text-sm font-mono text-primary break-all leading-relaxed">{hashOutput}</p>
             </motion.div>
           )}
         </div>
@@ -148,8 +148,8 @@ const BlockchainPage = () => {
             >
               <div className="text-primary shrink-0 mt-0.5">{f.icon}</div>
               <div>
-                <h3 className="text-sm font-bold font-heading text-foreground mb-1">{f.title}</h3>
-                <p className="text-sm text-muted-foreground">{f.text}</p>
+                <h3 className="text-base font-bold font-heading text-foreground mb-1">{f.title}</h3>
+                <p className="text-base text-muted-foreground leading-[1.7]">{f.text}</p>
               </div>
             </motion.div>
           ))}
