@@ -1,5 +1,5 @@
 import { Twitter, Linkedin, Send } from "lucide-react";
-import PrivacyModal from "./PrivacyModal";
+import { Link } from "react-router-dom";
 
 const FooterSection = () => {
   return (
@@ -23,10 +23,14 @@ const FooterSection = () => {
             </p>
             <p>Via Alcione 149 — 66023 Francavilla al Mare (CH)</p>
             <p>info@prismanconsulting.it</p>
-            <div className="pt-2">
-              <PrivacyModal>
-                <button className="text-primary hover:underline text-sm">Privacy & Cookie Policy</button>
-              </PrivacyModal>
+            <div className="flex items-center justify-center gap-4 pt-2">
+              <Link to="/privacy" className="text-primary hover:underline text-sm">
+                Privacy & Cookie Policy
+              </Link>
+              <span className="text-border">|</span>
+              <Link to="/termini" className="text-primary hover:underline text-sm">
+                Termini e Condizioni
+              </Link>
             </div>
           </div>
 
