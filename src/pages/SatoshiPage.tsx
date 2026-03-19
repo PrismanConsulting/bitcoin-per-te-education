@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const BTC_PRICE = 100_000;
 const SATS_PER_BTC = 100_000_000;
