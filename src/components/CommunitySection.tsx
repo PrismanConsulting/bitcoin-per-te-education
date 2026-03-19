@@ -1,111 +1,100 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { Twitter, Linkedin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 
 const CommunitySection = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const { toast } = useToast();
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Messaggio inviato!",
-      description: "Grazie per averci contattato. Ti risponderemo al più presto.",
-    });
-    setName("");
-    setEmail("");
-    setMessage("");
+    window.location.href = `mailto:info@prismanconsulting.it?subject=Contatto da BitcoinPerTe - ${form.name}&body=${encodeURIComponent(form.message)}%0A%0ADa: ${form.name} (${form.email})`;
   };
 
   return (
-    <section id="community" className="py-24 px-4">
+    <section id="community" className="min-h-screen flex flex-col justify-center py-24 px-4">
       <div className="container mx-auto max-w-6xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold text-center mb-4"
-        >
-          Entra nella <span className="text-primary">Community</span>
-        </motion.h2>
-        <p className="text-center text-muted-foreground mb-12">
-          Siamo appassionati, non promotori. Condividiamo conoscenza, non rendimenti.
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Form */}
-          <motion.form
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+          {/* Left */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            onSubmit={handleSubmit}
-            className="card-bitcoin"
           >
-            <div className="flex flex-col gap-4">
+            <p className="label-section mb-2">IL PROGETTO</p>
+            <h2 className="text-2xl md:text-3xl font-bold font-heading mb-6">
+              BitcoinPerTe è un progetto editoriale indipendente
+            </h2>
+
+            <p className="text-sm text-muted-foreground leading-relaxed mb-8">
+              Nato dall'entusiasmo di Prisman Consulting per la tecnologia Bitcoin. Non un servizio finanziario, non una piattaforma di trading. Un luogo dove approfondire, confrontarsi e costruire una community di persone che vogliono capire davvero questa tecnologia.
+            </p>
+
+            <div className="border-t border-border pt-4 mb-6">
+              <p className="text-[13px] text-muted-foreground">
+                Prisman Consulting · Francavilla al Mare, Abruzzo
+              </p>
+              <p className="text-[13px] text-muted-foreground">
+                <a href="https://prismanconsulting.it" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">prismanconsulting.it</a> · info@prismanconsulting.it
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <a href="#" className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors" aria-label="X/Twitter">
+                <Twitter size={16} />
+              </a>
+              <a href="#" className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors" aria-label="Telegram">
+                <Send size={16} />
+              </a>
+              <a href="#" className="w-9 h-9 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors" aria-label="LinkedIn">
+                <Linkedin size={16} />
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Right — Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-xl font-semibold font-heading mb-1">Scrivici</h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              Per approfondimenti, collaborazioni editoriali o scambio di idee su Bitcoin e tecnologia distribuita.
+            </p>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Nome"
                 required
-                className="bg-background border border-border rounded-lg px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
               />
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
                 placeholder="Email"
                 required
-                className="bg-background border border-border rounded-lg px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
               />
               <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Il tuo messaggio"
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+                placeholder="Messaggio"
                 rows={4}
                 required
-                className="bg-background border border-border rounded-lg px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all resize-none"
               />
-              <Button type="submit" className="bg-gradient-bitcoin text-primary-foreground hover:opacity-90">
-                <Send size={16} className="mr-2" /> Invia
+              <Button type="submit" className="w-full font-heading">
+                Invia
               </Button>
-            </div>
+            </form>
 
-            <div className="mt-4 text-sm text-muted-foreground space-y-1">
-              <p>✉️ info@prismanconsulting.it</p>
-              <a href="https://prismanconsulting.it" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                prismanconsulting.it
-              </a>
-              <p className="text-xs mt-2">
-                Non ti invieremo mai offerte di investimento. Solo divulgazione e aggiornamenti educativi.
-              </p>
-            </div>
-          </motion.form>
-
-          {/* Chi siamo */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="card-bitcoin"
-          >
-            <h3 className="text-xl font-semibold mb-4">Chi siamo</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              BitcoinPerTe.it è un progetto di divulgazione di{" "}
-              <a href="https://prismanconsulting.it" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                Prisman Consulting
-              </a>
-              , una società di consulenza di Francavilla al Mare (Abruzzo).
-            </p>
-            <p className="text-muted-foreground text-sm leading-relaxed mt-4">
-              Siamo appassionati di Bitcoin, tecnologia e innovazione.
-              Non siamo consulenti finanziari. Questo progetto nasce dall'entusiasmo
-              per una tecnologia che riteniamo rilevante, non da interessi commerciali
-              legati ai mercati finanziari.
+            <p className="mt-4 text-[11px] text-muted-foreground/50">
+              Dati usati solo per rispondere alla tua richiesta · <button className="text-primary hover:underline" onClick={() => document.getElementById("privacy-modal-trigger")?.click()}>Privacy Policy</button> · <button className="text-primary hover:underline" onClick={() => document.getElementById("terms-modal-trigger")?.click()}>Termini d'uso</button>
             </p>
           </motion.div>
         </div>
