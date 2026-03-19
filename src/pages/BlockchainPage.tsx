@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Link as LinkIcon, Globe } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const blocks = [
   { num: "843,291", hash: "0x3f7a...c291", time: "2024-03-15 · 14:32", tx: "2,847" },
