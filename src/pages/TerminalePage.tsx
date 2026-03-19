@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -45,6 +45,30 @@ const resources = [
 
 const StatSkeleton = () => <Skeleton className="h-8 w-24 bg-muted" />;
 
+// Hook: flash animation on value change
+function useFlash(value: unknown): boolean {
+  const [flash, setFlash] = useState(false);
+  const prev = useRef(value);
+  useEffect(() => {
+    if (prev.current !== undefined && prev.current !== value) {
+      setFlash(true);
+      const t = setTimeout(() => setFlash(false), 500);
+      return () => clearTimeout(t);
+    }
+    prev.current = value;
+  }, [value]);
+  return flash;
+}
+
+const FlashValue = ({ children, flash }: { children: React.ReactNode; flash: boolean }) => (
+  <span
+    className="transition-colors duration-500"
+    style={{ color: flash ? "hsl(28, 93%, 53%)" : undefined }}
+  >
+    {children}
+  </span>
+);
+
 const TerminalePage = () => {
   const [price, setPrice] = useState<PriceData | null>(null);
   const [blockHeight, setBlockHeight] = useState<number | null>(null);
@@ -53,27 +77,53 @@ const TerminalePage = () => {
   const [mempool, setMempool] = useState<MempoolData | null>(null);
   const [blocks, setBlocks] = useState<BlockData[]>([]);
   const [error, setError] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+  const [lastFetchTime, setLastFetchTime] = useState<number | null>(null);
+  const [secAgo, setSecAgo] = useState(0);
 
-  const fetchAll = useCallback(async () => {
+  // Halving countdown ticking every second
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  // "Agg. XX sec fa" counter
+  useEffect(() => {
+    if (!lastFetchTime) return;
+    setSecAgo(0);
+    const t = setInterval(() => {
+      setSecAgo(Math.floor((Date.now() - lastFetchTime) / 1000));
+    }, 1000);
+    return () => clearInterval(t);
+  }, [lastFetchTime]);
+
+  // Fetch price (60s)
+  const fetchPrice = useCallback(async () => {
+    try {
+      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_24hr_change=true");
+      const d = await r.json();
+      if (d.bitcoin) setPrice(d.bitcoin);
+      setLastFetchTime(Date.now());
+      setError(false);
+    } catch { /* keep last value */ }
+  }, []);
+
+  // Fetch network data (30s)
+  const fetchNetwork = useCallback(async () => {
     try {
       const results = await Promise.allSettled([
-        fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_24hr_change=true").then(r => r.json()),
         fetch("https://mempool.space/api/blocks/tip/height").then(r => r.json()),
         fetch("https://mempool.space/api/v1/fees/recommended").then(r => r.json()),
         fetch("https://mempool.space/api/v1/difficulty-adjustment").then(r => r.json()),
         fetch("https://mempool.space/api/mempool").then(r => r.json()),
         fetch("https://mempool.space/api/v1/blocks").then(r => r.json()),
       ]);
-
-      if (results[0].status === "fulfilled") setPrice(results[0].value.bitcoin);
-      if (results[1].status === "fulfilled") setBlockHeight(results[1].value);
-      if (results[2].status === "fulfilled") setFees(results[2].value);
-      if (results[3].status === "fulfilled") setDiff(results[3].value);
-      if (results[4].status === "fulfilled") setMempool(results[4].value);
-      if (results[5].status === "fulfilled") setBlocks(results[5].value.slice(0, 6));
-
-      setLastUpdate(new Date());
+      if (results[0].status === "fulfilled") setBlockHeight(results[0].value);
+      if (results[1].status === "fulfilled") setFees(results[1].value);
+      if (results[2].status === "fulfilled") setDiff(results[2].value);
+      if (results[3].status === "fulfilled") setMempool(results[3].value);
+      if (results[4].status === "fulfilled") setBlocks(results[4].value.slice(0, 6));
+      setLastFetchTime(Date.now());
       setError(false);
     } catch {
       setError(true);
@@ -81,16 +131,38 @@ const TerminalePage = () => {
   }, []);
 
   useEffect(() => {
-    fetchAll();
-    const interval = setInterval(fetchAll, 30000);
-    return () => clearInterval(interval);
-  }, [fetchAll]);
+    fetchPrice();
+    fetchNetwork();
+    const priceInterval = setInterval(fetchPrice, 60_000);
+    const networkInterval = setInterval(fetchNetwork, 30_000);
+    return () => {
+      clearInterval(priceInterval);
+      clearInterval(networkInterval);
+    };
+  }, [fetchPrice, fetchNetwork]);
 
   const supply = blockHeight ? calcSupply(blockHeight) : null;
   const halvingBlocks = blockHeight ? NEXT_HALVING_BLOCK - blockHeight : null;
-  const halvingDays = halvingBlocks ? Math.floor((halvingBlocks * 10) / 1440) : null;
-  const halvingHours = halvingBlocks ? Math.floor(((halvingBlocks * 10) % 1440) / 60) : null;
+  // Live halving countdown recalculated every second
+  const halvingMs = halvingBlocks ? halvingBlocks * 10 * 60 * 1000 : null;
+  const halvingTarget = halvingMs && lastFetchTime ? lastFetchTime + halvingMs : null;
+  const halvingRemaining = halvingTarget ? Math.max(0, halvingTarget - now) : null;
+  const halvingDays = halvingRemaining ? Math.floor(halvingRemaining / 86_400_000) : null;
+  const halvingHours = halvingRemaining ? Math.floor((halvingRemaining % 86_400_000) / 3_600_000) : null;
+  const halvingMinutes = halvingRemaining ? Math.floor((halvingRemaining % 3_600_000) / 60_000) : null;
+  const halvingSeconds = halvingRemaining ? Math.floor((halvingRemaining % 60_000) / 1000) : null;
   const supplyPercent = supply ? (supply / 21_000_000) * 100 : 0;
+
+  // Flash hooks
+  const flashPrice = useFlash(price?.eur);
+  const flashBlock = useFlash(blockHeight);
+  const flashDiff = useFlash(diff?.difficultyChange);
+  const flashFee = useFlash(fees?.halfHourFee);
+  const flashSupply = useFlash(supply ? Math.floor(supply) : null);
+  const flashMemCount = useFlash(mempool?.count);
+  const flashMemSize = useFlash(mempool ? (mempool.vsize / 1_000_000).toFixed(1) : null);
+  const flashFastFee = useFlash(fees?.fastestFee);
+  const flashEcoFee = useFlash(fees?.hourFee);
 
   return (
     <motion.div
@@ -109,9 +181,16 @@ const TerminalePage = () => {
             <h1 className="text-2xl md:text-3xl font-bold font-heading text-foreground">Terminale</h1>
             <p className="text-sm text-muted-foreground mt-1">Dati tecnici live dalla rete Bitcoin. Solo la rete — nessun commento finanziario.</p>
           </div>
-          <div className="flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${error ? "bg-red-500" : "bg-green-500 animate-pulse"}`} />
-            <span className="text-xs text-muted-foreground">{error ? "Dati non disponibili" : "Rete attiva"}</span>
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${error ? "bg-red-500" : "bg-green-500 animate-pulse"}`} />
+              <span className="text-xs text-muted-foreground">{error ? "Dati non disponibili" : "Rete attiva"}</span>
+            </div>
+            {lastFetchTime && (
+              <span className="font-mono text-[10px] text-muted-foreground/50">
+                Agg. {secAgo} sec fa
+              </span>
+            )}
           </div>
         </div>
 
@@ -122,7 +201,9 @@ const TerminalePage = () => {
             <p className="text-[10px] text-muted-foreground mb-0.5">BTC/EUR</p>
             {price ? (
               <>
-                <p className="font-mono font-bold text-lg text-foreground">€{price.eur.toLocaleString("it-IT")}</p>
+                <p className="font-mono font-bold text-lg text-foreground">
+                  <FlashValue flash={flashPrice}>€{price.eur.toLocaleString("it-IT")}</FlashValue>
+                </p>
                 <p className={`text-[11px] font-mono ${price.eur_24h_change >= 0 ? "text-green-500" : "text-red-500"}`}>
                   {price.eur_24h_change >= 0 ? "+" : ""}{price.eur_24h_change.toFixed(1)}% 24h
                 </p>
@@ -135,7 +216,9 @@ const TerminalePage = () => {
           <div>
             <p className="text-[10px] text-muted-foreground mb-0.5">Blocco più recente</p>
             {blockHeight ? (
-              <p className="font-mono font-bold text-lg text-foreground">#{blockHeight.toLocaleString("it-IT")}</p>
+              <p className="font-mono font-bold text-lg text-foreground">
+                <FlashValue flash={flashBlock}>#{blockHeight.toLocaleString("it-IT")}</FlashValue>
+              </p>
             ) : <StatSkeleton />}
           </div>
 
@@ -144,16 +227,21 @@ const TerminalePage = () => {
             <p className="text-[10px] text-muted-foreground mb-0.5">Difficoltà di mining</p>
             {diff ? (
               <p className="font-mono font-bold text-lg text-foreground">
-                {diff.difficultyChange >= 0 ? "+" : ""}{diff.difficultyChange.toFixed(2)}%
+                <FlashValue flash={flashDiff}>
+                  {diff.difficultyChange >= 0 ? "+" : ""}{diff.difficultyChange.toFixed(2)}%
+                </FlashValue>
               </p>
             ) : <StatSkeleton />}
           </div>
 
-          {/* Halving countdown */}
+          {/* Halving countdown — ticks every second */}
           <div>
             <p className="text-[10px] text-muted-foreground mb-0.5">Al prossimo halving</p>
             {halvingDays !== null ? (
-              <p className="font-mono font-bold text-lg text-foreground">{halvingDays}g {halvingHours}h</p>
+              <p className="font-mono font-bold text-lg text-foreground">
+                {halvingDays}g {halvingHours}h {halvingMinutes}m{" "}
+                <span className="text-sm text-muted-foreground">{halvingSeconds}s</span>
+              </p>
             ) : <StatSkeleton />}
           </div>
 
@@ -161,7 +249,10 @@ const TerminalePage = () => {
           <div>
             <p className="text-[10px] text-muted-foreground mb-0.5">Fee consigliata ora</p>
             {fees ? (
-              <p className="font-mono font-bold text-lg text-primary">{fees.halfHourFee} <span className="text-xs text-muted-foreground">sat/vB</span></p>
+              <p className="font-mono font-bold text-lg text-primary">
+                <FlashValue flash={flashFee}>{fees.halfHourFee}</FlashValue>{" "}
+                <span className="text-xs text-muted-foreground">sat/vB</span>
+              </p>
             ) : <StatSkeleton />}
           </div>
 
@@ -170,7 +261,9 @@ const TerminalePage = () => {
             <p className="text-[10px] text-muted-foreground mb-0.5">BTC in circolazione</p>
             {supply ? (
               <>
-                <p className="font-mono font-bold text-foreground text-sm">{Math.floor(supply).toLocaleString("it-IT")} BTC</p>
+                <p className="font-mono font-bold text-foreground text-sm">
+                  <FlashValue flash={flashSupply}>{Math.floor(supply).toLocaleString("it-IT")} BTC</FlashValue>
+                </p>
                 <p className="text-[10px] text-muted-foreground">di 21.000.000 massimi</p>
                 <div className="w-full h-1 bg-muted rounded-full mt-1 overflow-hidden">
                   <div className="h-full bg-primary rounded-full" style={{ width: `${supplyPercent}%` }} />
@@ -233,19 +326,27 @@ const TerminalePage = () => {
               <div className="grid grid-cols-2 gap-2">
                 <div className="card-surface p-3">
                   <p className="text-[10px] text-muted-foreground">Tx in mempool</p>
-                  <p className="font-mono font-bold text-foreground">{mempool ? mempool.count.toLocaleString("it-IT") : "—"}</p>
+                  <p className="font-mono font-bold text-foreground">
+                    {mempool ? <FlashValue flash={flashMemCount}>{mempool.count.toLocaleString("it-IT")}</FlashValue> : "—"}
+                  </p>
                 </div>
                 <div className="card-surface p-3">
                   <p className="text-[10px] text-muted-foreground">Dim. mempool</p>
-                  <p className="font-mono font-bold text-foreground">{mempool ? (mempool.vsize / 1_000_000).toFixed(1) + " MB" : "—"}</p>
+                  <p className="font-mono font-bold text-foreground">
+                    {mempool ? <FlashValue flash={flashMemSize}>{(mempool.vsize / 1_000_000).toFixed(1) + " MB"}</FlashValue> : "—"}
+                  </p>
                 </div>
                 <div className="card-surface p-3">
                   <p className="text-[10px] text-muted-foreground">Fee veloce</p>
-                  <p className="font-mono font-bold text-primary">{fees ? fees.fastestFee + " sat/vB" : "—"}</p>
+                  <p className="font-mono font-bold text-primary">
+                    {fees ? <FlashValue flash={flashFastFee}>{fees.fastestFee + " sat/vB"}</FlashValue> : "—"}
+                  </p>
                 </div>
                 <div className="card-surface p-3">
                   <p className="text-[10px] text-muted-foreground">Fee economica</p>
-                  <p className="font-mono font-bold text-foreground">{fees ? fees.hourFee + " sat/vB" : "—"}</p>
+                  <p className="font-mono font-bold text-foreground">
+                    {fees ? <FlashValue flash={flashEcoFee}>{fees.hourFee + " sat/vB"}</FlashValue> : "—"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -276,11 +377,9 @@ const TerminalePage = () => {
 
         {/* Last update + note */}
         <div className="text-center border-t border-border pt-4">
-          {lastUpdate && (
-            <p className="text-[10px] text-muted-foreground/40 mb-1">
-              Ultimo aggiornamento: {lastUpdate.toLocaleTimeString("it-IT")} · Aggiornamento ogni 30s
-            </p>
-          )}
+          <p className="text-[10px] text-muted-foreground/40 mb-1">
+            Prezzo: ogni 60s · Rete: ogni 30s · Halving: tempo reale
+          </p>
           <p className="text-[10px] text-muted-foreground/30">
             Dati tecnici forniti a scopo informativo. Fonti: mempool.space, CoinGecko. Non costituisce analisi finanziaria.
           </p>
