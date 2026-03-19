@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const cards = [
   {
