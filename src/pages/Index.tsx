@@ -50,6 +50,12 @@ const HomePage = () => {
       transition={{ duration: 0.2 }}
       className="min-h-screen pt-16 flex flex-col relative"
     >
+      <SEO
+        title="BitcoinPerTe.it — Divulgazione Bitcoin in Italiano"
+        description="Il punto di riferimento italiano per capire Bitcoin: blockchain, halving, satoshi, dati live dalla rete. Divulgazione indipendente, nessuna consulenza finanziaria."
+        path="/"
+        keywords="bitcoin italiano, cos'è bitcoin, blockchain spiegazione, satoshi, halving bitcoin, divulgazione bitcoin"
+      />
       {/* Graph paper background with orange nodes */}
       <div className="absolute inset-0 graph-paper-bg opacity-30" />
       <div className="absolute top-20 left-10 w-48 h-48 bg-primary/5 rounded-full blur-[80px]" />
