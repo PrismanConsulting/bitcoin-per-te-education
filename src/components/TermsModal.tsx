@@ -108,7 +108,7 @@ const TermsModal = ({ open, onClose }: TermsModalProps) => {
                 </div>
               </section>
 
-              <div className="border-t border-border pt-4 text-xs text-center text-muted-foreground/50">
+              <div className="border-t border-border pt-4 text-xs text-center text-muted-foreground/90">
                 © 2026 BitcoinPerTe.it — Un progetto divulgativo di Prisman Consulting
               </div>
             </div>

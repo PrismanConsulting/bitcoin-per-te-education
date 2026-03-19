@@ -74,7 +74,7 @@ const FiatPage = () => (
               className="card-surface p-4"
             >
               <span className="text-lg">{card.emoji}</span>
-              <h3 className="text-[13px] font-bold font-heading text-primary mt-2 mb-2 tracking-wide">{card.title}</h3>
+              <h3 className="text-[14px] font-bold font-heading text-primary mt-2 mb-2 tracking-wide">{card.title}</h3>
               <p className="text-sm text-muted-foreground leading-[1.7]">{card.text}</p>
             </motion.div>
           ))}
@@ -82,7 +82,7 @@ const FiatPage = () => (
       </div>
 
       <div className="mt-8 pt-4 border-t border-primary bg-card rounded-b-lg px-4 py-3 text-center">
-        <p className="text-[13px] text-muted-foreground">
+        <p className="text-[14px] text-muted-foreground" style={{ color: '#BBBBBB' }}>
           Contenuto prodotto a fini informativi e comparativi. Non esprime raccomandazioni sull'utilizzo o sull'acquisto di alcun asset. Prisman Consulting non fornisce consulenza finanziaria.
         </p>
       </div>

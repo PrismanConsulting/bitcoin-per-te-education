@@ -90,7 +90,7 @@
   }
 
   .label-section {
-    @apply uppercase text-[13px] tracking-[0.2em] font-semibold text-primary font-heading;
+    @apply uppercase text-[14px] tracking-[0.2em] font-semibold text-primary font-heading;
   }
 
   .ticker-fade {

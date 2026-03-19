@@ -43,18 +43,18 @@ const CommunityPage = () => {
             </p>
 
             <div className="border-t border-border pt-4 space-y-1">
-              <p className="text-[13px] text-muted-foreground">
+              <p className="text-[14px] text-muted-foreground">
                 Prisman Consulting · Francavilla al Mare, Abruzzo
               </p>
-              <a href="https://prismanconsulting.it" target="_blank" rel="noopener noreferrer" className="text-[13px] text-primary hover:underline inline-flex items-center gap-1">
+              <a href="https://prismanconsulting.it" target="_blank" rel="noopener noreferrer" className="text-[14px] text-primary hover:underline inline-flex items-center gap-1">
                 prismanconsulting.it <ExternalLink size={10} />
               </a>
-              <p className="text-[13px] text-muted-foreground">info@prismanconsulting.it</p>
+              <p className="text-[14px] text-muted-foreground">info@prismanconsulting.it</p>
             </div>
 
             <div className="flex gap-4">
               {["X / Twitter", "Telegram", "LinkedIn"].map((s) => (
-                <span key={s} className="text-[13px] text-muted-foreground/50 border border-border rounded px-2.5 py-1">{s}</span>
+                <span key={s} className="text-[14px] text-muted-foreground border border-border rounded px-2.5 py-1">{s}</span>
               ))}
             </div>
           </div>
@@ -102,7 +102,7 @@ const CommunityPage = () => {
               </button>
             </form>
 
-            <p className="text-[13px] text-muted-foreground/50 mt-4">
+            <p className="text-[14px] text-muted-foreground mt-4">
               Dati usati solo per rispondere alla tua richiesta ·{" "}
               <button onClick={() => setPrivacyOpen(true)} className="text-primary hover:underline">Privacy Policy</button>{" · "}
               <button onClick={() => setTermsOpen(true)} className="text-primary hover:underline">Termini d'uso</button>

@@ -46,7 +46,7 @@ const MiningPage = () => (
                 transition={{ delay: i * 0.15 }}
                 className="flex gap-4 relative"
               >
-                <div className="w-6 h-6 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center text-[12px] font-mono font-bold text-primary shrink-0 z-10">
+                <div className="w-6 h-6 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center text-[13px] font-mono font-bold text-primary shrink-0 z-10">
                   {i + 1}
                 </div>
                 <p className="text-base text-muted-foreground pt-0.5 leading-[1.7]">{step.text}</p>
@@ -71,7 +71,7 @@ const MiningPage = () => (
               const heightPercent = (h.btc / maxH) * 100;
               return (
                 <div key={h.year} className="flex-1 flex flex-col items-center gap-1">
-                  <span className="text-[12px] font-mono text-muted-foreground">{h.label}</span>
+                  <span className="text-[13px] font-mono text-muted-foreground">{h.label}</span>
                   <motion.div
                     initial={{ scaleY: 0 }}
                     animate={{ scaleY: 1 }}
@@ -83,7 +83,7 @@ const MiningPage = () => (
                       opacity: 1 - i * 0.1,
                     }}
                   />
-                  <span className="text-[13px] font-mono text-muted-foreground mt-1">{h.year}</span>
+                  <span className="text-[14px] font-mono text-muted-foreground mt-1">{h.year}</span>
                 </div>
               );
             })}

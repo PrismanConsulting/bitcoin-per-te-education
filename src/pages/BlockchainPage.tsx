@@ -76,19 +76,19 @@ const BlockchainPage = () => {
                     onMouseEnter={() => setHoveredField("hash")}
                     onMouseLeave={() => setHoveredField(null)}
                   >
-                    <p className="text-[13px] text-muted-foreground font-mono cursor-help">Hash: {block.hash}</p>
+                    <p className="text-[14px] text-muted-foreground font-mono cursor-help">Hash: {block.hash}</p>
                   </div>
                   <div
                     onMouseEnter={() => setHoveredField("time")}
                     onMouseLeave={() => setHoveredField(null)}
                   >
-                    <p className="text-[13px] text-muted-foreground font-mono cursor-help mt-1">{block.time}</p>
+                    <p className="text-[14px] text-muted-foreground font-mono cursor-help mt-1">{block.time}</p>
                   </div>
                   <div
                     onMouseEnter={() => setHoveredField("tx")}
                     onMouseLeave={() => setHoveredField(null)}
                   >
-                    <p className="text-[13px] text-muted-foreground font-mono cursor-help mt-1">Tx: {block.tx}</p>
+                    <p className="text-[14px] text-muted-foreground font-mono cursor-help mt-1">Tx: {block.tx}</p>
                   </div>
                 </div>
                 {i < blocks.length - 1 && (
@@ -136,7 +136,7 @@ const BlockchainPage = () => {
               animate={{ opacity: 1 }}
               className="bg-background border border-border rounded p-3"
             >
-              <p className="text-[12px] text-muted-foreground mb-1">SHA-256</p>
+              <p className="text-[13px] text-muted-foreground mb-1">SHA-256</p>
               <p className="text-sm font-mono text-primary break-all leading-relaxed">{hashOutput}</p>
             </motion.div>
           )}
