@@ -40,24 +40,24 @@ const FooterSection = () => {
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="text-[12px] text-muted-foreground hover:text-primary transition-colors"
+                    className="text-[13px] text-muted-foreground hover:text-primary transition-colors"
                   >
                     {item.label}
                   </Link>
                 ))}
               </div>
               <div className="flex justify-center gap-3">
-                <button onClick={() => setPrivacyOpen(true)} className="text-[12px] text-primary hover:underline">
+                <button onClick={() => setPrivacyOpen(true)} className="text-[13px] text-primary hover:underline">
                   Privacy Policy
                 </button>
                 <span className="text-border">·</span>
-                <button onClick={() => setTermsOpen(true)} className="text-[12px] text-primary hover:underline">
+                <button onClick={() => setTermsOpen(true)} className="text-[13px] text-primary hover:underline">
                   Termini e Condizioni
                 </button>
               </div>
             </div>
 
-            <div className="text-right text-[12px] text-muted-foreground space-y-0.5">
+            <div className="text-right text-[13px] text-muted-foreground space-y-0.5">
               <p className="font-medium text-foreground">Prisman Consulting di Matteo Terenzio</p>
               <p>Via Alcione 149 · 66023 Francavilla al Mare (CH)</p>
               <p>P.IVA 02840410696</p>
@@ -65,7 +65,7 @@ const FooterSection = () => {
             </div>
           </div>
 
-          <div className="mt-8 pt-4 border-t border-border text-center text-[10px] text-muted-foreground/40">
+          <div className="mt-8 pt-4 border-t border-border text-center text-[12px] text-muted-foreground/40">
             © 2026 BitcoinPerTe.it · Contenuto prodotto a fini divulgativi · Non costituisce consulenza finanziaria ai sensi del D.Lgs. 58/1998 · Solo cookie tecnici
           </div>
         </div>

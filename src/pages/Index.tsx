@@ -68,26 +68,26 @@ const HomePage = () => {
                 Bitcoin — La Tecnologia che Ridefinisce il Concetto di Moneta
               </h1>
 
-              <p className="text-muted-foreground text-lg max-w-xl">
+              <p className="text-muted-foreground text-lg md:text-xl max-w-xl leading-relaxed">
                 Un hub di conoscenza per chi vuole capire Bitcoin davvero, senza semplificazioni e senza secondi fini.
               </p>
 
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/bitcoin"
-                  className="border border-primary/30 text-primary px-5 py-2.5 rounded-md text-sm font-medium hover:bg-primary/10 transition-colors font-heading"
+                  className="border border-primary/30 text-primary px-5 py-2.5 rounded-md text-base font-medium hover:bg-primary/10 transition-colors font-heading"
                 >
                   Inizia da qui →
                 </Link>
                 <Link
                   to="/community"
-                  className="border border-border text-muted-foreground px-5 py-2.5 rounded-md text-sm font-medium hover:text-foreground hover:border-muted-foreground transition-colors font-heading"
+                  className="border border-border text-muted-foreground px-5 py-2.5 rounded-md text-base font-medium hover:text-foreground hover:border-muted-foreground transition-colors font-heading"
                 >
                   Entra nella Community →
                 </Link>
               </div>
 
-              <p className="text-muted-foreground/50 text-[11px]">
+              <p className="text-muted-foreground/50 text-[13px]">
                 Prisman Consulting · Francavilla al Mare, Abruzzo · Solo cookie tecnici · Nessuna consulenza finanziaria
               </p>
             </div>
@@ -96,7 +96,7 @@ const HomePage = () => {
             <div className="lg:col-span-2 space-y-6">
               <div className="text-center lg:text-right">
                 <AnimatedNumber />
-                <p className="text-muted-foreground text-sm mt-2">BTC — offerta massima programmata</p>
+                <p className="text-muted-foreground text-base mt-2">BTC — offerta massima programmata</p>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
@@ -106,15 +106,15 @@ const HomePage = () => {
                   { value: "4 anni", label: "halving" },
                 ].map((stat) => (
                   <div key={stat.label} className="border-t-2 border-primary/40 pt-3 text-center">
-                    <p className="font-mono text-sm font-bold text-foreground">{stat.value}</p>
-                    <p className="text-[11px] text-muted-foreground">{stat.label}</p>
+                    <p className="font-mono text-base font-bold text-foreground">{stat.value}</p>
+                    <p className="text-[13px] text-muted-foreground">{stat.label}</p>
                   </div>
                 ))}
               </div>
 
               <div className="flex items-center justify-center lg:justify-end gap-2">
                 <span className={`w-2 h-2 rounded-full ${networkActive === true ? "bg-green-500 animate-pulse" : networkActive === false ? "bg-muted-foreground" : "bg-muted"}`} />
-                <span className="text-[12px] text-muted-foreground">
+                <span className="text-[13px] text-muted-foreground">
                   {networkActive === true ? "Rete Bitcoin attiva" : networkActive === false ? "Stato rete non disponibile" : "Verifica rete..."}
                 </span>
               </div>
@@ -138,7 +138,7 @@ const HomePage = () => {
       <div className="relative z-10 border-t border-border py-3 overflow-hidden ticker-fade">
         <div className="animate-ticker whitespace-nowrap">
           {[...tickerWords, ...tickerWords].map((word, i) => (
-            <span key={i} className="text-muted-foreground/30 text-[13px] mx-4 font-heading">
+            <span key={i} className="text-muted-foreground/30 text-[14px] mx-4 font-heading">
               {word}
             </span>
           ))}

@@ -45,7 +45,6 @@ const resources = [
 
 const StatSkeleton = () => <Skeleton className="h-8 w-24 bg-muted" />;
 
-// Hook: flash animation on value change
 function useFlash(value: unknown): boolean {
   const [flash, setFlash] = useState(false);
   const prev = useRef(value);
@@ -80,14 +79,12 @@ const TerminalePage = () => {
   const [lastFetchTime, setLastFetchTime] = useState<number | null>(null);
   const [secAgo, setSecAgo] = useState(0);
 
-  // Halving countdown ticking every second
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
 
-  // "Agg. XX sec fa" counter
   useEffect(() => {
     if (!lastFetchTime) return;
     setSecAgo(0);
@@ -97,7 +94,6 @@ const TerminalePage = () => {
     return () => clearInterval(t);
   }, [lastFetchTime]);
 
-  // Fetch price (60s)
   const fetchPrice = useCallback(async () => {
     try {
       const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_24hr_change=true");
@@ -108,7 +104,6 @@ const TerminalePage = () => {
     } catch { /* keep last value */ }
   }, []);
 
-  // Fetch network data (30s)
   const fetchNetwork = useCallback(async () => {
     try {
       const results = await Promise.allSettled([
@@ -143,7 +138,6 @@ const TerminalePage = () => {
 
   const supply = blockHeight ? calcSupply(blockHeight) : null;
   const halvingBlocks = blockHeight ? NEXT_HALVING_BLOCK - blockHeight : null;
-  // Live halving countdown recalculated every second
   const halvingMs = halvingBlocks ? halvingBlocks * 10 * 60 * 1000 : null;
   const halvingTarget = halvingMs && lastFetchTime ? lastFetchTime + halvingMs : null;
   const halvingRemaining = halvingTarget ? Math.max(0, halvingTarget - now) : null;
@@ -153,7 +147,6 @@ const TerminalePage = () => {
   const halvingSeconds = halvingRemaining ? Math.floor((halvingRemaining % 60_000) / 1000) : null;
   const supplyPercent = supply ? (supply / 21_000_000) * 100 : 0;
 
-  // Flash hooks
   const flashPrice = useFlash(price?.eur);
   const flashBlock = useFlash(blockHeight);
   const flashDiff = useFlash(diff?.difficultyChange);
@@ -179,15 +172,15 @@ const TerminalePage = () => {
           <div>
             <p className="label-section mb-1">DATI IN TEMPO REALE</p>
             <h1 className="text-2xl md:text-3xl font-bold font-heading text-foreground">Terminale</h1>
-            <p className="text-sm text-muted-foreground mt-1">Dati tecnici live dalla rete Bitcoin. Solo la rete — nessun commento finanziario.</p>
+            <p className="text-base text-muted-foreground mt-1">Dati tecnici live dalla rete Bitcoin. Solo la rete — nessun commento finanziario.</p>
           </div>
           <div className="flex flex-col items-end gap-1">
             <div className="flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${error ? "bg-red-500" : "bg-green-500 animate-pulse"}`} />
-              <span className="text-xs text-muted-foreground">{error ? "Dati non disponibili" : "Rete attiva"}</span>
+              <span className="text-sm text-muted-foreground">{error ? "Dati non disponibili" : "Rete attiva"}</span>
             </div>
             {lastFetchTime && (
-              <span className="font-mono text-[10px] text-muted-foreground/50">
+              <span className="font-mono text-[12px] text-muted-foreground/50">
                 Agg. {secAgo} sec fa
               </span>
             )}
@@ -198,25 +191,25 @@ const TerminalePage = () => {
         <div className="bg-card border-y border-border py-4 px-4 mb-8 rounded-lg grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Price */}
           <div>
-            <p className="text-[10px] text-muted-foreground mb-0.5">BTC/EUR</p>
+            <p className="text-[12px] text-muted-foreground mb-0.5">BTC/EUR</p>
             {price ? (
               <>
-                <p className="font-mono font-bold text-lg text-foreground">
+                <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
                   <FlashValue flash={flashPrice}>€{price.eur.toLocaleString("it-IT")}</FlashValue>
                 </p>
-                <p className={`text-[11px] font-mono ${price.eur_24h_change >= 0 ? "text-green-500" : "text-red-500"}`}>
+                <p className={`text-[13px] font-mono ${price.eur_24h_change >= 0 ? "text-green-500" : "text-red-500"}`}>
                   {price.eur_24h_change >= 0 ? "+" : ""}{price.eur_24h_change.toFixed(1)}% 24h
                 </p>
-                <p className="text-[9px] text-muted-foreground/40 mt-0.5">Fonte: CoinGecko · Solo informativo</p>
+                <p className="text-[12px] text-muted-foreground/40 mt-0.5">Fonte: CoinGecko · Solo informativo</p>
               </>
             ) : <StatSkeleton />}
           </div>
 
           {/* Block */}
           <div>
-            <p className="text-[10px] text-muted-foreground mb-0.5">Blocco più recente</p>
+            <p className="text-[12px] text-muted-foreground mb-0.5">Blocco più recente</p>
             {blockHeight ? (
-              <p className="font-mono font-bold text-lg text-foreground">
+              <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
                 <FlashValue flash={flashBlock}>#{blockHeight.toLocaleString("it-IT")}</FlashValue>
               </p>
             ) : <StatSkeleton />}
@@ -224,9 +217,9 @@ const TerminalePage = () => {
 
           {/* Difficulty */}
           <div>
-            <p className="text-[10px] text-muted-foreground mb-0.5">Difficoltà di mining</p>
+            <p className="text-[12px] text-muted-foreground mb-0.5">Difficoltà di mining</p>
             {diff ? (
-              <p className="font-mono font-bold text-lg text-foreground">
+              <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
                 <FlashValue flash={flashDiff}>
                   {diff.difficultyChange >= 0 ? "+" : ""}{diff.difficultyChange.toFixed(2)}%
                 </FlashValue>
@@ -234,37 +227,37 @@ const TerminalePage = () => {
             ) : <StatSkeleton />}
           </div>
 
-          {/* Halving countdown — ticks every second */}
+          {/* Halving countdown */}
           <div>
-            <p className="text-[10px] text-muted-foreground mb-0.5">Al prossimo halving</p>
+            <p className="text-[12px] text-muted-foreground mb-0.5">Al prossimo halving</p>
             {halvingDays !== null ? (
-              <p className="font-mono font-bold text-lg text-foreground">
+              <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
                 {halvingDays}g {halvingHours}h {halvingMinutes}m{" "}
-                <span className="text-sm text-muted-foreground">{halvingSeconds}s</span>
+                <span className="text-lg text-muted-foreground">{halvingSeconds}s</span>
               </p>
             ) : <StatSkeleton />}
           </div>
 
           {/* Fee */}
           <div>
-            <p className="text-[10px] text-muted-foreground mb-0.5">Fee consigliata ora</p>
+            <p className="text-[12px] text-muted-foreground mb-0.5">Fee consigliata ora</p>
             {fees ? (
-              <p className="font-mono font-bold text-lg text-primary">
+              <p className="font-mono font-bold text-[28px] text-primary leading-tight">
                 <FlashValue flash={flashFee}>{fees.halfHourFee}</FlashValue>{" "}
-                <span className="text-xs text-muted-foreground">sat/vB</span>
+                <span className="text-sm text-muted-foreground">sat/vB</span>
               </p>
             ) : <StatSkeleton />}
           </div>
 
           {/* Supply */}
           <div>
-            <p className="text-[10px] text-muted-foreground mb-0.5">BTC in circolazione</p>
+            <p className="text-[12px] text-muted-foreground mb-0.5">BTC in circolazione</p>
             {supply ? (
               <>
-                <p className="font-mono font-bold text-foreground text-sm">
+                <p className="font-mono font-bold text-foreground text-base">
                   <FlashValue flash={flashSupply}>{Math.floor(supply).toLocaleString("it-IT")} BTC</FlashValue>
                 </p>
-                <p className="text-[10px] text-muted-foreground">di 21.000.000 massimi</p>
+                <p className="text-[12px] text-muted-foreground">di 21.000.000 massimi</p>
                 <div className="w-full h-1 bg-muted rounded-full mt-1 overflow-hidden">
                   <div className="h-full bg-primary rounded-full" style={{ width: `${supplyPercent}%` }} />
                 </div>
@@ -277,7 +270,7 @@ const TerminalePage = () => {
         <div className="grid lg:grid-cols-5 gap-8 mb-8">
           {/* Left - Recent blocks */}
           <div className="lg:col-span-3">
-            <h2 className="text-sm font-heading font-bold text-foreground mb-4">Ultimi Blocchi</h2>
+            <h2 className="text-base font-heading font-bold text-foreground mb-4">Ultimi Blocchi</h2>
             <div className="space-y-2">
               {blocks.length > 0 ? blocks.map((b, i) => (
                 <motion.div
@@ -289,16 +282,16 @@ const TerminalePage = () => {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-sm font-bold text-foreground">#{b.height.toLocaleString("it-IT")}</span>
-                      <span className="text-[11px] text-muted-foreground">{timeAgo(b.timestamp)}</span>
+                      <span className="font-mono text-base font-bold text-foreground">#{b.height.toLocaleString("it-IT")}</span>
+                      <span className="text-[13px] text-muted-foreground">{timeAgo(b.timestamp)}</span>
                     </div>
-                    <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-mono">
+                    <div className="flex items-center gap-4 text-[13px] text-muted-foreground font-mono">
                       <span>Tx: {b.tx_count.toLocaleString("it-IT")}</span>
                       <span>{(b.size / 1_000_000).toFixed(2)} MB</span>
                       {b.extras?.pool?.name && <span className="text-primary">{b.extras.pool.name}</span>}
                     </div>
                   </div>
-                  <p className="font-mono text-[10px] text-muted-foreground/50 mt-1 truncate">
+                  <p className="font-mono text-[12px] text-muted-foreground/50 mt-1 truncate">
                     {b.id}
                   </p>
                 </motion.div>
@@ -312,9 +305,9 @@ const TerminalePage = () => {
               href="https://mempool.space"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-3"
+              className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-3"
             >
-              Esplora su mempool.space <ExternalLink size={10} />
+              Esplora su mempool.space <ExternalLink size={12} />
             </a>
           </div>
 
@@ -322,29 +315,29 @@ const TerminalePage = () => {
           <div className="lg:col-span-2 space-y-6">
             {/* Network status */}
             <div>
-              <h2 className="text-sm font-heading font-bold text-foreground mb-3">Stato della Rete</h2>
+              <h2 className="text-base font-heading font-bold text-foreground mb-3">Stato della Rete</h2>
               <div className="grid grid-cols-2 gap-2">
                 <div className="card-surface p-3">
-                  <p className="text-[10px] text-muted-foreground">Tx in mempool</p>
-                  <p className="font-mono font-bold text-foreground">
+                  <p className="text-[12px] text-muted-foreground">Tx in mempool</p>
+                  <p className="font-mono font-bold text-lg text-foreground">
                     {mempool ? <FlashValue flash={flashMemCount}>{mempool.count.toLocaleString("it-IT")}</FlashValue> : "—"}
                   </p>
                 </div>
                 <div className="card-surface p-3">
-                  <p className="text-[10px] text-muted-foreground">Dim. mempool</p>
-                  <p className="font-mono font-bold text-foreground">
+                  <p className="text-[12px] text-muted-foreground">Dim. mempool</p>
+                  <p className="font-mono font-bold text-lg text-foreground">
                     {mempool ? <FlashValue flash={flashMemSize}>{(mempool.vsize / 1_000_000).toFixed(1) + " MB"}</FlashValue> : "—"}
                   </p>
                 </div>
                 <div className="card-surface p-3">
-                  <p className="text-[10px] text-muted-foreground">Fee veloce</p>
-                  <p className="font-mono font-bold text-primary">
+                  <p className="text-[12px] text-muted-foreground">Fee veloce</p>
+                  <p className="font-mono font-bold text-lg text-primary">
                     {fees ? <FlashValue flash={flashFastFee}>{fees.fastestFee + " sat/vB"}</FlashValue> : "—"}
                   </p>
                 </div>
                 <div className="card-surface p-3">
-                  <p className="text-[10px] text-muted-foreground">Fee economica</p>
-                  <p className="font-mono font-bold text-foreground">
+                  <p className="text-[12px] text-muted-foreground">Fee economica</p>
+                  <p className="font-mono font-bold text-lg text-foreground">
                     {fees ? <FlashValue flash={flashEcoFee}>{fees.hourFee + " sat/vB"}</FlashValue> : "—"}
                   </p>
                 </div>
@@ -353,7 +346,7 @@ const TerminalePage = () => {
 
             {/* Resources */}
             <div>
-              <h2 className="text-sm font-heading font-bold text-foreground mb-3">Risorse Esterne</h2>
+              <h2 className="text-base font-heading font-bold text-foreground mb-3">Risorse Esterne</h2>
               <div className="space-y-1.5">
                 {resources.map((r) => (
                   <a
@@ -364,8 +357,8 @@ const TerminalePage = () => {
                     className="flex items-center justify-between py-1.5 text-sm hover:text-primary transition-colors group"
                   >
                     <div>
-                      <span className="text-foreground group-hover:text-primary text-xs font-medium">{r.name}</span>
-                      <span className="text-muted-foreground text-[11px] ml-2">{r.desc}</span>
+                      <span className="text-foreground group-hover:text-primary text-sm font-medium">{r.name}</span>
+                      <span className="text-muted-foreground text-[13px] ml-2">{r.desc}</span>
                     </div>
                     <ExternalLink size={12} className="text-muted-foreground/40 group-hover:text-primary shrink-0" />
                   </a>
@@ -377,10 +370,10 @@ const TerminalePage = () => {
 
         {/* Last update + note */}
         <div className="text-center border-t border-border pt-4">
-          <p className="text-[10px] text-muted-foreground/40 mb-1">
+          <p className="text-[12px] text-muted-foreground/40 mb-1">
             Prezzo: ogni 60s · Rete: ogni 30s · Halving: tempo reale
           </p>
-          <p className="text-[10px] text-muted-foreground/30">
+          <p className="text-[12px] text-muted-foreground/30">
             Dati tecnici forniti a scopo informativo. Fonti: mempool.space, CoinGecko. Non costituisce analisi finanziaria.
           </p>
         </div>

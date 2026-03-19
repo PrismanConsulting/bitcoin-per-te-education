@@ -40,15 +40,15 @@ const MiningPage = () => (
                 transition={{ delay: i * 0.15 }}
                 className="flex gap-4 relative"
               >
-                <div className="w-6 h-6 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center text-[10px] font-mono font-bold text-primary shrink-0 z-10">
+                <div className="w-6 h-6 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center text-[12px] font-mono font-bold text-primary shrink-0 z-10">
                   {i + 1}
                 </div>
-                <p className="text-sm text-muted-foreground pt-0.5">{step.text}</p>
+                <p className="text-base text-muted-foreground pt-0.5 leading-[1.7]">{step.text}</p>
               </motion.div>
             ))}
           </div>
 
-          <p className="text-sm text-muted-foreground mt-8 max-w-md leading-relaxed">
+          <p className="text-base text-muted-foreground mt-8 max-w-md leading-[1.7]">
             Il proof-of-work non è spreco energetico per definizione — è il meccanismo che rende
             la falsificazione della storia economicamente insostenibile.
           </p>
@@ -65,7 +65,7 @@ const MiningPage = () => (
               const heightPercent = (h.btc / maxH) * 100;
               return (
                 <div key={h.year} className="flex-1 flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-mono text-muted-foreground">{h.label}</span>
+                  <span className="text-[12px] font-mono text-muted-foreground">{h.label}</span>
                   <motion.div
                     initial={{ scaleY: 0 }}
                     animate={{ scaleY: 1 }}
@@ -77,13 +77,13 @@ const MiningPage = () => (
                       opacity: 1 - i * 0.1,
                     }}
                   />
-                  <span className="text-[11px] font-mono text-muted-foreground mt-1">{h.year}</span>
+                  <span className="text-[13px] font-mono text-muted-foreground mt-1">{h.year}</span>
                 </div>
               );
             })}
           </div>
 
-          <p className="text-sm text-muted-foreground mt-6 max-w-md leading-relaxed">
+          <p className="text-base text-muted-foreground mt-6 max-w-md leading-[1.7]">
             Ogni circa 4 anni, la ricompensa per i miner si dimezza. È scritto nel codice.
             Non richiede votazioni, non può essere modificato da nessuna autorità centrale.
           </p>
