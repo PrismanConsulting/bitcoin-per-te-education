@@ -112,7 +112,7 @@ const PrivacyModal = ({ open, onClose }: PrivacyModalProps) => {
                 <p>Il Titolare si riserva il diritto di modificare la presente Informativa.</p>
               </section>
 
-              <div className="border-t border-border pt-4 text-xs text-center text-muted-foreground/50">
+              <div className="border-t border-border pt-4 text-xs text-center text-muted-foreground/90">
                 © 2026 BitcoinPerTe.it — Redatto ai sensi del Reg. UE 2016/679
               </div>
             </div>

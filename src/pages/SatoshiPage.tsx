@@ -55,7 +55,7 @@ const SatoshiPage = () => {
           <div className="lg:col-span-5">
             <div className="card-surface p-6 border-primary/20">
               <h3 className="text-xl font-bold font-heading text-foreground mb-1">Calcolatore Didattico</h3>
-              <p className="text-[13px] text-muted-foreground mb-5">
+              <p className="text-[14px] text-muted-foreground mb-5">
                 Valore di riferimento fisso: 1 BTC = €100.000 · Solo uso educativo
               </p>
 
@@ -83,12 +83,12 @@ const SatoshiPage = () => {
                         {result.sats.toLocaleString("it-IT")} <span className="text-sm text-muted-foreground">sat</span>
                       </p>
                     </div>
-                    <p className="text-[13px] font-mono text-muted-foreground text-center">{result.formula}</p>
+                    <p className="text-[14px] font-mono text-muted-foreground text-center">{result.formula}</p>
                   </motion.div>
                 )}
               </div>
 
-              <p className="text-[13px] text-muted-foreground/60 mt-5">
+              <p className="text-[14px] text-muted-foreground mt-5" style={{ color: '#BBBBBB' }}>
                 Strumento didattico con valore fisso. Non riflette il prezzo corrente di mercato.
               </p>
             </div>

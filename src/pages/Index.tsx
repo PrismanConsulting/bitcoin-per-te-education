@@ -95,12 +95,12 @@ const HomePage = () => {
               </div>
 
               <div className="border-l-[3px] border-primary bg-card rounded-r px-4 py-2.5 max-w-xl">
-                <p className="text-[13px] text-muted-foreground leading-relaxed">
+                <p className="text-[14px] leading-relaxed" style={{ color: '#CCCCCC', fontWeight: 400 }}>
                   Questo sito è un progetto di pura divulgazione. I contenuti non costituiscono consulenza finanziaria né sollecitazione all'investimento ai sensi del D.Lgs. 58/1998.
                 </p>
               </div>
 
-              <p className="text-muted-foreground/50 text-[13px]">
+              <p className="text-muted-foreground text-[14px]" style={{ color: '#BBBBBB' }}>
                 Prisman Consulting · Francavilla al Mare, Abruzzo · Solo cookie tecnici
               </p>
             </div>
@@ -120,14 +120,14 @@ const HomePage = () => {
                 ].map((stat) => (
                   <div key={stat.label} className="border-t-2 border-primary/40 pt-3 text-center">
                     <p className="font-mono text-base font-bold text-foreground">{stat.value}</p>
-                    <p className="text-[13px] text-muted-foreground">{stat.label}</p>
+                    <p className="text-[14px] text-muted-foreground">{stat.label}</p>
                   </div>
                 ))}
               </div>
 
               <div className="flex items-center justify-center lg:justify-end gap-2">
                 <span className={`w-2 h-2 rounded-full ${networkActive === true ? "bg-green-500 animate-pulse" : networkActive === false ? "bg-muted-foreground" : "bg-muted"}`} />
-                <span className="text-[13px] text-muted-foreground">
+                <span className="text-[14px] text-muted-foreground">
                   {networkActive === true ? "Rete Bitcoin attiva" : networkActive === false ? "Stato rete non disponibile" : "Verifica rete..."}
                 </span>
               </div>
@@ -151,7 +151,7 @@ const HomePage = () => {
       <div className="relative z-10 border-t border-border py-3 overflow-hidden ticker-fade">
         <div className="animate-ticker whitespace-nowrap">
           {[...tickerWords, ...tickerWords].map((word, i) => (
-            <span key={i} className="text-muted-foreground/30 text-[14px] mx-4 font-heading">
+            <span key={i} className="text-muted-foreground/50 text-[15px] mx-4 font-heading">
               {word}
             </span>
           ))}

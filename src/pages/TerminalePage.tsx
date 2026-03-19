@@ -186,14 +186,14 @@ const TerminalePage = () => {
               <span className="text-sm text-muted-foreground">{error ? "Dati non disponibili" : "Rete attiva"}</span>
             </div>
             {lastFetchTime && (
-              <span className="font-mono text-[12px] text-muted-foreground/50">
+              <span className="font-mono text-[13px]" style={{ color: '#AAAAAA' }}>
                 Agg. {secAgo} sec fa
               </span>
             )}
           </div>
         </div>
         {/* Price disclaimer */}
-        <p className="text-[12px] text-muted-foreground/50 text-center mb-6">
+        <p className="text-[13px] text-muted-foreground/90 text-center mb-6">
           I dati di prezzo sono forniti a solo titolo informativo. Non costituiscono analisi finanziaria o raccomandazione di acquisto.
         </p>
 
@@ -201,25 +201,25 @@ const TerminalePage = () => {
         <div className="bg-card border-y border-border py-4 px-4 mb-8 rounded-lg grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Price */}
           <div>
-            <p className="text-[12px] text-muted-foreground mb-0.5">BTC/EUR</p>
+            <p className="text-[13px] text-muted-foreground mb-0.5">BTC/EUR</p>
             {price ? (
               <>
-                <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
+                <p className="font-mono font-bold text-[31px] text-foreground leading-tight">
                   <FlashValue flash={flashPrice}>€{price.eur.toLocaleString("it-IT")}</FlashValue>
                 </p>
-                <p className={`text-[13px] font-mono ${price.eur_24h_change >= 0 ? "text-green-500" : "text-red-500"}`}>
+                <p className={`text-[14px] font-mono ${price.eur_24h_change >= 0 ? "text-green-500" : "text-red-500"}`}>
                   {price.eur_24h_change >= 0 ? "+" : ""}{price.eur_24h_change.toFixed(1)}% 24h
                 </p>
-                <p className="text-[12px] text-muted-foreground/40 mt-0.5">Fonte: CoinGecko · Solo informativo</p>
+                <p className="text-[13px] mt-0.5" style={{ color: '#AAAAAA' }}>Fonte: CoinGecko · Solo informativo</p>
               </>
             ) : <StatSkeleton />}
           </div>
 
           {/* Block */}
           <div>
-            <p className="text-[12px] text-muted-foreground mb-0.5">Blocco più recente</p>
+            <p className="text-[13px] text-muted-foreground mb-0.5">Blocco più recente</p>
             {blockHeight ? (
-              <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
+              <p className="font-mono font-bold text-[31px] text-foreground leading-tight">
                 <FlashValue flash={flashBlock}>#{blockHeight.toLocaleString("it-IT")}</FlashValue>
               </p>
             ) : <StatSkeleton />}
@@ -227,9 +227,9 @@ const TerminalePage = () => {
 
           {/* Difficulty */}
           <div>
-            <p className="text-[12px] text-muted-foreground mb-0.5">Difficoltà di mining</p>
+            <p className="text-[13px] text-muted-foreground mb-0.5">Difficoltà di mining</p>
             {diff ? (
-              <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
+              <p className="font-mono font-bold text-[31px] text-foreground leading-tight">
                 <FlashValue flash={flashDiff}>
                   {diff.difficultyChange >= 0 ? "+" : ""}{diff.difficultyChange.toFixed(2)}%
                 </FlashValue>
@@ -239,9 +239,9 @@ const TerminalePage = () => {
 
           {/* Halving countdown */}
           <div>
-            <p className="text-[12px] text-muted-foreground mb-0.5">Al prossimo halving</p>
+            <p className="text-[13px] text-muted-foreground mb-0.5">Al prossimo halving</p>
             {halvingDays !== null ? (
-              <p className="font-mono font-bold text-[28px] text-foreground leading-tight">
+              <p className="font-mono font-bold text-[31px] text-foreground leading-tight">
                 {halvingDays}g {halvingHours}h {halvingMinutes}m{" "}
                 <span className="text-lg text-muted-foreground">{halvingSeconds}s</span>
               </p>
@@ -250,9 +250,9 @@ const TerminalePage = () => {
 
           {/* Fee */}
           <div>
-            <p className="text-[12px] text-muted-foreground mb-0.5">Fee consigliata ora</p>
+            <p className="text-[13px] text-muted-foreground mb-0.5">Fee consigliata ora</p>
             {fees ? (
-              <p className="font-mono font-bold text-[28px] text-primary leading-tight">
+              <p className="font-mono font-bold text-[31px] text-primary leading-tight">
                 <FlashValue flash={flashFee}>{fees.halfHourFee}</FlashValue>{" "}
                 <span className="text-sm text-muted-foreground">sat/vB</span>
               </p>
@@ -261,13 +261,13 @@ const TerminalePage = () => {
 
           {/* Supply */}
           <div>
-            <p className="text-[12px] text-muted-foreground mb-0.5">BTC in circolazione</p>
+            <p className="text-[13px] text-muted-foreground mb-0.5">BTC in circolazione</p>
             {supply ? (
               <>
                 <p className="font-mono font-bold text-foreground text-base">
                   <FlashValue flash={flashSupply}>{Math.floor(supply).toLocaleString("it-IT")} BTC</FlashValue>
                 </p>
-                <p className="text-[12px] text-muted-foreground">di 21.000.000 massimi</p>
+                <p className="text-[13px]" style={{ color: '#AAAAAA' }}>di 21.000.000 massimi</p>
                 <div className="w-full h-1 bg-muted rounded-full mt-1 overflow-hidden">
                   <div className="h-full bg-primary rounded-full" style={{ width: `${supplyPercent}%` }} />
                 </div>
@@ -293,15 +293,15 @@ const TerminalePage = () => {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-3">
                       <span className="font-mono text-base font-bold text-foreground">#{b.height.toLocaleString("it-IT")}</span>
-                      <span className="text-[13px] text-muted-foreground">{timeAgo(b.timestamp)}</span>
+                      <span className="text-[14px] text-muted-foreground">{timeAgo(b.timestamp)}</span>
                     </div>
-                    <div className="flex items-center gap-4 text-[13px] text-muted-foreground font-mono">
+                    <div className="flex items-center gap-4 text-[14px] text-muted-foreground font-mono">
                       <span>Tx: {b.tx_count.toLocaleString("it-IT")}</span>
                       <span>{(b.size / 1_000_000).toFixed(2)} MB</span>
                       {b.extras?.pool?.name && <span className="text-primary">{b.extras.pool.name}</span>}
                     </div>
                   </div>
-                  <p className="font-mono text-[12px] text-muted-foreground/50 mt-1 truncate">
+                  <p className="font-mono text-[13px] text-muted-foreground/70 mt-1 truncate">
                     {b.id}
                   </p>
                 </motion.div>
@@ -328,25 +328,25 @@ const TerminalePage = () => {
               <h2 className="text-base font-heading font-bold text-foreground mb-3">Stato della Rete</h2>
               <div className="grid grid-cols-2 gap-2">
                 <div className="card-surface p-3">
-                  <p className="text-[12px] text-muted-foreground">Tx in mempool</p>
+                  <p className="text-[13px] text-muted-foreground">Tx in mempool</p>
                   <p className="font-mono font-bold text-lg text-foreground">
                     {mempool ? <FlashValue flash={flashMemCount}>{mempool.count.toLocaleString("it-IT")}</FlashValue> : "—"}
                   </p>
                 </div>
                 <div className="card-surface p-3">
-                  <p className="text-[12px] text-muted-foreground">Dim. mempool</p>
+                  <p className="text-[13px] text-muted-foreground">Dim. mempool</p>
                   <p className="font-mono font-bold text-lg text-foreground">
                     {mempool ? <FlashValue flash={flashMemSize}>{(mempool.vsize / 1_000_000).toFixed(1) + " MB"}</FlashValue> : "—"}
                   </p>
                 </div>
                 <div className="card-surface p-3">
-                  <p className="text-[12px] text-muted-foreground">Fee veloce</p>
+                  <p className="text-[13px] text-muted-foreground">Fee veloce</p>
                   <p className="font-mono font-bold text-lg text-primary">
                     {fees ? <FlashValue flash={flashFastFee}>{fees.fastestFee + " sat/vB"}</FlashValue> : "—"}
                   </p>
                 </div>
                 <div className="card-surface p-3">
-                  <p className="text-[12px] text-muted-foreground">Fee economica</p>
+                  <p className="text-[13px] text-muted-foreground">Fee economica</p>
                   <p className="font-mono font-bold text-lg text-foreground">
                     {fees ? <FlashValue flash={flashEcoFee}>{fees.hourFee + " sat/vB"}</FlashValue> : "—"}
                   </p>
@@ -368,7 +368,7 @@ const TerminalePage = () => {
                   >
                     <div>
                       <span className="text-foreground group-hover:text-primary text-sm font-medium">{r.name}</span>
-                      <span className="text-muted-foreground text-[13px] ml-2">{r.desc}</span>
+                      <span className="text-muted-foreground text-[14px] ml-2">{r.desc}</span>
                     </div>
                     <ExternalLink size={12} className="text-muted-foreground/40 group-hover:text-primary shrink-0" />
                   </a>
@@ -380,10 +380,10 @@ const TerminalePage = () => {
 
         {/* Last update + note */}
         <div className="text-center border-t border-border pt-4">
-          <p className="text-[12px] text-muted-foreground/40 mb-1">
+          <p className="text-[13px]" style={{ color: '#AAAAAA' }}>
             Prezzo: ogni 60s · Rete: ogni 30s · Halving: tempo reale
           </p>
-          <p className="text-[12px] text-muted-foreground/30">
+          <p className="text-[13px]" style={{ color: '#AAAAAA' }}>
             Dati tecnici forniti a scopo informativo. Fonti: mempool.space, CoinGecko. Non costituisce analisi finanziaria.
           </p>
         </div>

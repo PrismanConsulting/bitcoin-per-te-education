@@ -21,7 +21,7 @@
     --secondary-foreground: 0 0% 94%;
 
     --muted: 0 0% 11%;
-    --muted-foreground: 0 0% 53%;
+    --muted-foreground: 0 0% 73%;
 
     --accent: 28 93% 53%;
     --accent-foreground: 0 0% 100%;
@@ -58,6 +58,7 @@
 
   html {
     scroll-behavior: smooth;
+    font-size: 110%;
   }
 
   h1, h2, h3, h4, h5, h6, nav, .font-heading {
@@ -89,7 +90,7 @@
   }
 
   .label-section {
-    @apply uppercase text-[13px] tracking-[0.2em] font-semibold text-primary font-heading;
+    @apply uppercase text-[14px] tracking-[0.2em] font-semibold text-primary font-heading;
   }
 
   .ticker-fade {

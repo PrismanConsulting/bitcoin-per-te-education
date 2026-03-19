@@ -118,7 +118,7 @@ const QuizPage = () => {
                     transition={{ duration: 0.3 }}
                   />
                 </div>
-                <span className="text-[13px] font-mono text-muted-foreground">{current + 1}/{questions.length}</span>
+                <span className="text-[14px] font-mono text-muted-foreground">{current + 1}/{questions.length}</span>
               </div>
 
               <AnimatePresence mode="wait">

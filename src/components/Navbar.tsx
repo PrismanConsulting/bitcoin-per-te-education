@@ -33,7 +33,7 @@ const Navbar = () => {
             <Link
               key={l.href}
               to={l.href}
-              className={`relative text-[13px] px-2.5 py-2 transition-colors whitespace-nowrap ${
+              className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap ${
                 location.pathname === l.href
                   ? "text-primary"
                   : "text-muted-foreground hover:text-foreground"
@@ -52,7 +52,7 @@ const Navbar = () => {
         </div>
 
         <div className="hidden xl:block shrink-0">
-          <span className="text-[11px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
+          <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
             Solo divulgazione · Non consulenza finanziaria
           </span>
         </div>
@@ -90,7 +90,7 @@ const Navbar = () => {
                   {l.label}
                 </Link>
               ))}
-              <span className="text-[11px] text-primary-foreground bg-primary rounded px-2.5 py-1 mt-3 self-start font-medium">
+              <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 mt-3 self-start font-medium">
                 Solo divulgazione · Non consulenza finanziaria
               </span>
             </div>
