@@ -75,8 +75,8 @@ const FiatPage = () => (
         </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-border text-center">
-        <p className="text-[13px] text-muted-foreground/50">
+      <div className="mt-8 pt-4 border-t border-primary bg-card rounded-b-lg px-4 py-3 text-center">
+        <p className="text-[13px] text-muted-foreground">
           Contenuto prodotto a fini informativi e comparativi. Non esprime raccomandazioni sull'utilizzo o sull'acquisto di alcun asset. Prisman Consulting non fornisce consulenza finanziaria.
         </p>
       </div>

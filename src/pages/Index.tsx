@@ -87,8 +87,14 @@ const HomePage = () => {
                 </Link>
               </div>
 
+              <div className="border-l-[3px] border-primary bg-card rounded-r px-4 py-2.5 max-w-xl">
+                <p className="text-[13px] text-muted-foreground leading-relaxed">
+                  Questo sito è un progetto di pura divulgazione. I contenuti non costituiscono consulenza finanziaria né sollecitazione all'investimento ai sensi del D.Lgs. 58/1998.
+                </p>
+              </div>
+
               <p className="text-muted-foreground/50 text-[13px]">
-                Prisman Consulting · Francavilla al Mare, Abruzzo · Solo cookie tecnici · Nessuna consulenza finanziaria
+                Prisman Consulting · Francavilla al Mare, Abruzzo · Solo cookie tecnici
               </p>
             </div>
 

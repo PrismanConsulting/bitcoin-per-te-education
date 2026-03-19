@@ -65,8 +65,8 @@ const FooterSection = () => {
             </div>
           </div>
 
-          <div className="mt-8 pt-4 border-t border-border text-center text-[12px] text-muted-foreground/40">
-            © 2026 BitcoinPerTe.it · Contenuto prodotto a fini divulgativi · Non costituisce consulenza finanziaria ai sensi del D.Lgs. 58/1998 · Solo cookie tecnici
+          <div className="mt-8 pt-4 border-t border-border text-center text-[12px]" style={{ color: "#777777" }}>
+            © 2026 BitcoinPerTe.it · Contenuto prodotto a fini divulgativi · Non costituisce consulenza finanziaria ai sensi del D.Lgs. 58/1998 · Solo cookie tecnici · Nessuna parte di questo sito costituisce sollecitazione all'investimento
           </div>
         </div>
       </footer>
