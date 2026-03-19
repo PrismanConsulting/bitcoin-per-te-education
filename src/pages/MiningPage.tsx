@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const steps = [
   { n: "①", text: "Le transazioni vengono trasmesse alla rete peer-to-peer" },
