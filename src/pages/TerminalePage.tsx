@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import SEO from "@/components/SEO";
 
 interface PriceData { eur: number; eur_24h_change: number }
 interface FeeData { fastestFee: number; halfHourFee: number; hourFee: number; economyFee: number }
