@@ -52,8 +52,8 @@ const Navbar = () => {
         </div>
 
         <div className="hidden xl:block shrink-0">
-          <span className="text-[12px] text-primary border border-primary/20 rounded-full px-3 py-1 font-medium">
-            #divulgazione
+          <span className="text-[11px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
+            Solo divulgazione · Non consulenza finanziaria
           </span>
         </div>
 
@@ -90,8 +90,8 @@ const Navbar = () => {
                   {l.label}
                 </Link>
               ))}
-              <span className="text-[12px] text-primary border border-primary/20 rounded-full px-3 py-1 mt-3 self-start font-medium">
-                #divulgazione
+              <span className="text-[11px] text-primary-foreground bg-primary rounded px-2.5 py-1 mt-3 self-start font-medium">
+                Solo divulgazione · Non consulenza finanziaria
               </span>
             </div>
           </motion.div>

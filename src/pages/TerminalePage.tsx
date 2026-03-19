@@ -186,6 +186,10 @@ const TerminalePage = () => {
             )}
           </div>
         </div>
+        {/* Price disclaimer */}
+        <p className="text-[12px] text-muted-foreground/50 text-center mb-6">
+          I dati di prezzo sono forniti a solo titolo informativo. Non costituiscono analisi finanziaria o raccomandazione di acquisto.
+        </p>
 
         {/* Stats strip */}
         <div className="bg-card border-y border-border py-4 px-4 mb-8 rounded-lg grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
