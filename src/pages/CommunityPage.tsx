@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import PrivacyModal from "@/components/PrivacyModal";
 import TermsModal from "@/components/TermsModal";
+import SEO from "@/components/SEO";
 
 const CommunityPage = () => {
   const [name, setName] = useState("");
