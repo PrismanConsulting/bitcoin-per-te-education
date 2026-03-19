@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import PrivacyModal from "@/components/PrivacyModal";
 import TermsModal from "@/components/TermsModal";
+import SEO from "@/components/SEO";
 
 const CommunityPage = () => {
   const [name, setName] = useState("");
@@ -19,6 +20,11 @@ const CommunityPage = () => {
       transition={{ duration: 0.2 }}
       className="min-h-screen pt-16 flex flex-col justify-center"
     >
+      <SEO
+        title="Community BitcoinPerTe — Progetto Editoriale Indipendente"
+        description="BitcoinPerTe è un progetto di Prisman Consulting per la divulgazione di Bitcoin in Italia. Contattaci per collaborazioni e scambio di idee."
+        path="/community"
+      />
       <div className="container mx-auto px-4 max-w-6xl py-12">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left - Project */}

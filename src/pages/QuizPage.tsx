@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, X, RotateCcw } from "lucide-react";
+import SEO from "@/components/SEO";
 
 interface Question {
   q: string;
@@ -92,6 +93,11 @@ const QuizPage = () => {
       transition={{ duration: 0.2 }}
       className="min-h-screen pt-16 flex flex-col justify-center"
     >
+      <SEO
+        title="Quiz Bitcoin — Testa le tue Conoscenze | BitcoinPerTe"
+        description="6 domande sui fondamentali tecnici di Bitcoin. Niente domande su prezzi o investimenti — solo tecnologia e protocollo."
+        path="/quiz"
+      />
       <div className="container mx-auto px-4 max-w-[680px] py-12">
         <div className="mb-8 text-center">
           <p className="label-section mb-2">VERIFICA LE TUE CONOSCENZE</p>

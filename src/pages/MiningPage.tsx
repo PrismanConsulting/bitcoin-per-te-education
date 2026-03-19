@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const steps = [
   { n: "①", text: "Le transazioni vengono trasmesse alla rete peer-to-peer" },
@@ -23,6 +24,11 @@ const MiningPage = () => (
     transition={{ duration: 0.2 }}
     className="min-h-screen pt-16 flex flex-col justify-center"
   >
+    <SEO
+      title="Mining e Halving Bitcoin — Cosa Sono e Come Funzionano | BitcoinPerTe"
+      description="Proof of Work, mining Bitcoin e halving spiegati in italiano. Grafico storico delle ricompense e countdown al prossimo dimezzamento."
+      path="/mining"
+    />
     <div className="container mx-auto px-4 max-w-6xl py-12">
       <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
         {/* Left - Mining */}

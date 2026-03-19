@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const cards = [
   {
@@ -41,6 +42,11 @@ const BitcoinPage = () => (
     transition={{ duration: 0.2 }}
     className="min-h-screen pt-16 flex flex-col justify-center"
   >
+    <SEO
+      title="Cos'è Bitcoin — Guida Completa in Italiano | BitcoinPerTe"
+      description="Bitcoin spiegato chiaramente: come funziona, cos'è la decentralizzazione, perché le regole sono immutabili. Guida tecnica in italiano senza gergo."
+      path="/bitcoin"
+    />
     <div className="container mx-auto px-4 max-w-6xl py-12">
       {/* Header */}
       <div className="mb-10">

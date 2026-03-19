@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const BTC_PRICE = 100_000;
 const SATS_PER_BTC = 100_000_000;
@@ -22,6 +23,11 @@ const SatoshiPage = () => {
       transition={{ duration: 0.2 }}
       className="min-h-screen pt-16 flex flex-col justify-center"
     >
+      <SEO
+        title="Il Satoshi — L'Unità di Bitcoin Spiegata | BitcoinPerTe"
+        description="Cos'è un satoshi, quanto vale, come si calcola. Calcolatore didattico e storia di Satoshi Nakamoto. La denominazione base di Bitcoin spiegata in italiano."
+        path="/satoshi"
+      />
       <div className="container mx-auto px-4 max-w-6xl py-12">
         <div className="grid lg:grid-cols-9 gap-12 lg:gap-16 items-start">
           {/* Left - 45% */}

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import SEO from "@/components/SEO";
 
 interface PriceData { eur: number; eur_24h_change: number }
 interface FeeData { fastestFee: number; halfHourFee: number; hourFee: number; economyFee: number }
@@ -166,6 +167,11 @@ const TerminalePage = () => {
       className="min-h-screen pt-16"
       style={{ background: "#080808" }}
     >
+      <SEO
+        title="Terminale Bitcoin — Dati Live: Blocchi, Fee, Mempool | BitcoinPerTe"
+        description="Dati in tempo reale dalla rete Bitcoin: prezzo BTC/EUR, blocchi live, fee consigliate, stato mempool, countdown halving. Aggiornamento automatico."
+        path="/terminale"
+      />
       <div className="container mx-auto px-4 max-w-6xl py-8">
         {/* Header */}
         <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
