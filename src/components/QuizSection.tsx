@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react";
+import { Check, X, RotateCcw } from "lucide-react";
 
 interface Question {
   q: string;
@@ -15,37 +16,37 @@ const questions: Question[] = [
     q: "Qual è l'unità più piccola di Bitcoin?",
     options: ["Milli-Bitcoin", "Satoshi", "Wei", "Bit"],
     correct: 1,
-    explanation: "Il satoshi è la più piccola unità di Bitcoin: 1 BTC = 100.000.000 satoshi.",
+    explanation: "Il satoshi è l'unità indivisibile di Bitcoin: 1 BTC = 100.000.000 satoshi.",
   },
   {
-    q: "Quanti Bitcoin esisteranno mai in totale?",
+    q: "Quanti Bitcoin esisteranno in totale?",
     options: ["1 miliardo", "100 milioni", "21 milioni", "Illimitati"],
     correct: 2,
-    explanation: "Il protocollo Bitcoin stabilisce un limite massimo di 21 milioni di BTC.",
+    explanation: "Il protocollo limita l'offerta totale a 21 milioni di BTC.",
   },
   {
-    q: 'Cosa succede durante un "halving"?',
-    options: ["Il prezzo si dimezza", "La ricompensa ai miner si dimezza", "La blockchain si divide", "I nodi vengono spenti"],
+    q: "Cosa avviene durante un halving?",
+    options: ["Il prezzo si dimezza", "La ricompensa ai miner si dimezza", "La blockchain si biforca", "I nodi vengono spenti"],
     correct: 1,
-    explanation: "L'halving dimezza la ricompensa che i miner ricevono per ogni blocco validato.",
+    explanation: "L'halving dimezza la ricompensa per blocco assegnata ai miner.",
   },
   {
     q: "Cos'è la blockchain?",
-    options: ["Un portafoglio digitale", "Un registro pubblico immutabile di transazioni", "Una piattaforma di trading", "Un tipo di criptovaluta"],
+    options: ["Un portafoglio digitale", "Un registro pubblico immutabile", "Una piattaforma di scambio", "Un tipo di criptovaluta"],
     correct: 1,
-    explanation: "La blockchain è il registro pubblico e immutabile di tutte le transazioni Bitcoin.",
+    explanation: "La blockchain è un registro distribuito, pubblico e immutabile di tutte le transazioni.",
   },
   {
     q: "Chi ha creato Bitcoin?",
-    options: ["Elon Musk", "Craig Wright", "Un gruppo di banche", "Satoshi Nakamoto (identità sconosciuta)"],
-    correct: 3,
-    explanation: "Bitcoin è stato creato nel 2009 da un individuo o gruppo sotto lo pseudonimo Satoshi Nakamoto.",
+    options: ["Un consorzio di banche centrali", "Elon Musk", "Satoshi Nakamoto — identità sconosciuta", "Craig Wright"],
+    correct: 2,
+    explanation: "Bitcoin è stato creato nel 2008 da Satoshi Nakamoto, pseudonimo la cui identità resta sconosciuta.",
   },
   {
-    q: "Ogni quanto avviene circa un halving?",
+    q: "Con quale frequenza avviene circa un halving?",
     options: ["Ogni anno", "Ogni 2 anni", "Ogni 4 anni", "Ogni 10 anni"],
     correct: 2,
-    explanation: "L'halving avviene circa ogni 210.000 blocchi, cioè circa ogni 4 anni.",
+    explanation: "L'halving avviene circa ogni 210.000 blocchi, equivalenti a circa 4 anni.",
   },
 ];
 
@@ -54,113 +55,120 @@ const QuizSection = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [answers, setAnswers] = useState<(number | null)[]>([]);
+  const [answered, setAnswered] = useState(false);
 
-  const handleAnswer = (idx: number) => {
-    if (selected !== null) return;
+  const handleSelect = (idx: number) => {
+    if (answered) return;
     setSelected(idx);
-    if (idx === questions[current].correct) {
-      setScore((s) => s + 1);
-    }
-    setAnswers((a) => [...a, idx]);
+    setAnswered(true);
+    if (idx === questions[current].correct) setScore((s) => s + 1);
   };
 
-  const next = () => {
-    if (current < questions.length - 1) {
+  const handleNext = () => {
+    if (current + 1 >= questions.length) {
+      setFinished(true);
+    } else {
       setCurrent((c) => c + 1);
       setSelected(null);
-    } else {
-      setFinished(true);
+      setAnswered(false);
     }
   };
 
-  const reset = () => {
+  const handleReset = () => {
     setCurrent(0);
     setSelected(null);
     setScore(0);
     setFinished(false);
-    setAnswers([]);
+    setAnswered(false);
   };
 
-  const getMessage = () => {
-    if (score <= 2) return "Stai iniziando il tuo viaggio — continua a leggere!";
-    if (score <= 4) return "Buona base! Stai capendo i fondamentali.";
-    return "Ottimo! Sei un vero Bitcoiner appassionato 🟠";
+  const getScoreMessage = () => {
+    if (score <= 2) return "Ottimo punto di partenza. Esplora le sezioni del sito.";
+    if (score <= 4) return "Buona base. I fondamentali ci sono.";
+    return "Conoscenza solida. Territorio da Bitcoiner appassionato. 🟠";
   };
-
-  const q = questions[current];
 
   return (
-    <section id="quiz" className="py-24 px-4">
+    <section id="quiz" className="min-h-screen flex flex-col items-center justify-center py-24 px-4">
       <div className="container mx-auto max-w-2xl">
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold text-center mb-4"
+          className="mb-10 text-center"
         >
-          Metti alla prova le tue <span className="text-primary">conoscenze</span>
-        </motion.h2>
-        <p className="text-center text-muted-foreground text-sm mb-12">
-          Solo domande di cultura generale su Bitcoin — nessuna domanda su investimenti o rendimenti
-        </p>
+          <p className="label-section mb-2">VERIFICA LE TUE CONOSCENZE</p>
+          <h2 className="text-3xl md:text-5xl font-bold font-heading">Quanto conosci Bitcoin?</h2>
+          <p className="text-muted-foreground mt-2">6 domande sui fondamentali tecnici. Niente prezzi, niente rendimenti.</p>
+        </motion.div>
 
-        {!finished ? (
-          <motion.div
-            key={current}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="card-bitcoin"
-          >
-            {/* Progress bar */}
-            <div className="w-full bg-muted rounded-full h-2 mb-6">
-              <div
-                className="bg-gradient-bitcoin h-2 rounded-full transition-all duration-300"
-                style={{ width: `${((current + 1) / questions.length) * 100}%` }}
-              />
-            </div>
+        <div className="card-surface p-6 md:p-8">
+          {!finished ? (
+            <>
+              <div className="mb-6">
+                <div className="flex justify-between text-xs text-muted-foreground mb-2 font-heading">
+                  <span>Domanda {current + 1}/{questions.length}</span>
+                  <span>{score} corrette</span>
+                </div>
+                <Progress value={((current + 1) / questions.length) * 100} className="h-1.5 bg-border" />
+              </div>
 
-            <p className="text-xs text-muted-foreground mb-3">
-              Domanda {current + 1} di {questions.length}
-            </p>
-            <h3 className="text-lg font-semibold mb-6">{q.q}</h3>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <h3 className="text-lg font-semibold font-heading mb-6">{questions[current].q}</h3>
 
-            <div className="flex flex-col gap-3">
-              {q.options.map((opt, i) => {
-                let cls = "card-bitcoin cursor-pointer text-sm transition-all duration-200 hover:border-primary/50";
-                if (selected !== null) {
-                  if (i === q.correct) cls += " !border-green-500 !bg-green-500/10";
-                  else if (i === selected) cls += " !border-red-500 !bg-red-500/10";
-                }
-                return (
-                  <button key={i} onClick={() => handleAnswer(i)} className={cls} disabled={selected !== null}>
-                    {opt}
-                  </button>
-                );
-              })}
-            </div>
+                  <div className="space-y-3">
+                    {questions[current].options.map((opt, idx) => {
+                      let borderClass = "border-border hover:border-primary/40";
+                      if (answered) {
+                        if (idx === questions[current].correct) borderClass = "border-green-500/60 bg-green-500/5";
+                        else if (idx === selected) borderClass = "border-red-500/60 bg-red-500/5";
+                        else borderClass = "border-border opacity-50";
+                      }
 
-            {selected !== null && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4">
-                <p className="text-sm text-muted-foreground">{q.explanation}</p>
-                <Button onClick={next} className="mt-4 bg-gradient-bitcoin text-primary-foreground hover:opacity-90">
-                  {current < questions.length - 1 ? "Prossima domanda" : "Vedi risultato"}
-                </Button>
-              </motion.div>
-            )}
-          </motion.div>
-        ) : (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="card-bitcoin text-center">
-            <div className="text-6xl mb-4">{score <= 2 ? "📚" : score <= 4 ? "👍" : "🏆"}</div>
-            <h3 className="text-2xl font-bold mb-2">
-              {score}/{questions.length} risposte corrette
-            </h3>
-            <p className="text-muted-foreground mb-6">{getMessage()}</p>
-            <Button onClick={reset} variant="outline" className="border-primary text-primary hover:bg-primary/10">
-              <RotateCcw size={16} className="mr-2" /> Rifai il quiz
-            </Button>
-          </motion.div>
-        )}
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => handleSelect(idx)}
+                          disabled={answered}
+                          className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition-all flex items-center gap-3 ${borderClass}`}
+                        >
+                          <span className="flex-1">{opt}</span>
+                          {answered && idx === questions[current].correct && <Check size={16} className="text-green-500" />}
+                          {answered && idx === selected && idx !== questions[current].correct && <X size={16} className="text-red-500" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {answered && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4">
+                      <p className="text-[13px] text-muted-foreground mb-4">{questions[current].explanation}</p>
+                      <Button onClick={handleNext} className="font-heading">
+                        {current + 1 < questions.length ? "Prossima domanda" : "Vedi risultato"}
+                      </Button>
+                    </motion.div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </>
+          ) : (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-8">
+              <p className="text-5xl font-bold text-primary font-heading mb-4">{score}/{questions.length}</p>
+              <p className="text-muted-foreground mb-6">{getScoreMessage()}</p>
+              <Button onClick={handleReset} variant="outline" className="font-heading gap-2">
+                <RotateCcw size={14} />
+                Ricomincia
+              </Button>
+            </motion.div>
+          )}
+        </div>
       </div>
     </section>
   );

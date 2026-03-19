@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Monitor, Globe, Lock } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -9,82 +8,80 @@ import {
 
 const cards = [
   {
-    icon: Monitor,
-    emoji: "💻",
-    title: "Moneta Digitale",
-    desc: "La prima valuta digitale decentralizzata, senza banche né intermediari. Funziona 24/7 in tutto il mondo su base matematica.",
-    detail: "Bitcoin è stato creato nel 2009 da Satoshi Nakamoto come sistema di pagamento elettronico peer-to-peer. Non dipende da nessuna banca centrale o istituto finanziario. Le transazioni avvengono direttamente tra utenti attraverso la crittografia, senza la necessità di un intermediario di fiducia.",
+    title: "DECENTRALIZZATO",
+    text: "Nessun server centrale, nessuna autorità di controllo. La rete vive su migliaia di nodi distribuiti che mantengono insieme il registro pubblico. Non esiste un interruttore da spegnere.",
   },
   {
-    icon: Globe,
-    emoji: "🌐",
-    title: "Rete Distribuita",
-    desc: "Non esiste un server centrale. Migliaia di computer nel mondo mantengono insieme il registro pubblico, senza nessun punto di controllo.",
-    detail: "La rete Bitcoin è composta da migliaia di nodi distribuiti in tutto il mondo. Ogni nodo mantiene una copia completa della blockchain. Questo rende il sistema estremamente resistente: non esiste un singolo punto di guasto o di controllo. Anche se alcuni nodi vengono spenti, la rete continua a funzionare.",
+    title: "IMMUTABILE",
+    text: "Ogni transazione registrata nella blockchain è permanente. Nessuno — nessuno stato, nessuna banca, nessuna azienda — può alterare ciò che è già scritto nel registro.",
   },
   {
-    icon: Lock,
-    emoji: "🔒",
-    title: "Regole Immutabili",
-    desc: "Le regole del sistema sono trasparenti, matematiche e uguali per tutti. Nessuno può cambiarle unilateralmente.",
-    detail: "Il protocollo Bitcoin è open-source e le sue regole sono verificabili da chiunque. Modifiche al codice richiedono il consenso della maggioranza della rete. Regole come il limite massimo di 21 milioni di Bitcoin e il meccanismo di halving sono programmate nel codice sin dall'inizio e non possono essere alterate da un singolo attore.",
+    title: "PROGRAMMATO",
+    text: "Le regole di Bitcoin sono matematiche, non politiche. L'emissione, il ritmo di produzione, il limite massimo: tutto è definito dal protocollo, non da una decisione umana.",
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.15, duration: 0.5 },
-  }),
-};
+const faqs = [
+  {
+    q: "Come funziona tecnicamente una transazione?",
+    a: "L'utente firma digitalmente la transazione con la propria chiave privata. La transazione viene trasmessa alla rete peer-to-peer, validata dai nodi e inclusa in un blocco dai miner. Una volta confermata, è irreversibile e visibile a tutti sul registro pubblico.",
+  },
+  {
+    q: "Qual è la differenza tra Bitcoin e una valuta tradizionale?",
+    a: "Una valuta tradizionale è emessa e controllata da un'autorità centrale (banca centrale). Bitcoin è emesso da un algoritmo, regolato dal consenso della rete e non ha bisogno di intermediari per funzionare. L'offerta è fissa e predeterminata.",
+  },
+  {
+    q: "Chi governa il protocollo Bitcoin?",
+    a: "Nessuna entità singola. Le modifiche al protocollo richiedono il consenso distribuito della rete: sviluppatori propongono, nodi validano, miner eseguono. È un sistema di governance emergente, non gerarchico.",
+  },
+];
 
 const WhatIsBitcoin = () => {
   return (
-    <section id="cosè-bitcoin" className="py-24 px-4">
+    <section id="cose-bitcoin" className="min-h-screen flex flex-col justify-center py-24 px-4">
       <div className="container mx-auto max-w-6xl">
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold text-center mb-16"
+          className="mb-12"
         >
-          Cos'è <span className="text-primary">Bitcoin</span>?
-        </motion.h2>
+          <p className="label-section mb-2">FONDAMENTALI</p>
+          <h2 className="text-3xl md:text-5xl font-bold font-heading">Cos'è Bitcoin?</h2>
+          <p className="text-muted-foreground mt-2">Non una valuta come le altre. Un protocollo.</p>
+        </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-4 mb-12">
           {cards.map((card, i) => (
             <motion.div
               key={card.title}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              variants={cardVariants}
-              className="card-bitcoin hover:glow-bitcoin transition-shadow duration-300"
+              transition={{ delay: i * 0.1 }}
+              className="card-surface p-6"
             >
-              <div className="text-3xl mb-4">{card.emoji}</div>
-              <h3 className="text-xl font-semibold mb-3">{card.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{card.desc}</p>
+              <h3 className="text-primary text-xs font-bold tracking-wider mb-3 font-heading">
+                {card.title}
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{card.text}</p>
             </motion.div>
           ))}
         </div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-3xl mx-auto"
         >
-          <Accordion type="single" collapsible>
-            {cards.map((card, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="border-border">
-                <AccordionTrigger className="text-foreground hover:text-primary">
-                  {card.emoji} Approfondisci: {card.title}
+          <Accordion type="single" collapsible className="card-surface divide-y divide-border">
+            {faqs.map((faq) => (
+              <AccordionItem key={faq.q} value={faq.q} className="border-none px-6">
+                <AccordionTrigger className="text-sm font-heading text-foreground hover:text-primary py-4">
+                  {faq.q}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  {card.detail}
+                <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+                  {faq.a}
                 </AccordionContent>
               </AccordionItem>
             ))}
