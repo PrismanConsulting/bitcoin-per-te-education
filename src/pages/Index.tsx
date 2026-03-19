@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const tickerWords = [
   "blockchain", "satoshi", "halving", "proof-of-work", "UTXO", "mempool",
