@@ -28,6 +28,11 @@ const FiatPage = () => (
     transition={{ duration: 0.2 }}
     className="min-h-screen pt-16 flex flex-col justify-center"
   >
+    <SEO
+      title="Bitcoin vs Monete Fiat — Confronto Tecnico | BitcoinPerTe"
+      description="Confronto tecnico tra Bitcoin e valute tradizionali: operatività 24/7, assenza di intermediari, offerta programmata vs discrezionale. Analisi oggettiva."
+      path="/fiat"
+    />
     <div className="container mx-auto px-4 max-w-6xl py-12">
       <div className="mb-8">
         <p className="label-section mb-2">CONFRONTO</p>

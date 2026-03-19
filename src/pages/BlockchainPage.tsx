@@ -51,6 +51,11 @@ const BlockchainPage = () => {
       transition={{ duration: 0.2 }}
       className="min-h-screen pt-16 flex flex-col justify-center"
     >
+      <SEO
+        title="Come Funziona la Blockchain — Spiegazione Tecnica | BitcoinPerTe"
+        description="La blockchain di Bitcoin spiegata passo per passo: blocchi, hash, immutabilità, registro pubblico. Con visualizzazione interattiva e hash simulator reale."
+        path="/blockchain"
+      />
       <div className="container mx-auto px-4 max-w-6xl py-12">
         {/* Header */}
         <div className="mb-8">
