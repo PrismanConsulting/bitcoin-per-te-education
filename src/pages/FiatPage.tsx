@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 const rows = [
   ["Emissione", "Programmata (max 21M BTC)", "Discrezionale — banca centrale"],
