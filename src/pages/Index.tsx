@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import SEO from "@/components/SEO";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useLiveStats, useFlash } from "@/hooks/useLiveStats";
 
 const tickerWords = [
   "blockchain", "satoshi", "halving", "proof-of-work", "UTXO", "mempool",
@@ -124,6 +126,9 @@ const HomePage = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Live dalla Rete widget */}
+              <LiveWidget />
 
               <div className="flex items-center justify-center lg:justify-end gap-2">
                 <span className={`w-2 h-2 rounded-full ${networkActive === true ? "bg-green-500 animate-pulse" : networkActive === false ? "bg-muted-foreground" : "bg-muted"}`} />
