@@ -12,6 +12,7 @@ const navLinks = [
   { label: "Bitcoin vs Fiat", href: "/fiat" },
   { label: "Terminale", href: "/terminale" },
   { label: "Quiz", href: "/quiz" },
+  { label: "Glossario", href: "/glossario" },
   { label: "Community", href: "/community" },
 ];
 
