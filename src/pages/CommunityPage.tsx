@@ -5,30 +5,9 @@ import PrivacyModal from "@/components/PrivacyModal";
 import TermsModal from "@/components/TermsModal";
 import SEO from "@/components/SEO";
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/TUO_ID_REALE";
-
 const CommunityPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("sending");
-    try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
-      });
-      setStatus(res.ok ? "ok" : "error");
-    } catch {
-      setStatus("error");
-    }
-  };
 
   const socialLinks = [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/matteoterenzio/" },
@@ -92,67 +71,46 @@ const CommunityPage = () => {
             </div>
           </div>
 
-          {/* Right - Form */}
+          {/* Right - Contact buttons */}
           <div className="card-surface p-6">
             <h3 className="text-xl font-bold font-heading text-foreground mb-1">Scrivici</h3>
             <p className="text-base text-muted-foreground mb-5">
-              Per approfondimenti, collaborazioni editoriali o scambio di idee su Bitcoin e tecnologia distribuita.
+              Scegli il canale che preferisci. Rispondiamo sempre.
             </p>
 
-            {status === "ok" ? (
-              <div className="card-surface p-6 text-center space-y-2">
-                <p className="text-lg font-heading font-semibold text-primary">✅ Messaggio ricevuto!</p>
-                <p className="text-base text-muted-foreground">Ti risponderemo presto.</p>
-              </div>
-            ) : (
-              <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="space-y-3">
+              <a
+                href="https://wa.me/39INSERISCI_NUMERO?text=Ciao%2C+ti+scrivo+da+bitcoinperte.it"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-4 card-surface rounded-xl hover:border-primary/30 transition-colors w-full text-left"
+              >
+                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" className="flex-shrink-0">
+                  <path d="M6 26l1.5-5.5A11 11 0 1122 25l-5.5 1.5L6 26z" stroke="#F7931A" strokeWidth="1.5" strokeLinejoin="round" />
+                </svg>
                 <div>
-                  <label className="text-sm text-muted-foreground mb-1 block">Nome</label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
-                  />
+                  <p className="text-sm font-medium text-foreground">Scrivici su WhatsApp</p>
+                  <p className="text-xs text-muted-foreground">Messaggio diretto · Solo divulgazione</p>
                 </div>
+              </a>
+
+              <a
+                href="mailto:info@prismanconsulting.it?subject=Contatto da bitcoinperte.it"
+                className="flex items-center gap-4 p-4 card-surface rounded-xl hover:border-primary/30 transition-colors w-full text-left"
+              >
+                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" className="flex-shrink-0">
+                  <rect x="4" y="8" width="24" height="16" rx="2" stroke="#F7931A" strokeWidth="1.5" />
+                  <path d="M4 10l12 8 12-8" stroke="#F7931A" strokeWidth="1.5" strokeLinejoin="round" />
+                </svg>
                 <div>
-                  <label className="text-sm text-muted-foreground mb-1 block">Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
-                  />
+                  <p className="text-sm font-medium text-foreground">Scrivici via Email</p>
+                  <p className="text-xs text-muted-foreground">info@prismanconsulting.it</p>
                 </div>
-                <div>
-                  <label className="text-sm text-muted-foreground mb-1 block">Messaggio</label>
-                  <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    rows={4}
-                    required
-                    className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50 resize-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-base font-medium hover:bg-primary/90 transition-colors font-heading disabled:opacity-60"
-                >
-                  {status === "sending" ? "Invio in corso..." : "Invia"}
-                </button>
-                {status === "error" && (
-                  <p className="text-sm" style={{ color: "#EF4444" }}>
-                    ❌ Errore nell'invio. Riprova o scrivi a info@prismanconsulting.it
-                  </p>
-                )}
-              </form>
-            )}
+              </a>
+            </div>
 
             <p className="text-[14px] text-muted-foreground mt-4">
-              Dati usati solo per rispondere alla tua richiesta ·{" "}
+              Dati usati solo per rispondere ·{" "}
               <button onClick={() => setPrivacyOpen(true)} className="text-primary hover:underline">Privacy Policy</button>{" · "}
               <button onClick={() => setTermsOpen(true)} className="text-primary hover:underline">Termini d'uso</button>
             </p>
