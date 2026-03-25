@@ -34,6 +34,48 @@ const AnimatedNumber = () => {
   );
 };
 
+const LiveWidget = () => {
+  const { priceEur, blockHeight, halfHourFee } = useLiveStats();
+  const flashPrice = useFlash(priceEur);
+  const flashBlock = useFlash(blockHeight);
+  const flashFee = useFlash(halfHourFee);
+
+  const items = [
+    { label: "BTC/EUR", value: priceEur ? `€${priceEur.toLocaleString("it-IT")}` : null, flash: flashPrice },
+    { label: "Blocco", value: blockHeight ? blockHeight.toLocaleString("it-IT") : null, flash: flashBlock },
+    { label: "Fee ~30m", value: halfHourFee ? `${halfHourFee} sat/vB` : null, flash: flashFee },
+  ];
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <p className="text-[13px] text-muted-foreground font-heading">Live dalla Rete</p>
+        <span className="flex items-center gap-1 text-[12px] text-green-500">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+          live
+        </span>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {items.map((item) => (
+          <div key={item.label} className="card-surface p-2.5 text-center">
+            <p className="text-[11px] text-muted-foreground mb-1">{item.label}</p>
+            {item.value ? (
+              <p className={`font-mono text-sm font-bold text-foreground transition-colors duration-500 ${item.flash ? "!text-primary" : ""}`}>
+                {item.value}
+              </p>
+            ) : (
+              <Skeleton className="h-5 w-full mx-auto" />
+            )}
+          </div>
+        ))}
+      </div>
+      <Link to="/terminale" className="text-[13px] text-primary hover:underline block text-right">
+        → Terminale completo
+      </Link>
+    </div>
+  );
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
   const [networkActive, setNetworkActive] = useState<boolean | null>(null);
