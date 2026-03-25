@@ -15,6 +15,7 @@ import FiatPage from "@/pages/FiatPage";
 import TerminalePage from "@/pages/TerminalePage";
 import QuizPage from "@/pages/QuizPage";
 import CommunityPage from "@/pages/CommunityPage";
+import GlossarioPage from "@/pages/GlossarioPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const AnimatedRoutes = () => {
           <Route path="/fiat" element={<FiatPage />} />
           <Route path="/terminale" element={<TerminalePage />} />
           <Route path="/quiz" element={<QuizPage />} />
+          <Route path="/glossario" element={<GlossarioPage />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
