@@ -42,6 +42,7 @@ const Navbar = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              {l.href === "/live" && <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block mr-1" />}
               {l.label}
               {location.pathname === l.href && (
                 <motion.div
