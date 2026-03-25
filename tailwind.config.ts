@@ -94,6 +94,10 @@ export default {
           from: { transform: "scaleY(0)" },
           to: { transform: "scaleY(1)" },
         },
+        breathe: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.6" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.3s ease-out",
@@ -101,6 +105,7 @@ export default {
         ticker: "ticker 40s linear infinite",
         "bounce-slow": "bounce-slow 3s ease-in-out infinite",
         "grow-bar": "grow-bar 0.8s ease-out forwards",
+        breathe: "breathe 3s ease-in-out infinite",
       },
     },
   },

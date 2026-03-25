@@ -7,29 +7,40 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useLiveStats, useFlash } from "@/hooks/useLiveStats";
 
 const tickerWords = [
-  "blockchain", "satoshi", "halving", "proof-of-work", "UTXO", "mempool",
-  "nodo", "mining", "wallet", "decentralizzazione", "hash", "fork",
-  "lightning network", "timelock", "multisig", "schnorr",
+  "nessun padrone",
+  "21 milioni · mai uno di più",
+  "dal 2009 senza mai fermarsi",
+  "ogni 10 minuti un blocco",
+  "nessuno può bloccartelo",
+  "matematica pura",
+  "verificabile da chiunque",
+  "inflazione zero programmata",
+  "nessuna banca centrale",
+  "codice aperto · per sempre",
 ];
 
 const AnimatedNumber = () => {
   const target = "21.000.000";
   const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
       i++;
       setDisplayed(target.slice(0, i));
-      if (i >= target.length) clearInterval(interval);
+      if (i >= target.length) {
+        clearInterval(interval);
+        setDone(true);
+      }
     }, 80);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <span className="font-mono text-5xl md:text-7xl font-bold text-primary">
+    <span className={`font-mono text-5xl md:text-7xl font-bold text-primary ${done ? "animate-breathe" : ""}`}>
       {displayed}
-      <span className="animate-pulse">|</span>
+      {!done && <span className="animate-pulse">|</span>}
     </span>
   );
 };
@@ -116,11 +127,13 @@ const HomePage = () => {
               <p className="label-section">PROGETTO EDITORIALE INDIPENDENTE</p>
 
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-[1.1] text-foreground">
-                Bitcoin — La Tecnologia che Ridefinisce il Concetto di Moneta
+                Una moneta che nessuno{" "}
+                <span className="text-primary">può fermare.</span>
               </h1>
 
               <p className="text-muted-foreground text-lg md:text-xl max-w-xl leading-relaxed">
-                Un hub di conoscenza per chi vuole capire Bitcoin davvero, senza semplificazioni e senza secondi fini.
+                Non serve sapere nulla di tecnologia.<br />
+                Serve solo capire perché esiste.
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -131,10 +144,10 @@ const HomePage = () => {
                   Inizia da qui →
                 </Link>
                 <Link
-                  to="/community"
+                  to="/live"
                   className="border border-border text-muted-foreground px-5 py-2.5 rounded-md text-base font-medium hover:text-foreground hover:border-muted-foreground transition-colors font-heading"
                 >
-                  Entra nella Community →
+                  Senti la rete live →
                 </Link>
               </div>
 
@@ -154,6 +167,9 @@ const HomePage = () => {
               <div className="text-center lg:text-right">
                 <AnimatedNumber />
                 <p className="text-muted-foreground text-base mt-2">BTC — offerta massima programmata</p>
+                <p className="font-mono text-[11px] text-primary/40 mt-1">
+                  +6.25 BTC ogni ~10 minuti · ancora per ~100 anni
+                </p>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
@@ -182,6 +198,83 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+
+      {/* 3 card di ingresso */}
+      <section className="container mx-auto px-4 max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-3 mb-8 relative z-10">
+        <Link to="/bitcoin" className="card-surface p-4 rounded-xl hover:border-primary/20 transition-colors cursor-pointer flex flex-col gap-3">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="2.5" fill="#F7931A"/>
+            <circle cx="16" cy="16" r="7" stroke="#F7931A" strokeWidth="0.8" opacity="0.5"/>
+            <circle cx="16" cy="16" r="12" stroke="#F7931A" strokeWidth="0.5" opacity="0.2"/>
+          </svg>
+          <p className="text-[11px] tracking-widest text-muted-foreground">PARTI DA ZERO</p>
+          <p className="font-heading font-bold text-foreground">Non so nulla di Bitcoin</p>
+          <p className="text-[14px] text-muted-foreground">Spiegazione senza tecnicismi in 3 minuti</p>
+        </Link>
+
+        <Link to="/fiat" className="card-surface p-4 rounded-xl hover:border-primary/20 transition-colors cursor-pointer flex flex-col gap-3">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <rect x="2" y="13" width="10" height="6" rx="1.5" stroke="#F7931A" strokeWidth="1"/>
+            <rect x="20" y="13" width="10" height="6" rx="1.5" stroke="#F7931A" strokeWidth="1" opacity="0.35"/>
+            <line x1="12" y1="16" x2="20" y2="16" stroke="#F7931A" strokeWidth="1" strokeDasharray="2 2" opacity="0.3"/>
+          </svg>
+          <p className="text-[11px] tracking-widest text-muted-foreground">SO QUALCOSA</p>
+          <p className="font-heading font-bold text-foreground">Ho sentito ma non capisco</p>
+          <p className="text-[14px] text-muted-foreground">Le domande che tutti fanno, finalmente risposta</p>
+        </Link>
+
+        <Link to="/terminale" className="card-surface p-4 rounded-xl hover:border-primary/20 transition-colors cursor-pointer flex flex-col gap-3">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <rect x="4" y="22" width="24" height="5" rx="1" fill="#F7931A"/>
+            <rect x="4" y="15" width="24" height="5" rx="1" fill="#F7931A" opacity="0.5"/>
+            <rect x="4" y="8" width="24" height="5" rx="1" fill="#F7931A" opacity="0.2"/>
+            <line x1="16" y1="22" x2="16" y2="20" stroke="#F7931A" strokeWidth="0.8" opacity="0.4"/>
+            <line x1="16" y1="15" x2="16" y2="13" stroke="#F7931A" strokeWidth="0.8" opacity="0.4"/>
+          </svg>
+          <p className="text-[11px] tracking-widest text-muted-foreground">VOGLIO I DATI</p>
+          <p className="font-heading font-bold text-foreground">Sono già convinto</p>
+          <p className="text-[14px] text-muted-foreground">Terminale, mappa nodi, parametri vitali</p>
+        </Link>
+      </section>
+
+      {/* Teaser /live */}
+      <section className="container mx-auto px-4 max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 relative z-10">
+        <Link
+          to="/live"
+          className="card-surface p-4 rounded-xl border-l-2 border-l-primary hover:border-primary/30 transition-colors cursor-pointer"
+          style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+        >
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" className="mb-2">
+            <line x1="2" y1="16" x2="5" y2="16" stroke="#F7931A" strokeWidth="1.2" strokeLinecap="round"/>
+            <line x1="7" y1="11" x2="7" y2="21" stroke="#F7931A" strokeWidth="1.2" strokeLinecap="round"/>
+            <line x1="11" y1="8" x2="11" y2="24" stroke="#F7931A" strokeWidth="1.2" strokeLinecap="round"/>
+            <line x1="15" y1="13" x2="15" y2="19" stroke="#F7931A" strokeWidth="1.2" strokeLinecap="round"/>
+            <line x1="19" y1="10" x2="19" y2="22" stroke="#F7931A" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/>
+            <line x1="23" y1="14" x2="23" y2="18" stroke="#F7931A" strokeWidth="1.2" strokeLinecap="round" opacity="0.4"/>
+            <line x1="27" y1="16" x2="30" y2="16" stroke="#F7931A" strokeWidth="1.2" strokeLinecap="round" opacity="0.2"/>
+          </svg>
+          <p className="font-heading font-bold text-foreground">La Sinfonia della Rete</p>
+          <p className="text-[14px] text-muted-foreground mt-1">Ogni transazione Bitcoin è una nota. La musica che il mondo compone senza saperlo.</p>
+          <p className="text-[13px] text-primary mt-2">Ascolta live →</p>
+        </Link>
+
+        <Link
+          to="/live"
+          className="card-surface p-4 rounded-xl border-l-2 border-l-primary hover:border-primary/30 transition-colors cursor-pointer"
+          style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+        >
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" className="mb-2">
+            <polyline
+              points="2,16 7,16 9,10 11,22 13,7 15,16 17,16 19,13 21,16 30,16"
+              stroke="#F7931A" strokeWidth="1.2"
+              strokeLinecap="round" strokeLinejoin="round"
+              fill="none"/>
+          </svg>
+          <p className="font-heading font-bold text-foreground">Bitcoin Vivo</p>
+          <p className="text-[14px] text-muted-foreground mt-1">Battito cardiaco, pressione, temperatura. La rete come organismo biologico.</p>
+          <p className="text-[13px] text-primary mt-2">Guarda battere →</p>
+        </Link>
+      </section>
 
       {/* Arrow */}
       <div className="relative z-10 flex justify-center pb-4">
