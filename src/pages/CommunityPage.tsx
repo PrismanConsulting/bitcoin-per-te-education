@@ -5,7 +5,7 @@ import PrivacyModal from "@/components/PrivacyModal";
 import TermsModal from "@/components/TermsModal";
 import SEO from "@/components/SEO";
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/FORMSPREE_ENDPOINT";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/TUO_ID_REALE";
 
 const CommunityPage = () => {
   const [name, setName] = useState("");
