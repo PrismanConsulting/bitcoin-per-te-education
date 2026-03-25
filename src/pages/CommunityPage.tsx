@@ -80,7 +80,7 @@ const CommunityPage = () => {
 
             <div className="space-y-3">
               <a
-                href="https://wa.me/39INSERISCI_NUMERO?text=Ciao%2C+ti+scrivo+da+bitcoinperte.it"
+                href="https://wa.me/393382529370?text=Ciao%2C+ti+scrivo+da+bitcoinperte.it"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 card-surface rounded-xl hover:border-primary/30 transition-colors w-full text-left"
