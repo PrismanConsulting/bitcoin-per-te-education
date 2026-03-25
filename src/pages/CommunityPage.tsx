@@ -5,12 +5,36 @@ import PrivacyModal from "@/components/PrivacyModal";
 import TermsModal from "@/components/TermsModal";
 import SEO from "@/components/SEO";
 
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/FORMSPREE_ENDPOINT";
+
 const CommunityPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("sending");
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      setStatus(res.ok ? "ok" : "error");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  const socialLinks = [
+    { label: "X / Twitter", href: "#" },
+    { label: "Telegram", href: "#" },
+    { label: "LinkedIn", href: "#" },
+  ];
 
   return (
     <motion.div
@@ -53,8 +77,16 @@ const CommunityPage = () => {
             </div>
 
             <div className="flex gap-4">
-              {["X / Twitter", "Telegram", "LinkedIn"].map((s) => (
-                <span key={s} className="text-[14px] text-muted-foreground border border-border rounded px-2.5 py-1">{s}</span>
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[14px] text-muted-foreground border border-border rounded px-2.5 py-1 hover:border-primary/40 hover:text-primary transition-colors"
+                >
+                  {s.label}
+                </a>
               ))}
             </div>
           </div>
@@ -66,41 +98,57 @@ const CommunityPage = () => {
               Per approfondimenti, collaborazioni editoriali o scambio di idee su Bitcoin e tecnologia distribuita.
             </p>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Nome</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
-                />
+            {status === "ok" ? (
+              <div className="card-surface p-6 text-center space-y-2">
+                <p className="text-lg font-heading font-semibold text-primary">✅ Messaggio ricevuto!</p>
+                <p className="text-base text-muted-foreground">Ti risponderemo presto.</p>
               </div>
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
-                />
-              </div>
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Messaggio</label>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  rows={4}
-                  className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50 resize-none"
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-base font-medium hover:bg-primary/90 transition-colors font-heading"
-              >
-                Invia
-              </button>
-            </form>
+            ) : (
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <div>
+                  <label className="text-sm text-muted-foreground mb-1 block">Nome</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-muted-foreground mb-1 block">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-muted-foreground mb-1 block">Messaggio</label>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={4}
+                    required
+                    className="w-full bg-card-elevated border border-border rounded px-3 py-2.5 text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50 resize-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md text-base font-medium hover:bg-primary/90 transition-colors font-heading disabled:opacity-60"
+                >
+                  {status === "sending" ? "Invio in corso..." : "Invia"}
+                </button>
+                {status === "error" && (
+                  <p className="text-sm" style={{ color: "#EF4444" }}>
+                    ❌ Errore nell'invio. Riprova o scrivi a info@prismanconsulting.it
+                  </p>
+                )}
+              </form>
+            )}
 
             <p className="text-[14px] text-muted-foreground mt-4">
               Dati usati solo per rispondere alla tua richiesta ·{" "}
