@@ -31,7 +31,7 @@ const CommunityPage = () => {
   };
 
   const socialLinks = [
-    { label: "LinkedIn", href: "https://www.linkedin.com/company/prisman-consulting" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/matteoterenzio/" },
   ];
 
   return (
