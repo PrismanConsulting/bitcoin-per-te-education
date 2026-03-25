@@ -11,6 +11,7 @@ const navLinks = [
   { label: "I Satoshi", href: "/satoshi" },
   { label: "Bitcoin vs Fiat", href: "/fiat" },
   { label: "Terminale", href: "/terminale" },
+  { label: "Live", href: "/live" },
   { label: "Mappa", href: "/mappa" },
   { label: "Quiz", href: "/quiz" },
   { label: "Glossario", href: "/glossario" },
@@ -41,6 +42,7 @@ const Navbar = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
+              {l.href === "/live" && <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block mr-1" />}
               {l.label}
               {location.pathname === l.href && (
                 <motion.div
@@ -89,6 +91,7 @@ const Navbar = () => {
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
+                  {l.href === "/live" && <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block mr-1" />}
                   {l.label}
                 </Link>
               ))}
