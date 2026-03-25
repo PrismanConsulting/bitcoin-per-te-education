@@ -31,9 +31,7 @@ const CommunityPage = () => {
   };
 
   const socialLinks = [
-    { label: "X / Twitter", href: "#" },
-    { label: "Telegram", href: "#" },
-    { label: "LinkedIn", href: "#" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/prisman-consulting" },
   ];
 
   return (
