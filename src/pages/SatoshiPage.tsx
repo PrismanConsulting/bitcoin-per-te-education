@@ -1,19 +1,38 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Share2 } from "lucide-react";
 
-const BTC_PRICE = 100_000;
 const SATS_PER_BTC = 100_000_000;
 
 const SatoshiPage = () => {
   const [euros, setEuros] = useState("");
+  const [btcPrice, setBtcPrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchPrice = () => {
+      fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur")
+        .then((r) => r.json())
+        .then((d) => setBtcPrice(d.bitcoin.eur))
+        .catch(() => {});
+    };
+    fetchPrice();
+    const id = setInterval(fetchPrice, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   const result = useMemo(() => {
+    if (!btcPrice) return null;
     const val = parseFloat(euros);
     if (isNaN(val) || val <= 0) return null;
-    const sats = Math.round((val / BTC_PRICE) * SATS_PER_BTC);
-    return { sats, formula: `€${val.toLocaleString("it-IT")} ÷ €100.000 × 100.000.000 = ${sats.toLocaleString("it-IT")} sat` };
-  }, [euros]);
+    const sats = Math.round((val / btcPrice) * SATS_PER_BTC);
+    return {
+      sats,
+      formula: `€${val.toLocaleString("it-IT")} ÷ €${btcPrice.toLocaleString("it-IT")} × 100.000.000 = ${sats.toLocaleString("it-IT")} sat`,
+      shareUrl: `https://twitter.com/intent/tweet?text=Con+€${val.toLocaleString("it-IT")}+compri+${sats.toLocaleString("it-IT")}+satoshi+di+Bitcoin+📊+%23Bitcoin+%23Satoshi+→+bitcoinperte.it/satoshi`,
+    };
+  }, [euros, btcPrice]);
 
   return (
     <motion.div
@@ -55,8 +74,10 @@ const SatoshiPage = () => {
           <div className="lg:col-span-5">
             <div className="card-surface p-6 border-primary/20">
               <h3 className="text-xl font-bold font-heading text-foreground mb-1">Calcolatore Didattico</h3>
-              <p className="text-[14px] text-muted-foreground mb-5">
-                Valore di riferimento fisso: 1 BTC = €100.000 · Solo uso educativo
+              <p className="text-[15px] text-muted-foreground mb-5">
+                {btcPrice
+                  ? `Prezzo live da CoinGecko: 1 BTC = €${btcPrice.toLocaleString("it-IT")} · Aggiornato ogni 60s · Solo uso educativo`
+                  : "Caricamento prezzo live da CoinGecko…"}
               </p>
 
               <div className="space-y-4">
@@ -71,6 +92,13 @@ const SatoshiPage = () => {
                   />
                 </div>
 
+                {!btcPrice && euros && (
+                  <div className="space-y-3">
+                    <Skeleton className="h-20 w-full rounded" />
+                    <Skeleton className="h-4 w-3/4 mx-auto rounded" />
+                  </div>
+                )}
+
                 {result && (
                   <motion.div
                     initial={{ opacity: 0, y: 8 }}
@@ -83,13 +111,24 @@ const SatoshiPage = () => {
                         {result.sats.toLocaleString("it-IT")} <span className="text-sm text-muted-foreground">sat</span>
                       </p>
                     </div>
-                    <p className="text-[14px] font-mono text-muted-foreground text-center">{result.formula}</p>
+                    <p className="text-[15px] font-mono text-muted-foreground text-center">{result.formula}</p>
+                    <div className="flex justify-center pt-1">
+                      <a
+                        href={result.shareUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors"
+                      >
+                        <Share2 className="w-4 h-4" />
+                        Condividi su X
+                      </a>
+                    </div>
                   </motion.div>
                 )}
               </div>
 
-              <p className="text-[14px] text-muted-foreground mt-5" style={{ color: '#BBBBBB' }}>
-                Strumento didattico con valore fisso. Non riflette il prezzo corrente di mercato.
+              <p className="text-[15px] text-muted-foreground mt-5" style={{ color: '#BBBBBB' }}>
+                Solo uso educativo — non costituisce consiglio finanziario.
               </p>
             </div>
           </div>
