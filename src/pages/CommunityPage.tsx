@@ -72,6 +72,9 @@ const CommunityPage = () => {
                 prismanconsulting.it <ExternalLink size={10} />
               </a>
               <p className="text-[14px] text-muted-foreground">info@prismanconsulting.it</p>
+              <p className="text-[14px] text-muted-foreground">
+                <a href="tel:+393382529370" className="hover:text-primary transition-colors">+39 338 25 29 370</a>
+              </p>
             </div>
 
             <div className="flex gap-4">
