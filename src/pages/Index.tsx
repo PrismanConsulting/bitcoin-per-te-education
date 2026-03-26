@@ -144,7 +144,7 @@ const HomePage = () => {
 
               <div className="flex flex-wrap gap-3">
                 <Link
-                  to="/bitcoin"
+                  to="/inizia"
                   className="border border-primary/30 text-primary px-5 py-2.5 rounded-md text-base font-medium hover:bg-primary/10 transition-colors font-heading"
                 >
                   Inizia da qui →
