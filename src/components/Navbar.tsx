@@ -179,9 +179,30 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Badge */}
-        <div className="hidden xl:block shrink-0">
-          <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
+        {/* Auth + Badge */}
+        <div className="hidden lg:flex items-center gap-2 shrink-0">
+          {!loading && !user && (
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="text-[13px] border border-primary/30 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors font-heading"
+            >
+              Accedi
+            </button>
+          )}
+          {!loading && user && profile && (
+            <div className="flex items-center gap-2">
+              <Link to="/preferenze" className="text-[13px] font-mono text-primary hover:text-primary/80 transition-colors">
+                ₿ {profile.nickname}
+              </Link>
+              <button
+                onClick={signOut}
+                className="text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+              >
+                esci
+              </button>
+            </div>
+          )}
+          <span className="hidden xl:inline text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
             Solo divulgazione · Non consulenza finanziaria
           </span>
         </div>
@@ -238,9 +259,9 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </nav>
   );
-};
 
 const DropdownPanel = ({ links, pathname }: { links: { label: string; href: string }[]; pathname: string }) => (
   <motion.div
