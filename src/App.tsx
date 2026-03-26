@@ -21,6 +21,7 @@ import LivePage from "@/pages/LivePage";
 import OracoloPage from "@/pages/OracoloPage";
 import HolderPage from "@/pages/HolderPage";
 import NotizePage from "@/pages/NotizePage";
+import PreferenzePage from "@/pages/PreferenzePage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();

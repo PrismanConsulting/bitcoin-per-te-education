@@ -262,6 +262,7 @@ const Navbar = () => {
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </nav>
   );
+};
 
 const DropdownPanel = ({ links, pathname }: { links: { label: string; href: string }[]; pathname: string }) => (
   <motion.div
