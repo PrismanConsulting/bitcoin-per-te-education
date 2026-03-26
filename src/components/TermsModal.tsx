@@ -36,7 +36,7 @@ const TermsModal = ({ open, onClose }: TermsModalProps) => {
             </div>
 
             <div className="overflow-y-auto max-h-[calc(80vh-60px)] px-6 py-6 text-sm text-muted-foreground leading-relaxed space-y-6">
-              <p className="text-xs">Ultimo aggiornamento: 19 marzo 2026</p>
+              <p className="text-xs">Ultimo aggiornamento: 26 marzo 2026</p>
 
               <section>
                 <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 1 — Identità del Gestore e Oggetto del Sito</h3>
@@ -70,37 +70,63 @@ const TermsModal = ({ open, onClose }: TermsModalProps) => {
               </section>
 
               <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 4 — Proprietà Intellettuale</h3>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 4 — Registrazione e Account</h3>
+                <p>Per registrarti devi:</p>
+                <ul className="list-disc list-inside space-y-1 ml-2 mt-2">
+                  <li>Avere almeno 16 anni (GDPR minori)</li>
+                  <li>Fornire un'email valida</li>
+                  <li>Scegliere un nickname appropriato</li>
+                  <li>Accettare questi termini e la Privacy Policy</li>
+                </ul>
+                <p className="mt-2">Un account per persona. Account multipli non sono consentiti.</p>
+              </section>
+
+              <section>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 5 — Contenuti Pubblicati dagli Utenti</h3>
+                <p>Pubblicando sul Wall o nei commenti ti impegni a non postare:</p>
+                <ul className="list-disc list-inside space-y-1 ml-2 mt-2">
+                  <li>Contenuti offensivi, razzisti, discriminatori o violenti</li>
+                  <li>Spam, pubblicità o link commerciali</li>
+                  <li>Informazioni personali altrui</li>
+                  <li>Contenuti che violano copyright</li>
+                  <li>Consigli finanziari o sollecitazioni all'investimento</li>
+                </ul>
+                <p className="mt-2">Ci riserviamo il diritto di rimuovere contenuti che violano queste regole senza preavviso.</p>
+              </section>
+
+              <section>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 6 — Disclaimer Finanziario</h3>
+                <p>BitcoinPerTe.it è un progetto di pura divulgazione educativa. Nessun contenuto del sito — inclusi messaggi del wall e commenti — costituisce consulenza finanziaria, raccomandazione di investimento o sollecitazione all'acquisto/vendita di asset ai sensi del D.Lgs. 58/1998 (TUF). L'utente è l'unico responsabile delle proprie decisioni finanziarie.</p>
+              </section>
+
+              <section>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 7 — Proprietà Intellettuale</h3>
                 <p>Tutti i contenuti sono di proprietà di Prisman Consulting. È vietata la riproduzione senza autorizzazione scritta. Il termine "Bitcoin" e il simbolo ₿ sono di dominio pubblico.</p>
               </section>
 
               <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 5 — Limitazione di Responsabilità</h3>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 8 — Limitazione di Responsabilità</h3>
                 <p>Il gestore non garantisce l'accuratezza dei contenuti. Le informazioni sono fornite "così come sono". Il gestore non è responsabile per decisioni di natura finanziaria prese sulla base dei contenuti del Sito.</p>
+                <p className="mt-2">Prisman Consulting non è responsabile per contenuti pubblicati dagli utenti. I dati live (prezzi, fee, blocchi) sono forniti a scopo puramente informativo — potrebbero contenere imprecisioni o ritardi.</p>
               </section>
 
               <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 6 — Link e Contenuti di Terze Parti</h3>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 9 — Link e Contenuti di Terze Parti</h3>
                 <p>Il Sito può contenere link a siti web di terzi, forniti a solo titolo informativo.</p>
               </section>
 
               <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 7 — Uso Consentito del Sito</h3>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 10 — Uso Consentito del Sito</h3>
                 <p>L'utente si impegna a utilizzare il Sito in modo lecito. È vietato l'uso per scopi commerciali non autorizzati, accessi non autorizzati, scraping e data mining.</p>
               </section>
 
               <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 8 — Contatti e Community</h3>
-                <p>Le comunicazioni non costituiscono una relazione di consulenza finanziaria. Il gestore si riserva di non rispondere a richieste relative a consigli di investimento.</p>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 11 — Legge Applicabile e Foro Competente</h3>
+                <p>I presenti termini sono regolati dalla legge italiana. Per qualsiasi controversia è competente il Foro di Chieti.</p>
               </section>
 
               <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 9 — Legge Applicabile e Foro Competente</h3>
-                <p>Legge italiana. Foro di Chieti, salvo diversa disposizione applicabile ai consumatori.</p>
-              </section>
-
-              <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 10 — Contatti</h3>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 12 — Contatti</h3>
                 <div className="card-elevated p-3 text-sm">
                   <p className="text-foreground font-medium">Prisman Consulting di Matteo Terenzio</p>
                   <p>Via Alcione 149 — 66023 Francavilla al Mare (CH)</p>
