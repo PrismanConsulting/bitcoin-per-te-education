@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
+import AuthModal from "@/components/AuthModal";
 
 const imparaLinks = [
   { label: "Cos'è Bitcoin", href: "/bitcoin" },
@@ -70,8 +72,10 @@ const ChevronSVG = ({ open }: { open: boolean }) => (
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
   const location = useLocation();
   const navRef = useRef<HTMLDivElement>(null);
+  const { user, profile, loading, signOut } = useAuth();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
