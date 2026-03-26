@@ -25,6 +25,8 @@ const esploraLinks = [
 ];
 
 const communityLinks = [
+  { label: "Il Registro →", href: "/registro", highlight: true },
+  { label: "separator", href: "" },
   { label: "Notizie Bitcoin", href: "/notizie" },
   { label: "Quiz", href: "/quiz" },
   { label: "separator", href: "" },
@@ -57,6 +59,7 @@ const mobileGroups = [
     { label: "Holder", href: "/holder" },
   ]},
   { label: "COMMUNITY", links: [
+    { label: "Il Registro →", href: "/registro", highlight: true },
     { label: "Notizie", href: "/notizie" },
     { label: "Quiz", href: "/quiz" },
     { label: "Scrivici", href: "/community" },
