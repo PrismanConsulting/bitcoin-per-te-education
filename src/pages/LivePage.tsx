@@ -2,6 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext;
+  }
+}
+
 /* ─── types ─── */
 interface Vitals {
   fee: number;
@@ -253,10 +259,14 @@ const LivePage = () => {
   }, []);
 
   // play note
-  const playNote = useCallback(() => {
+  const playNote = useCallback(async () => {
     const ctx = audioCtxRef.current;
     const gain = gainRef.current;
     if (!ctx || !gain) return;
+
+    if (ctx.state === 'suspended') {
+      await ctx.resume();
+    }
 
     const cfg = getScaleConfig(feeRef.current);
     const freq = cfg.freqs[Math.floor(Math.random() * cfg.freqs.length)];
@@ -267,8 +277,8 @@ const LivePage = () => {
     osc.frequency.setValueAtTime(freq, ctx.currentTime);
 
     const noteGain = ctx.createGain();
-    noteGain.gain.setValueAtTime(0.001, ctx.currentTime);
-    noteGain.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + 0.05);
+    noteGain.gain.setValueAtTime(0, ctx.currentTime);
+    noteGain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.05);
     noteGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
 
     osc.connect(noteGain).connect(gain);
@@ -286,21 +296,23 @@ const LivePage = () => {
     if (gainRef.current) gainRef.current.gain.setValueAtTime(volume, audioCtxRef.current?.currentTime ?? 0);
   }, [volume]);
 
-  const togglePlay = useCallback(() => {
+  const togglePlay = useCallback(async () => {
     if (playing) {
       if (timerRef.current) clearTimeout(timerRef.current);
       setPlaying(false);
       return;
     }
     if (!audioCtxRef.current) {
-      const ctx = new AudioContext();
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioCtx();
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(volume, ctx.currentTime);
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.05);
       gain.connect(ctx.destination);
       audioCtxRef.current = ctx;
       gainRef.current = gain;
     }
-    audioCtxRef.current.resume();
+    await audioCtxRef.current.resume();
     setPlaying(true);
     playNote();
   }, [playing, playNote, volume]);
@@ -447,6 +459,9 @@ const LivePage = () => {
             >
               {playing ? "⏸ Pausa" : "▶ Ascolta"}
             </button>
+            <p className="text-[11px] text-muted-foreground text-center mt-2 sm:hidden">
+              Su mobile: assicurati che il volume non sia in modalità silenziosa
+            </p>
             <div className="flex items-center gap-2">
               <span className="text-[12px] text-muted-foreground">Vol</span>
               <input
