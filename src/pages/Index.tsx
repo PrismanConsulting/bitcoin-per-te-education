@@ -11,7 +11,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useLiveStats, useFlash } from "@/hooks/useLiveStats";
 
 const tickerWords = [
   "nessun padrone",
