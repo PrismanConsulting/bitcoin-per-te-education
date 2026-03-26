@@ -5,13 +5,14 @@ interface SEOProps {
   description: string;
   path: string;
   keywords?: string;
+  noIndex?: boolean;
 }
 
 const BASE_URL = "https://www.bitcoinperte.it";
 const OG_IMAGE = `${BASE_URL}/og-image.png`;
 const SITE_NAME = "BitcoinPerTe.it";
 
-const SEO = ({ title, description, path, keywords }: SEOProps) => {
+const SEO = ({ title, description, path, keywords, noIndex }: SEOProps) => {
   const canonicalUrl = `${BASE_URL}${path === "/" ? "" : path}`;
 
   return (
@@ -19,7 +20,11 @@ const SEO = ({ title, description, path, keywords }: SEOProps) => {
       <title>{title}</title>
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
-      <meta name="robots" content="index, follow" />
+      {noIndex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow" />
+      )}
       <link rel="canonical" href={canonicalUrl} />
       <link rel="alternate" hrefLang="it" href={`${BASE_URL}/`} />
 

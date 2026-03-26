@@ -65,9 +65,10 @@ const PreferenzePage = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
       <SEO
-        title="Preferenze — Il tuo profilo | BitcoinPerTe"
-        description="Gestisci il tuo profilo, la newsletter e le preferenze del tuo account BitcoinPerTe."
+        title="Le tue Preferenze | BitcoinPerTe"
+        description="Gestisci il tuo account, newsletter e preferenze privacy."
         path="/preferenze"
+        noIndex={true}
       />
       <div className="container mx-auto px-4 py-24 max-w-xl space-y-6">
         <h1 className="text-2xl font-heading font-bold text-foreground">Preferenze</h1>
