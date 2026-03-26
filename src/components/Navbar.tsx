@@ -252,6 +252,24 @@ const Navbar = () => {
                   ))}
                 </div>
               ))}
+              {!loading && !user && (
+                <button
+                  onClick={() => { setMobileOpen(false); setAuthOpen(true); }}
+                  className="text-[13px] border border-primary/30 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors font-heading mt-3 self-start"
+                >
+                  Accedi
+                </button>
+              )}
+              {!loading && user && profile && (
+                <div className="flex items-center gap-3 mt-3">
+                  <Link to="/preferenze" onClick={() => setMobileOpen(false)} className="text-[13px] font-mono text-primary">
+                    ₿ {profile.nickname}
+                  </Link>
+                  <button onClick={() => { signOut(); setMobileOpen(false); }} className="text-[11px] text-muted-foreground">
+                    esci
+                  </button>
+                </div>
+              )}
               <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 mt-3 self-start font-medium">
                 Solo divulgazione · Non consulenza finanziaria
               </span>
