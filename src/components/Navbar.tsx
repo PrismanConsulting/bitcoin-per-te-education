@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
+import AuthModal from "@/components/AuthModal";
 
 const imparaLinks = [
   { label: "Cos'è Bitcoin", href: "/bitcoin" },
@@ -70,8 +72,10 @@ const ChevronSVG = ({ open }: { open: boolean }) => (
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
   const location = useLocation();
   const navRef = useRef<HTMLDivElement>(null);
+  const { user, profile, loading, signOut } = useAuth();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -175,9 +179,30 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Badge */}
-        <div className="hidden xl:block shrink-0">
-          <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
+        {/* Auth + Badge */}
+        <div className="hidden lg:flex items-center gap-2 shrink-0">
+          {!loading && !user && (
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="text-[13px] border border-primary/30 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors font-heading"
+            >
+              Accedi
+            </button>
+          )}
+          {!loading && user && profile && (
+            <div className="flex items-center gap-2">
+              <Link to="/preferenze" className="text-[13px] font-mono text-primary hover:text-primary/80 transition-colors">
+                ₿ {profile.nickname}
+              </Link>
+              <button
+                onClick={signOut}
+                className="text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+              >
+                esci
+              </button>
+            </div>
+          )}
+          <span className="hidden xl:inline text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
             Solo divulgazione · Non consulenza finanziaria
           </span>
         </div>
@@ -227,6 +252,24 @@ const Navbar = () => {
                   ))}
                 </div>
               ))}
+              {!loading && !user && (
+                <button
+                  onClick={() => { setMobileOpen(false); setAuthOpen(true); }}
+                  className="text-[13px] border border-primary/30 text-primary px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors font-heading mt-3 self-start"
+                >
+                  Accedi
+                </button>
+              )}
+              {!loading && user && profile && (
+                <div className="flex items-center gap-3 mt-3">
+                  <Link to="/preferenze" onClick={() => setMobileOpen(false)} className="text-[13px] font-mono text-primary">
+                    ₿ {profile.nickname}
+                  </Link>
+                  <button onClick={() => { signOut(); setMobileOpen(false); }} className="text-[11px] text-muted-foreground">
+                    esci
+                  </button>
+                </div>
+              )}
               <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 mt-3 self-start font-medium">
                 Solo divulgazione · Non consulenza finanziaria
               </span>
@@ -234,6 +277,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </nav>
   );
 };
