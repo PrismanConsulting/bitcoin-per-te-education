@@ -2,7 +2,13 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
-const PROXY = "https://api.allorigins.win/get?url=";
+const RSS2JSON = "https://api.rss2json.com/v1/api.json?rss_url=";
+
+const FEEDS = [
+  { url: "https://bitcoinmagazine.com/feed", source: "Bitcoin Magazine" },
+  { url: "https://cointelegraph.com/rss/tag/bitcoin", source: "Cointelegraph" },
+  { url: "https://www.theblock.co/rss.xml", source: "The Block" },
+];
 
 const BLOCKED_KEYWORDS = [
   "price", "prezzo", "pump", "dump", "rally",
@@ -10,12 +16,6 @@ const BLOCKED_KEYWORDS = [
   "ethereum", "solana", "exchange", "binance",
   "coinbase", "trading", "invest", "buy", "sell",
   "scam", "hack", "stolen",
-];
-
-const FEEDS = [
-  { url: "https://bitcoinmagazine.com/feed", source: "Bitcoin Magazine" },
-  { url: "https://www.coindesk.com/arc/outboundfeeds/rss/", source: "CoinDesk" },
-  { url: "https://cointelegraph.com/rss", source: "Cointelegraph" },
 ];
 
 interface NewsPost {
@@ -41,27 +41,6 @@ function passesFilter(title: string): boolean {
   return !BLOCKED_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
-function parseFeed(xml: string, source: string): NewsPost[] {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, "text/xml");
-  const items = doc.querySelectorAll("item");
-  const posts: NewsPost[] = [];
-  items.forEach((item) => {
-    const title = item.querySelector("title")?.textContent?.trim() ?? "";
-    const link = item.querySelector("link")?.textContent?.trim() ?? "";
-    const pubDate = item.querySelector("pubDate")?.textContent ?? "";
-    if (title && link) {
-      posts.push({
-        title,
-        url: link,
-        source,
-        published_at: pubDate ? new Date(pubDate) : new Date(),
-      });
-    }
-  });
-  return posts;
-}
-
 const NotizePage = () => {
   const [posts, setPosts] = useState<NewsPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,9 +53,19 @@ const NotizePage = () => {
         const allPosts: NewsPost[] = [];
         const results = await Promise.allSettled(
           FEEDS.map((feed) =>
-            fetch(PROXY + encodeURIComponent(feed.url))
+            fetch(RSS2JSON + encodeURIComponent(feed.url))
               .then((r) => r.json())
-              .then((outer) => parseFeed(outer.contents, feed.source))
+              .then((data) => {
+                if (data.status === "ok" && data.items) {
+                  return data.items.map((item: any) => ({
+                    title: item.title?.trim() ?? "",
+                    url: item.link ?? "",
+                    source: feed.source,
+                    published_at: item.pubDate ? new Date(item.pubDate) : new Date(),
+                  }));
+                }
+                return [];
+              })
           )
         );
         for (const r of results) {
@@ -116,7 +105,6 @@ const NotizePage = () => {
       />
 
       <div className="container mx-auto px-4 max-w-3xl py-12 space-y-10">
-        {/* Header */}
         <div className="text-center space-y-3">
           <p className="text-[11px] uppercase tracking-[0.3em] text-primary/60">Notizie dalla Rete</p>
           <h1 className="text-2xl md:text-4xl font-bold font-heading text-foreground">Bitcoin oggi</h1>
@@ -124,7 +112,7 @@ const NotizePage = () => {
             Notizie filtrate automaticamente. Solo protocollo, mining e sviluppo. Zero speculazione, zero prezzi.
           </p>
           <span className="inline-block text-[11px] text-primary-foreground bg-primary rounded px-3 py-1 font-medium">
-            Aggiornamento ogni 30 min · Filtro automatico attivo · Fonti: Bitcoin Magazine, CoinDesk, Cointelegraph
+            Aggiornamento ogni 30 min · Filtro automatico attivo · Fonti: Bitcoin Magazine, Cointelegraph, The Block
           </span>
           {lastUpdate && (
             <p className="text-[11px] text-muted-foreground/60">
@@ -133,7 +121,6 @@ const NotizePage = () => {
           )}
         </div>
 
-        {/* News List */}
         {loading ? (
           <div className="space-y-4">
             {[...Array(6)].map((_, i) => (
@@ -175,7 +162,6 @@ const NotizePage = () => {
           </div>
         )}
 
-        {/* How filter works */}
         <div className="card-surface rounded-xl p-6 border-l-2 border-l-primary">
           <h3 className="text-base font-bold text-foreground mb-2">Come funziona il filtro</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
@@ -185,7 +171,7 @@ const NotizePage = () => {
         </div>
 
         <p className="text-center text-[12px] text-muted-foreground/60 pb-4">
-          Dati da RSS feed pubblici via allorigins.win · Filtro automatico client-side · Solo uso divulgativo
+          Dati da RSS feed pubblici via rss2json.com · Filtro automatico client-side · Solo uso divulgativo
         </p>
       </div>
     </motion.div>
