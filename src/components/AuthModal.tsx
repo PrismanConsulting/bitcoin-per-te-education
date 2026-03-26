@@ -54,12 +54,9 @@ const AuthModal = ({ open, onClose }: AuthModalProps) => {
       setError("Devi accettare la Privacy Policy e i Termini d'uso."); setSubmitting(false); return;
     }
 
-    // Check nickname uniqueness
-    const { count } = await supabase
-      .from("profiles")
-      .select("*", { count: "exact", head: true })
-      .eq("nickname", nickname);
-    if (count && count > 0) {
+    // Check nickname uniqueness via secure RPC
+    const { data: taken } = await supabase.rpc('is_nickname_taken', { check_nickname: nickname });
+    if (taken) {
       setError("Nickname già preso. Scegline un altro."); setSubmitting(false); return;
     }
 
