@@ -16,11 +16,13 @@ const esploraLinks = [
   { label: "Mining & Halving", href: "/mining" },
   { label: "I Satoshi", href: "/satoshi" },
   { label: "Bitcoin vs Fiat", href: "/fiat" },
-  { label: "Holder", href: "/holder" },
-  { label: "Notizie", href: "/notizie" },
-  { label: "Mappa", href: "/mappa" },
+  { label: "separator", href: "" },
   { label: "Quiz", href: "/quiz" },
   { label: "Glossario", href: "/glossario" },
+  { label: "separator", href: "" },
+  { label: "Notizie", href: "/notizie" },
+  { label: "Mappa", href: "/mappa" },
+  { label: "Holder", href: "/holder" },
 ];
 
 const allMobileLinks = [
@@ -126,19 +128,23 @@ const Navbar = () => {
                   transition={{ duration: 0.15 }}
                   className="absolute top-full left-0 mt-1 min-w-[180px] rounded-xl border border-border bg-card shadow-lg z-50 py-2"
                 >
-                  {esploraLinks.map((l) => (
-                    <Link
-                      key={l.href}
-                      to={l.href}
-                      className={`block px-4 py-2 text-sm transition-colors ${
-                        location.pathname === l.href
-                          ? "text-primary"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {l.label}
-                    </Link>
-                  ))}
+                  {esploraLinks.map((l, i) =>
+                    l.label === "separator" ? (
+                      <div key={`sep-${i}`} className="border-t border-border my-1" />
+                    ) : (
+                      <Link
+                        key={l.href}
+                        to={l.href}
+                        className={`block px-4 py-2 text-sm transition-colors ${
+                          location.pathname === l.href
+                            ? "text-primary"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {l.label}
+                      </Link>
+                    )
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

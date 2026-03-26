@@ -10,12 +10,22 @@ const FEEDS = [
   { url: "https://www.theblock.co/rss.xml", source: "The Block" },
 ];
 
-const BLOCKED_KEYWORDS = [
-  "price", "prezzo", "pump", "dump", "rally",
-  "crash", "prediction", "forecast", "altcoin",
-  "ethereum", "solana", "exchange", "binance",
-  "coinbase", "trading", "invest", "buy", "sell",
-  "scam", "hack", "stolen",
+const FILTER_WORDS = [
+  "$", "€", "price", "prezzo", "pump", "dump",
+  "rally", "crash", "prediction", "forecast",
+  "bullish", "bearish", "ath", "all-time",
+  "surge", "soar", "plunge", "drop", "rise",
+  "fall", "$75k", "$80k", "$100k", "75,000",
+  "80,000", "100,000", "traders", "trading",
+  "invest", "buy", "sell", "profit", "loss",
+  "portfolio", "market cap", "capitalizzazione",
+  "exchange", "binance", "coinbase", "kraken",
+  "bybit", "okx", "etf", "futures", "options",
+  "derivat", "leverage", "short", "long",
+  "ethereum", "solana", "xrp", "doge",
+  "altcoin", "crypto", "token", "nft", "defi",
+  "scam", "hack", "stolen", "fraud", "ponzi",
+  "rug pull", "exit",
 ];
 
 interface NewsPost {
@@ -38,7 +48,7 @@ function relativeTime(date: Date): string {
 
 function passesFilter(title: string): boolean {
   const lower = title.toLowerCase();
-  return !BLOCKED_KEYWORDS.some((kw) => lower.includes(kw));
+  return !FILTER_WORDS.some((kw) => lower.includes(kw.toLowerCase()));
 }
 
 const NotizePage = () => {
@@ -133,11 +143,11 @@ const NotizePage = () => {
               Dati temporaneamente non disponibili. La rete Bitcoin continua a funzionare.
             </p>
           </div>
-        ) : filtered.length < 5 ? (
+        ) : filtered.length === 0 ? (
           <div className="card-surface rounded-xl p-8 text-center border border-border">
             <p className="text-muted-foreground leading-relaxed">
-              Nessuna notizia tecnica rilevante nelle ultime ore.<br />
-              La rete continua a funzionare — un blocco ogni ~10 minuti, come sempre.
+              Il filtro ha rimosso tutte le notizie delle ultime ore perché contenevano riferimenti a prezzi o speculazione.<br />
+              La rete Bitcoin continua a funzionare — un blocco ogni ~10 minuti, come sempre.
             </p>
           </div>
         ) : (
