@@ -13,6 +13,7 @@ const navLinks = [
   { label: "Terminale", href: "/terminale" },
   { label: "Live", href: "/live" },
   { label: "Oracolo", href: "/oracolo" },
+  { label: "Holder", href: "/holder" },
   { label: "Mappa", href: "/mappa" },
   { label: "Quiz", href: "/quiz" },
   { label: "Glossario", href: "/glossario" },
