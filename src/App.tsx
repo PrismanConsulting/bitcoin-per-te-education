@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { AnimatePresence } from "framer-motion";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
+import CookieBanner from "@/components/CookieBanner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "@/components/Layout";
 import HomePage from "@/pages/Index";
@@ -44,6 +45,7 @@ const AnimatedRoutes = () => {
           <Route path="/oracolo" element={<OracoloPage />} />
           <Route path="/holder" element={<HolderPage />} />
           <Route path="/notizie" element={<NotizePage />} />
+          <Route path="/preferenze" element={<PreferenzePage />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/glossario" element={<GlossarioPage />} />
           <Route path="/community" element={<CommunityPage />} />
