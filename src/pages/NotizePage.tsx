@@ -5,9 +5,9 @@ import SEO from "@/components/SEO";
 const RSS2JSON = "https://api.rss2json.com/v1/api.json?rss_url=";
 
 const FEEDS = [
-  { url: "https://bitcoinmagazine.com/feed", source: "Bitcoin Magazine" },
-  { url: "https://cointelegraph.com/rss/tag/bitcoin", source: "Cointelegraph" },
-  { url: "https://www.theblock.co/rss.xml", source: "The Block" },
+  { url: "https://bitcoinops.org/feed.xml", source: "Bitcoin Optech" },
+  { url: "https://bitcoin.org/en/rss/blog.rss", source: "Bitcoin.org" },
+  { url: "https://www.nobsbitcoin.com/rss/", source: "NoBSBitcoin" },
 ];
 
 const FILTER_WORDS = [
@@ -122,7 +122,7 @@ const NotizePage = () => {
             Notizie filtrate automaticamente. Solo protocollo, mining e sviluppo. Zero speculazione, zero prezzi.
           </p>
           <span className="inline-block text-[11px] text-primary-foreground bg-primary rounded px-3 py-1 font-medium">
-            Aggiornamento ogni 30 min · Filtro automatico attivo · Fonti: Bitcoin Magazine, Cointelegraph, The Block
+            Fonti: Bitcoin Optech · Bitcoin.org · NoBSBitcoin · Filtro automatico attivo
           </span>
           {lastUpdate && (
             <p className="text-[11px] text-muted-foreground/60">
