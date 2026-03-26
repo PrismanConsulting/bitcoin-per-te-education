@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
@@ -210,6 +210,121 @@ const SinfoniaCanvas = ({ fee, noteCount }: { fee: number; noteCount: number }) 
       className="rounded-full border border-border mx-auto"
       style={{ width: 260, height: 260 }}
     />
+  );
+};
+
+/* ─── Mempool Tx Section ─── */
+interface MempoolTx {
+  txid: string;
+  fee: number;
+  vsize: number;
+  value: number;
+}
+
+const MempoolTxSection = () => {
+  const [txList, setTxList] = useState<MempoolTx[]>([]);
+  const [txTimestamps, setTxTimestamps] = useState<number[]>([]);
+  const seenRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const fetchTx = () => {
+      fetch("https://mempool.space/api/mempool/recent")
+        .then((r) => r.json())
+        .then((data: MempoolTx[]) => {
+          const now = Date.now();
+          const newTxs = data.filter((tx) => !seenRef.current.has(tx.txid)).slice(0, 12);
+          if (newTxs.length > 0) {
+            newTxs.forEach((tx) => seenRef.current.add(tx.txid));
+            // Keep set from growing forever
+            if (seenRef.current.size > 500) {
+              const arr = Array.from(seenRef.current);
+              seenRef.current = new Set(arr.slice(arr.length - 200));
+            }
+            setTxTimestamps((prev) => [...prev, ...newTxs.map(() => now)].slice(-50));
+            setTxList((prev) => [...newTxs, ...prev].slice(0, 12));
+          }
+        })
+        .catch(() => {});
+    };
+    fetchTx();
+    const iv = setInterval(fetchTx, 8_000);
+    return () => clearInterval(iv);
+  }, []);
+
+  const txPerMin = useMemo(() => {
+    const now = Date.now();
+    const recent = txTimestamps.filter((t) => now - t < 30_000);
+    return Math.round((recent.length / 30) * 60);
+  }, [txTimestamps]);
+
+  const feeColor = (feeRate: number) => {
+    if (feeRate <= 5) return "border-l-blue-500/40";
+    if (feeRate <= 20) return "border-l-primary/40";
+    return "border-l-red-500/40";
+  };
+
+  const feeTextColor = (feeRate: number) => {
+    if (feeRate <= 5) return "text-blue-400";
+    if (feeRate <= 20) return "text-primary";
+    return "text-red-400";
+  };
+
+  const formatValue = (sat: number) => {
+    const btc = sat / 1e8;
+    if (btc >= 0.01) return `${btc.toFixed(4)} BTC`;
+    return `${sat.toLocaleString("it-IT")} sat`;
+  };
+
+  return (
+    <section className="space-y-6">
+      <div>
+        <h2 className="text-xl md:text-2xl font-bold font-heading text-foreground">Transazioni in Volo</h2>
+        <p className="text-muted-foreground text-sm mt-1">
+          Le ultime transazioni entrate in mempool. In tempo reale.
+        </p>
+        {txPerMin > 0 && (
+          <p className="text-xs text-primary mt-2 font-mono">~{txPerMin} tx/min (media)</p>
+        )}
+      </div>
+
+      <div className="space-y-1.5 overflow-hidden">
+        {txList.length === 0 ? (
+          <div className="card-surface p-6 text-center">
+            <p className="text-sm text-muted-foreground animate-pulse">Caricamento transazioni…</p>
+          </div>
+        ) : (
+          txList.map((tx, i) => {
+            const feeRate = tx.vsize > 0 ? (tx.fee / tx.vsize) : 0;
+            return (
+              <motion.div
+                key={tx.txid}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.15, delay: i * 0.02 }}
+                className={`card-surface rounded-lg p-3 border-l-2 ${feeColor(feeRate)} flex items-center justify-between gap-3`}
+              >
+                <div className="min-w-0">
+                  <p className="font-mono text-xs text-muted-foreground truncate">
+                    {tx.txid.slice(0, 8)}…{tx.txid.slice(-4)}
+                  </p>
+                  <p className={`font-mono text-xs mt-0.5 ${feeTextColor(feeRate)}`}>
+                    {feeRate.toFixed(1)} sat/vB
+                  </p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="font-mono text-sm text-foreground">
+                    {formatValue(tx.value)}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {tx.vsize.toLocaleString("it-IT")} vB
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })
+        )}
+      </div>
+    </section>
   );
 };
 
@@ -501,6 +616,16 @@ const LivePage = () => {
             <p className="text-sm text-muted-foreground italic">{poeticText(fee)}</p>
           </div>
         </section>
+
+        {/* ═══ DIVIDER 2 ═══ */}
+        <div className="flex items-center gap-4">
+          <div className="flex-1 border-t border-border" />
+          <span className="text-muted-foreground text-sm font-heading">· e adesso guarda il denaro muoversi ·</span>
+          <div className="flex-1 border-t border-border" />
+        </div>
+
+        {/* ═══ SEZIONE 3 — TRANSAZIONI IN VOLO ═══ */}
+        <MempoolTxSection />
 
         {/* DISCLAIMER */}
         <p className="text-center text-[12px] text-muted-foreground/60 pb-4">
