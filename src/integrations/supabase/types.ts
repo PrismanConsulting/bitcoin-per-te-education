@@ -64,6 +64,7 @@ export type Database = {
           id: string
           newsletter_opt_in: boolean | null
           nickname: string
+          sat_balance: number | null
         }
         Insert: {
           created_at?: string | null
@@ -73,6 +74,7 @@ export type Database = {
           id: string
           newsletter_opt_in?: boolean | null
           nickname: string
+          sat_balance?: number | null
         }
         Update: {
           created_at?: string | null
@@ -82,6 +84,37 @@ export type Database = {
           id?: string
           newsletter_opt_in?: boolean | null
           nickname?: string
+          sat_balance?: number | null
+        }
+        Relationships: []
+      }
+      registro_celle: {
+        Row: {
+          claimed_at: string | null
+          color: string
+          frase: string
+          id: number
+          nickname: string
+          sat_cost: number
+          user_id: string | null
+        }
+        Insert: {
+          claimed_at?: string | null
+          color?: string
+          frase: string
+          id: number
+          nickname: string
+          sat_cost?: number
+          user_id?: string | null
+        }
+        Update: {
+          claimed_at?: string | null
+          color?: string
+          frase?: string
+          id?: number
+          nickname?: string
+          sat_cost?: number
+          user_id?: string | null
         }
         Relationships: []
       }
