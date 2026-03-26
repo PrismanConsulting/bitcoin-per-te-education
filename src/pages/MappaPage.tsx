@@ -39,7 +39,6 @@ const NODE_DISTRIBUTION: [number, number, string, number][] = [
 const flag = (cc: string) =>
   cc.toUpperCase().replace(/./g, (c) => String.fromCodePoint(c.charCodeAt(0) + 127397));
 
-// Seeded random for deterministic marker placement
 function seededRandom(seed: number) {
   const x = Math.sin(seed) * 10000;
   return x - Math.floor(x);
@@ -52,14 +51,12 @@ interface MarkerPoint {
 }
 
 const MappaPage = () => {
-  const [hoveredNode, setHoveredNode] = useState<{ x: number; y: number; label: string } | null>(null);
-
   const totalNodes = useMemo(() => NODE_DISTRIBUTION.reduce((s, d) => s + d[3], 0), []);
 
   const markers = useMemo(() => {
     const points: MarkerPoint[] = [];
     for (const [lat, lng, cc, count] of NODE_DISTRIBUTION) {
-      const numMarkers = Math.max(Math.round(count / 10), 1);
+      const numMarkers = Math.max(Math.round(count / 30), 1);
       for (let i = 0; i < numMarkers; i++) {
         const seed = lat * 1000 + lng * 100 + i;
         points.push({
@@ -110,7 +107,6 @@ const MappaPage = () => {
           </p>
         </header>
 
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {stats.map((s) => (
             <div key={s.label} className="rounded-lg border border-border bg-card p-4 space-y-1">
@@ -120,14 +116,13 @@ const MappaPage = () => {
           ))}
         </div>
 
-        {/* Map */}
         <div className="rounded-lg border border-border overflow-hidden" style={{ background: "#0D0D0D" }}>
           <ComposableMap
             projectionConfig={{ scale: 147 }}
             className="w-full h-[300px] md:h-[500px]"
             style={{ width: "100%", height: "auto" }}
           >
-            <ZoomableGroup>
+            <ZoomableGroup zoom={1} center={[0, 20]}>
               <Geographies geography={GEO_URL}>
                 {({ geographies }) =>
                   geographies.map((geo) => (
@@ -148,39 +143,17 @@ const MappaPage = () => {
               </Geographies>
               {markers.map((node, i) => (
                 <Marker key={i} coordinates={[node.lng, node.lat]}>
-                  <circle
-                    r={2.5}
-                    fill="#F7931A"
-                    fillOpacity={0.7}
-                    stroke="none"
-                    className="cursor-pointer transition-all duration-150"
-                    onMouseEnter={(e) => {
-                      const target = e.target as SVGCircleElement;
-                      target.setAttribute("r", "4");
-                      setHoveredNode({ x: e.clientX, y: e.clientY, label: node.country });
-                    }}
-                    onMouseLeave={(e) => {
-                      const target = e.target as SVGCircleElement;
-                      target.setAttribute("r", "2.5");
-                      setHoveredNode(null);
-                    }}
-                  />
+                  <circle r={1.5} fill="#F7931A" fillOpacity={0.6} stroke="none" />
                 </Marker>
               ))}
             </ZoomableGroup>
           </ComposableMap>
         </div>
 
-        {hoveredNode && (
-          <div
-            className="fixed z-50 pointer-events-none rounded bg-card border border-border px-3 py-1.5 text-xs text-foreground shadow-lg"
-            style={{ left: hoveredNode.x + 12, top: hoveredNode.y - 10 }}
-          >
-            {hoveredNode.label}
-          </div>
-        )}
+        <p className="text-[12px] text-muted-foreground text-center mt-3">
+          Ogni punto arancione rappresenta un gruppo di nodi Bitcoin attivi in quella regione
+        </p>
 
-        {/* Top 10 */}
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">Top 10 Paesi per nodi</p>
           <ScrollArea className="w-full">
