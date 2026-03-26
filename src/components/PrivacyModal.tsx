@@ -86,7 +86,20 @@ const PrivacyModal = ({ open, onClose }: PrivacyModalProps) => {
               </section>
 
               <section>
-                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 4 — Cookie Policy</h3>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 4 — Fonti Dati Esterne</h3>
+                <p>Alcune pagine di questo sito recuperano dati da API pubbliche esterne per scopi puramente informativi e divulgativi:</p>
+                <ul className="list-disc list-inside space-y-1 ml-2 mt-2">
+                  <li><strong className="text-foreground">mempool.space</strong> — dati tecnici sulla rete Bitcoin (blocchi, fee, mempool). Nessun dato personale trasmesso.</li>
+                  <li><strong className="text-foreground">CoinGecko</strong> — prezzo di riferimento BTC/EUR. Solo lettura, nessun dato personale.</li>
+                  <li><strong className="text-foreground">Blockchair</strong> — dati pubblici on-chain sugli indirizzi Bitcoin più ricchi. Tutti i dati sono pubblicamente visibili sulla blockchain. Nessun dato personale.</li>
+                  <li><strong className="text-foreground">CryptoPanic</strong> — feed notizie Bitcoin filtrato. Nessun dato personale trasmesso.</li>
+                  <li><strong className="text-foreground">bitnodes.io</strong> — mappa nodi Bitcoin attivi. Nessun dato personale trasmesso.</li>
+                </ul>
+                <p className="mt-2">Queste API sono servizi di terze parti con proprie privacy policy. Il sito non trasmette alcun dato personale dell'utente a questi servizi.</p>
+              </section>
+
+              <section>
+                <h3 className="text-base font-semibold text-foreground font-heading mb-2">Art. 5 — Cookie Policy</h3>
                 <p>Il Sito utilizza esclusivamente cookie tecnici necessari al corretto funzionamento. Non vengono utilizzati cookie di profilazione, tracciamento pubblicitario o analitici di terze parti.</p>
                 <p>L'utente può gestire i cookie tramite le impostazioni del proprio browser.</p>
               </section>
