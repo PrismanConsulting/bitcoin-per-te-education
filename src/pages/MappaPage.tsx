@@ -13,6 +13,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import SEO from "@/components/SEO";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const PROXY = "https://api.allorigins.win/get?url=";
 const API_URL = "https://bitnodes.io/api/v1/snapshots/latest/?limit=5000";
 
 interface NodeData {
@@ -36,9 +37,10 @@ const MappaPage = () => {
 
   const fetchNodes = () => {
     setError(false);
-    fetch(API_URL)
+    fetch(PROXY + encodeURIComponent(API_URL))
       .then((r) => r.json())
-      .then((data) => {
+      .then((outer) => {
+        const data = JSON.parse(outer.contents);
         setTotalNodes(data.total_nodes ?? 0);
         const entries = Object.values(data.nodes) as any[][];
         const parsed: NodeData[] = [];

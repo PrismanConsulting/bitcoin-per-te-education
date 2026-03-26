@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
+const PROXY = "https://api.allorigins.win/get?url=";
+
 const BLOCKED_KEYWORDS = [
   "price", "prezzo", "pump", "dump", "rally",
   "crash", "prediction", "forecast", "altcoin",
@@ -10,16 +12,21 @@ const BLOCKED_KEYWORDS = [
   "scam", "hack", "stolen",
 ];
 
+const FEEDS = [
+  { url: "https://bitcoinmagazine.com/feed", source: "Bitcoin Magazine" },
+  { url: "https://www.coindesk.com/arc/outboundfeeds/rss/", source: "CoinDesk" },
+  { url: "https://cointelegraph.com/rss", source: "Cointelegraph" },
+];
+
 interface NewsPost {
   title: string;
   url: string;
-  source: { title: string };
-  published_at: string;
-  votes: { positive: number; negative: number };
+  source: string;
+  published_at: Date;
 }
 
-function relativeTime(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
+function relativeTime(date: Date): string {
+  const diff = Date.now() - date.getTime();
   const mins = Math.floor(diff / 60_000);
   if (mins < 60) return `${mins} min fa`;
   const hours = Math.floor(mins / 60);
@@ -34,6 +41,27 @@ function passesFilter(title: string): boolean {
   return !BLOCKED_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
+function parseFeed(xml: string, source: string): NewsPost[] {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xml, "text/xml");
+  const items = doc.querySelectorAll("item");
+  const posts: NewsPost[] = [];
+  items.forEach((item) => {
+    const title = item.querySelector("title")?.textContent?.trim() ?? "";
+    const link = item.querySelector("link")?.textContent?.trim() ?? "";
+    const pubDate = item.querySelector("pubDate")?.textContent ?? "";
+    if (title && link) {
+      posts.push({
+        title,
+        url: link,
+        source,
+        published_at: pubDate ? new Date(pubDate) : new Date(),
+      });
+    }
+  });
+  return posts;
+}
+
 const NotizePage = () => {
   const [posts, setPosts] = useState<NewsPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,22 +69,27 @@ const NotizePage = () => {
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
 
   useEffect(() => {
-    const fetchNews = () => {
-      fetch(
-        "https://cryptopanic.com/api/free/v1/posts/?currencies=BTC&kind=news&filter=important&public=true"
-      )
-        .then((r) => r.json())
-        .then((d) => {
-          if (d.results) {
-            setPosts(d.results);
-            setLastUpdate(new Date());
-          }
-          setLoading(false);
-        })
-        .catch(() => {
-          setError(true);
-          setLoading(false);
-        });
+    const fetchNews = async () => {
+      try {
+        const allPosts: NewsPost[] = [];
+        const results = await Promise.allSettled(
+          FEEDS.map((feed) =>
+            fetch(PROXY + encodeURIComponent(feed.url))
+              .then((r) => r.json())
+              .then((outer) => parseFeed(outer.contents, feed.source))
+          )
+        );
+        for (const r of results) {
+          if (r.status === "fulfilled") allPosts.push(...r.value);
+        }
+        allPosts.sort((a, b) => b.published_at.getTime() - a.published_at.getTime());
+        setPosts(allPosts);
+        setLastUpdate(new Date());
+        setLoading(false);
+      } catch {
+        setError(true);
+        setLoading(false);
+      }
     };
     fetchNews();
     const iv = setInterval(fetchNews, 1_800_000);
@@ -91,7 +124,7 @@ const NotizePage = () => {
             Notizie filtrate automaticamente. Solo protocollo, mining e sviluppo. Zero speculazione, zero prezzi.
           </p>
           <span className="inline-block text-[11px] text-primary-foreground bg-primary rounded px-3 py-1 font-medium">
-            Aggiornamento ogni 30 min · Filtro automatico attivo · Fonte: CryptoPanic
+            Aggiornamento ogni 30 min · Filtro automatico attivo · Fonti: Bitcoin Magazine, CoinDesk, Cointelegraph
           </span>
           {lastUpdate && (
             <p className="text-[11px] text-muted-foreground/60">
@@ -109,7 +142,9 @@ const NotizePage = () => {
           </div>
         ) : error ? (
           <div className="card-surface rounded-xl p-8 text-center">
-            <p className="text-muted-foreground">Dati temporaneamente non disponibili. Riprova più tardi.</p>
+            <p className="text-muted-foreground">
+              Dati temporaneamente non disponibili. La rete Bitcoin continua a funzionare.
+            </p>
           </div>
         ) : filtered.length < 5 ? (
           <div className="card-surface rounded-xl p-8 text-center border border-border">
@@ -123,7 +158,7 @@ const NotizePage = () => {
             {filtered.map((post, i) => (
               <div key={i} className="py-5 first:pt-0 last:pb-0">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <span className="text-[11px] text-primary font-medium">{post.source.title}</span>
+                  <span className="text-[11px] text-primary font-medium">{post.source}</span>
                   <span className="text-[11px] text-muted-foreground/50">·</span>
                   <span className="text-[11px] text-muted-foreground/50">{relativeTime(post.published_at)}</span>
                 </div>
@@ -135,15 +170,6 @@ const NotizePage = () => {
                 >
                   {post.title}
                 </a>
-                {post.votes.positive > 10 && (
-                  <span className="inline-flex items-center gap-1 mt-2 text-[11px] text-primary bg-primary/10 rounded px-2 py-0.5 font-medium">
-                    <svg width="12" height="12" viewBox="0 0 20 20" fill="none" className="shrink-0">
-                      <path d="M10 2C10 2 6 6 6 11C6 14 8 16 10 18C12 16 14 14 14 11C14 6 10 2 10 2Z" fill="currentColor" opacity="0.9" />
-                      <path d="M10 7C10 7 8.5 9 8.5 11.5C8.5 13 9.2 14 10 15C10.8 14 11.5 13 11.5 11.5C11.5 9 10 7 10 7Z" fill="currentColor" opacity="0.5" />
-                    </svg>
-                    {post.votes.positive} segnalazioni
-                  </span>
-                )}
               </div>
             ))}
           </div>
@@ -159,7 +185,7 @@ const NotizePage = () => {
         </div>
 
         <p className="text-center text-[12px] text-muted-foreground/60 pb-4">
-          Dati da CryptoPanic API pubblica · Filtro automatico client-side · Solo uso divulgativo
+          Dati da RSS feed pubblici via allorigins.win · Filtro automatico client-side · Solo uso divulgativo
         </p>
       </div>
     </motion.div>
