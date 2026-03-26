@@ -1,72 +1,95 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const primaryLinks = [
-  { label: "Home", href: "/" },
-  { label: "Bitcoin", href: "/bitcoin" },
-  { label: "Blockchain", href: "/blockchain" },
-  { label: "Terminale", href: "/terminale" },
-  { label: "Live", href: "/live" },
-  { label: "Oracolo", href: "/oracolo" },
-];
-
-const esploraLinks = [
-  { label: "Mining & Halving", href: "/mining" },
-  { label: "I Satoshi", href: "/satoshi" },
-  { label: "Bitcoin vs Fiat", href: "/fiat" },
-  { label: "separator", href: "" },
-  { label: "Quiz", href: "/quiz" },
-  { label: "Glossario", href: "/glossario" },
-  { label: "separator", href: "" },
-  { label: "Notizie", href: "/notizie" },
-  { label: "Mappa", href: "/mappa" },
-  { label: "Holder", href: "/holder" },
-];
-
-const allMobileLinks = [
-  { label: "Home", href: "/" },
+const imparaLinks = [
   { label: "Cos'è Bitcoin", href: "/bitcoin" },
   { label: "Blockchain", href: "/blockchain" },
   { label: "Mining & Halving", href: "/mining" },
   { label: "I Satoshi", href: "/satoshi" },
   { label: "Bitcoin vs Fiat", href: "/fiat" },
-  { label: "Terminale", href: "/terminale" },
-  { label: "Live", href: "/live" },
-  { label: "Oracolo", href: "/oracolo" },
-  { label: "Holder", href: "/holder" },
-  { label: "Notizie", href: "/notizie" },
-  { label: "Mappa", href: "/mappa" },
-  { label: "Quiz", href: "/quiz" },
+  { label: "separator", href: "" },
   { label: "Glossario", href: "/glossario" },
-  { label: "Community", href: "/community" },
 ];
 
-const Navbar = () => {
-  const [open, setOpen] = useState(false);
-  const [esploraOpen, setEsploraOpen] = useState(false);
-  const location = useLocation();
-  const esploraRef = useRef<HTMLDivElement>(null);
+const esploraLinks = [
+  { label: "Terminale", href: "/terminale" },
+  { label: "Oracolo dei Blocchi", href: "/oracolo" },
+  { label: "Mappa Nodi", href: "/mappa" },
+  { label: "Top Holder", href: "/holder" },
+];
 
-  // Close dropdown on click outside
+const communityLinks = [
+  { label: "Notizie Bitcoin", href: "/notizie" },
+  { label: "Quiz", href: "/quiz" },
+  { label: "separator", href: "" },
+  { label: "Scrivici", href: "/community" },
+];
+
+const dropdowns = [
+  { id: "impara", label: "Impara", links: imparaLinks },
+  { id: "esplora", label: "Esplora", links: esploraLinks },
+  { id: "community", label: "Community", links: communityLinks },
+];
+
+const mobileGroups = [
+  { label: "IMPARA", links: [
+    { label: "Cos'è Bitcoin", href: "/bitcoin" },
+    { label: "Blockchain", href: "/blockchain" },
+    { label: "Mining & Halving", href: "/mining" },
+    { label: "I Satoshi", href: "/satoshi" },
+    { label: "Bitcoin vs Fiat", href: "/fiat" },
+    { label: "Glossario", href: "/glossario" },
+  ]},
+  { label: "LIVE", links: [
+    { label: "Live", href: "/live", live: true },
+  ]},
+  { label: "ESPLORA", links: [
+    { label: "Terminale", href: "/terminale" },
+    { label: "Oracolo", href: "/oracolo" },
+    { label: "Mappa", href: "/mappa" },
+    { label: "Holder", href: "/holder" },
+  ]},
+  { label: "COMMUNITY", links: [
+    { label: "Notizie", href: "/notizie" },
+    { label: "Quiz", href: "/quiz" },
+    { label: "Scrivici", href: "/community" },
+  ]},
+];
+
+const ChevronSVG = ({ open }: { open: boolean }) => (
+  <svg
+    width="10" height="10" viewBox="0 0 10 10" fill="none"
+    style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}
+  >
+    <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const Navbar = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const location = useLocation();
+  const navRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (esploraRef.current && !esploraRef.current.contains(e.target as Node)) {
-        setEsploraOpen(false);
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenMenu(null);
       }
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Close dropdown on route change
   useEffect(() => {
-    setEsploraOpen(false);
-    setOpen(false);
+    setOpenMenu(null);
+    setMobileOpen(false);
   }, [location.pathname]);
 
-  const isEsploraActive = esploraLinks.some((l) => location.pathname === l.href);
+  const isDropdownActive = (links: { href: string }[]) =>
+    links.some((l) => l.href && location.pathname === l.href);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border font-heading">
@@ -77,115 +100,101 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-0.5">
-          {primaryLinks.map((l) => (
-            <Link
-              key={l.href}
-              to={l.href}
-              className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap ${
-                location.pathname === l.href
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {l.href === "/live" && <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block mr-1" />}
-              {l.label}
-              {location.pathname === l.href && (
-                <motion.div
-                  layoutId="nav-underline"
-                  className="absolute bottom-0 left-2.5 right-2.5 h-[2px] bg-primary rounded-full"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
-            </Link>
-          ))}
+        <div ref={navRef} className="hidden lg:flex items-center gap-0.5">
+          {/* Home */}
+          <Link
+            to="/"
+            className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap ${
+              location.pathname === "/" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Home
+          </Link>
 
-          {/* Esplora Dropdown */}
-          <div ref={esploraRef} className="relative">
+          {/* Dropdowns: Impara, then Live, then Esplora, Community */}
+          {/* Impara */}
+          <div className="relative">
             <button
-              onClick={() => setEsploraOpen(!esploraOpen)}
-              className={`relative flex items-center gap-1 text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap ${
-                isEsploraActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              onClick={() => setOpenMenu(openMenu === "impara" ? null : "impara")}
+              className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap flex items-center gap-1 ${
+                isDropdownActive(imparaLinks) ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Esplora
-              <ChevronDown size={14} className={`transition-transform ${esploraOpen ? "rotate-180" : ""}`} />
-              {isEsploraActive && (
-                <motion.div
-                  layoutId="nav-underline"
-                  className="absolute bottom-0 left-2.5 right-2.5 h-[2px] bg-primary rounded-full"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
+              Impara <ChevronSVG open={openMenu === "impara"} />
             </button>
-
             <AnimatePresence>
-              {esploraOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 mt-1 min-w-[180px] rounded-xl border border-border bg-card shadow-lg z-50 py-2"
-                >
-                  {esploraLinks.map((l, i) =>
-                    l.label === "separator" ? (
-                      <div key={`sep-${i}`} className="border-t border-border my-1" />
-                    ) : (
-                      <Link
-                        key={l.href}
-                        to={l.href}
-                        className={`block px-4 py-2 text-sm transition-colors ${
-                          location.pathname === l.href
-                            ? "text-primary"
-                            : "text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        {l.label}
-                      </Link>
-                    )
-                  )}
-                </motion.div>
+              {openMenu === "impara" && (
+                <DropdownPanel links={imparaLinks} pathname={location.pathname} />
               )}
             </AnimatePresence>
           </div>
 
+          {/* Live — direct link */}
           <Link
-            to="/community"
-            className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap ${
-              location.pathname === "/community"
-                ? "text-primary"
-                : "text-muted-foreground hover:text-foreground"
+            to="/live"
+            className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap flex items-center ${
+              location.pathname === "/live" ? "text-primary" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Community
-            {location.pathname === "/community" && (
-              <motion.div
-                layoutId="nav-underline"
-                className="absolute bottom-0 left-2.5 right-2.5 h-[2px] bg-primary rounded-full"
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
-            )}
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block mr-1.5" />
+            Live
           </Link>
+
+          {/* Esplora */}
+          <div className="relative">
+            <button
+              onClick={() => setOpenMenu(openMenu === "esplora" ? null : "esplora")}
+              className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap flex items-center gap-1 ${
+                isDropdownActive(esploraLinks) ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Esplora <ChevronSVG open={openMenu === "esplora"} />
+            </button>
+            <AnimatePresence>
+              {openMenu === "esplora" && (
+                <DropdownPanel links={esploraLinks} pathname={location.pathname} />
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Community */}
+          <div className="relative">
+            <button
+              onClick={() => setOpenMenu(openMenu === "community" ? null : "community")}
+              className={`relative text-[14px] px-2.5 py-2 transition-colors whitespace-nowrap flex items-center gap-1 ${
+                isDropdownActive(communityLinks) ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Community <ChevronSVG open={openMenu === "community"} />
+            </button>
+            <AnimatePresence>
+              {openMenu === "community" && (
+                <DropdownPanel links={communityLinks} pathname={location.pathname} />
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
+        {/* Badge */}
         <div className="hidden xl:block shrink-0">
           <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 font-medium">
             Solo divulgazione · Non consulenza finanziaria
           </span>
         </div>
 
+        {/* Mobile hamburger */}
         <button
-          onClick={() => setOpen(!open)}
+          onClick={() => setMobileOpen(!mobileOpen)}
           className="lg:hidden text-foreground p-2"
           aria-label="Menu"
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
+      {/* Mobile menu */}
       <AnimatePresence>
-        {open && (
+        {mobileOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -193,21 +202,30 @@ const Navbar = () => {
             transition={{ duration: 0.2 }}
             className="lg:hidden overflow-hidden bg-background border-b border-border"
           >
-            <div className="flex flex-col gap-1 px-4 py-4">
-              {allMobileLinks.map((l) => (
-                <Link
-                  key={l.href}
-                  to={l.href}
-                  onClick={() => setOpen(false)}
-                  className={`text-left text-base py-2 transition-colors ${
-                    location.pathname === l.href
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {l.href === "/live" && <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block mr-1" />}
-                  {l.label}
-                </Link>
+            <div className="flex flex-col px-4 py-4">
+              {mobileGroups.map((group) => (
+                <div key={group.label}>
+                  <p className="text-[10px] tracking-widest text-muted-foreground/40 px-0 pt-3 pb-1">
+                    {group.label}
+                  </p>
+                  {group.links.map((l) => (
+                    <Link
+                      key={l.href}
+                      to={l.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={`text-left text-base py-2 transition-colors block ${
+                        location.pathname === l.href
+                          ? "text-primary"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {"live" in l && l.live && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse inline-block mr-1.5" />
+                      )}
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
               ))}
               <span className="text-[12px] text-primary-foreground bg-primary rounded px-2.5 py-1 mt-3 self-start font-medium">
                 Solo divulgazione · Non consulenza finanziaria
@@ -219,5 +237,33 @@ const Navbar = () => {
     </nav>
   );
 };
+
+const DropdownPanel = ({ links, pathname }: { links: { label: string; href: string }[]; pathname: string }) => (
+  <motion.div
+    initial={{ opacity: 0, y: -8 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -8 }}
+    transition={{ duration: 0.15 }}
+    className="absolute top-full left-0 mt-1 bg-background border border-border rounded-xl shadow-lg z-50 min-w-[200px] overflow-hidden py-1"
+  >
+    {links.map((l, i) =>
+      l.label === "separator" ? (
+        <div key={`sep-${i}`} className="border-t border-border my-1 mx-3" />
+      ) : (
+        <Link
+          key={l.href}
+          to={l.href}
+          className={`block px-4 py-2.5 text-[14px] transition-colors whitespace-nowrap ${
+            pathname === l.href
+              ? "text-primary"
+              : "text-muted-foreground hover:text-foreground hover:bg-card"
+          }`}
+        >
+          {l.label}
+        </Link>
+      )
+    )}
+  </motion.div>
+);
 
 export default Navbar;
