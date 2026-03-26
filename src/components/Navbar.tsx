@@ -14,6 +14,7 @@ const navLinks = [
   { label: "Live", href: "/live" },
   { label: "Oracolo", href: "/oracolo" },
   { label: "Holder", href: "/holder" },
+  { label: "Notizie", href: "/notizie" },
   { label: "Mappa", href: "/mappa" },
   { label: "Quiz", href: "/quiz" },
   { label: "Glossario", href: "/glossario" },
