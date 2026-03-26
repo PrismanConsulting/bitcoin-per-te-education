@@ -5,6 +5,12 @@ import { ChevronDown } from "lucide-react";
 import SEO from "@/components/SEO";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLiveStats, useFlash } from "@/hooks/useLiveStats";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const tickerWords = [
   "nessun padrone",
@@ -274,6 +280,67 @@ const HomePage = () => {
           <p className="text-[14px] text-muted-foreground mt-1">Battito cardiaco, pressione, temperatura. La rete come organismo biologico.</p>
           <p className="text-[13px] text-primary mt-2">Guarda battere →</p>
         </Link>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="container mx-auto px-4 max-w-3xl py-12 relative z-10">
+        <p className="label-section">DOMANDE FREQUENTI</p>
+        <h2 className="text-2xl font-bold font-heading text-foreground mb-6">
+          Le domande che tutti fanno.
+        </h2>
+        <Accordion type="single" collapsible className="space-y-0">
+          {[
+            {
+              q: "Bitcoin è illegale in Italia?",
+              a: "No. Bitcoin è legale in Italia e nell'Unione Europea. Dal 2023 è regolamentato dal MiCA (Markets in Crypto-Assets Regulation). Usarlo, detenerlo e scambiarlo è perfettamente legale. Come ogni asset, le plusvalenze vanno dichiarate al fisco.",
+            },
+            {
+              q: "Si può perdere tutto?",
+              a: "La rete Bitcoin non può fallire — è distribuita su ~20.000 computer. Quello che può succedere è perdere l'accesso ai propri Bitcoin se si perdono le chiavi private. È come perdere il contante: la colpa non è della moneta, ma di chi non l'ha custodita bene.",
+            },
+            {
+              q: "Chi controlla Bitcoin?",
+              a: "Nessuno e tutti. Il protocollo è controllato dal codice, che è pubblico e modificabile solo con il consenso della maggioranza dei partecipanti alla rete. Nessuna azienda, governo o persona può cambiare le regole unilateralmente.",
+            },
+            {
+              q: "Bitcoin è anonimo?",
+              a: "No, è pseudonimo. Tutte le transazioni sono pubbliche e visibili sulla blockchain. Non conosci il nome di chi le fa, ma puoi tracciare ogni movimento di ogni indirizzo Bitcoin della storia. È più trasparente di qualsiasi banca.",
+            },
+            {
+              q: "Quanto consuma Bitcoin?",
+              a: "Bitcoin consuma energia — è vero. Ma circa il 50-60% viene da fonti rinnovabili, una percentuale più alta di qualsiasi altro settore industriale. Inoltre il consumo è funzionale: senza energia non c'è sicurezza della rete.",
+            },
+            {
+              q: "Può essere copiato o hackerato?",
+              a: "Il codice è open source — chiunque può copiarlo e creare una nuova criptovaluta. L'hanno fatto migliaia di volte. Ma copiare il codice non copia la rete, la fiducia e i 15 anni di storia. La rete Bitcoin in sé non è mai stata hackerata.",
+            },
+            {
+              q: "Cosa succede quando finiscono i 21 milioni?",
+              a: "L'ultimo Bitcoin sarà minato intorno al 2140. Da quel momento i miner saranno ricompensati solo dalle fee delle transazioni. La rete continuerà a funzionare esattamente come oggi.",
+            },
+            {
+              q: "Come faccio a custodirlo in sicurezza?",
+              a: "La regola fondamentale è: 'not your keys, not your coins'. Chi custodisce i propri Bitcoin su un exchange non li possiede davvero — possiede solo una promessa. Un hardware wallet fisico è la soluzione più sicura per chi vuole la vera proprietà.",
+            },
+            {
+              q: "Bitcoin e blockchain sono la stessa cosa?",
+              a: "No. La blockchain è la tecnologia usata da Bitcoin — un registro pubblico distribuito. Bitcoin è la prima e più importante applicazione di questa tecnologia. Esistono migliaia di altre blockchain, ma nessuna ha la sicurezza, la decentralizzazione e la storia di quella di Bitcoin.",
+            },
+            {
+              q: "Devo capire la tecnologia per usarlo?",
+              a: "No — come non devi capire il protocollo TCP/IP per usare internet. Ma capire come funziona ti rende più consapevole e più sicuro. Per questo esiste BitcoinPerTe.",
+            },
+          ].map((faq, i) => (
+            <AccordionItem key={i} value={`faq-${i}`} className="border-border">
+              <AccordionTrigger className="font-heading font-medium text-foreground text-base text-left">
+                {faq.q}
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                {faq.a}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </section>
 
       {/* Arrow */}
