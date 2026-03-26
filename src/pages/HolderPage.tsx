@@ -52,10 +52,13 @@ const HolderPage = () => {
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
 
   useEffect(() => {
+    const PROXY = "https://api.allorigins.win/get?url=";
+    const API = "https://api.blockchair.com/bitcoin/addresses?a=balance&s=balance(desc)&limit=50";
     const fetchData = () => {
-      fetch("https://api.blockchair.com/bitcoin/addresses?a=balance&s=balance(desc)&limit=50")
+      fetch(PROXY + encodeURIComponent(API))
         .then((r) => r.json())
-        .then((d: BlockchairResponse) => {
+        .then((outer) => {
+          const d = JSON.parse(outer.contents) as BlockchairResponse;
           if (d.data) {
             setAddresses(d.data);
             setLastUpdate(new Date());
