@@ -94,6 +94,8 @@ const PrivacyModal = ({ open, onClose }: PrivacyModalProps) => {
                   <li><strong className="text-foreground">Blockchair</strong> — dati pubblici on-chain sugli indirizzi Bitcoin più ricchi. Tutti i dati sono pubblicamente visibili sulla blockchain. Nessun dato personale.</li>
                   <li><strong className="text-foreground">CryptoPanic</strong> — feed notizie Bitcoin filtrato. Nessun dato personale trasmesso.</li>
                   <li><strong className="text-foreground">bitnodes.io</strong> — mappa nodi Bitcoin attivi. Nessun dato personale trasmesso.</li>
+                  <li><strong className="text-foreground">rss2json.com</strong> — conversione RSS in JSON per feed notizie. Nessun dato personale.</li>
+                  <li><strong className="text-foreground">bitcoinops.org, bitcoin.org, nobsbitcoin.com</strong> — feed RSS pubblici di notizie tecniche Bitcoin. Solo lettura, nessun dato personale.</li>
                 </ul>
                 <p className="mt-2">Queste API sono servizi di terze parti con proprie privacy policy. Il sito non trasmette alcun dato personale dell'utente a questi servizi.</p>
               </section>

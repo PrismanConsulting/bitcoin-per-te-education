@@ -51,12 +51,25 @@ interface MarkerPoint {
 }
 
 const MappaPage = () => {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [tooltip, setTooltip] = useState<{
+    x: number; y: number; country: string; count: number;
+  } | null>(null);
+
   const totalNodes = useMemo(() => NODE_DISTRIBUTION.reduce((s, d) => s + d[3], 0), []);
+
+  const countByCountry = useMemo(() => {
+    const map: Record<string, number> = {};
+    NODE_DISTRIBUTION.forEach(([, , country, count]) => {
+      map[country] = count;
+    });
+    return map;
+  }, []);
 
   const markers = useMemo(() => {
     const points: MarkerPoint[] = [];
     for (const [lat, lng, cc, count] of NODE_DISTRIBUTION) {
-      const numMarkers = Math.max(Math.round(count / 30), 1);
+      const numMarkers = Math.max(Math.round(count / 50), 1);
       for (let i = 0; i < numMarkers; i++) {
         const seed = lat * 1000 + lng * 100 + i;
         points.push({
@@ -80,6 +93,25 @@ const MappaPage = () => {
     { label: "Versione più comune", value: "v27.0.0" },
     { label: "Ultimo aggiornamento", value: new Date().toLocaleDateString("it-IT") },
   ];
+
+  const handleMarkerEnter = (e: React.MouseEvent, node: MarkerPoint, idx: number) => {
+    setHoveredIdx(idx);
+    const svg = (e.target as Element).closest("svg");
+    if (svg) {
+      const rect = svg.getBoundingClientRect();
+      setTooltip({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        country: node.country,
+        count: countByCountry[node.country] || 0,
+      });
+    }
+  };
+
+  const handleMarkerLeave = () => {
+    setHoveredIdx(null);
+    setTooltip(null);
+  };
 
   return (
     <motion.div
@@ -116,7 +148,7 @@ const MappaPage = () => {
           ))}
         </div>
 
-        <div className="rounded-lg border border-border overflow-hidden" style={{ background: "#0D0D0D" }}>
+        <div className="relative rounded-lg border border-border overflow-hidden" style={{ background: "#0D0D0D" }}>
           <ComposableMap
             projectionConfig={{ scale: 147 }}
             className="w-full h-[300px] md:h-[500px]"
@@ -141,18 +173,56 @@ const MappaPage = () => {
                   ))
                 }
               </Geographies>
-              {markers.map((node, i) => (
-                <Marker key={i} coordinates={[node.lng, node.lat]}>
-                  <circle r={1.5} fill="#F7931A" fillOpacity={0.6} stroke="none" />
+              {markers.map((node, idx) => (
+                <Marker key={idx} coordinates={[node.lng, node.lat]}>
+                  <circle
+                    r={hoveredIdx === idx ? 3 : 1.8}
+                    fill="#F7931A"
+                    fillOpacity={hoveredIdx === idx ? 0.9 : 0.55}
+                    stroke="#F7931A"
+                    strokeWidth={0.3}
+                    strokeOpacity={0.3}
+                    style={{ cursor: "pointer", transition: "fill-opacity 0.15s" }}
+                    onMouseEnter={(e) => handleMarkerEnter(e as unknown as React.MouseEvent, node, idx)}
+                    onMouseLeave={handleMarkerLeave}
+                  />
                 </Marker>
               ))}
             </ZoomableGroup>
           </ComposableMap>
+
+          {tooltip && (
+            <div
+              className="absolute z-50 pointer-events-none"
+              style={{ left: tooltip.x + 12, top: tooltip.y - 10 }}
+            >
+              <div className="bg-card border border-primary/30 rounded-lg px-3 py-2 text-sm shadow-lg">
+                <p className="font-mono font-bold text-primary text-[13px]">
+                  {flag(tooltip.country)} {tooltip.country}
+                </p>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  ~{tooltip.count.toLocaleString("it-IT")} nodi stimati
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         <p className="text-[12px] text-muted-foreground text-center mt-3">
           Ogni punto arancione rappresenta un gruppo di nodi Bitcoin attivi in quella regione
         </p>
+
+        <div className="flex flex-wrap gap-2 justify-center">
+          {Object.entries(countByCountry)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([cc, count]) => (
+              <span key={cc} className="text-[11px] font-mono bg-card border border-border rounded px-2 py-1 text-muted-foreground">
+                {flag(cc)} {cc}: ~{count.toLocaleString("it-IT")}
+              </span>
+            ))}
+          <span className="text-[11px] text-muted-foreground/40 self-center">+ altri 15 paesi</span>
+        </div>
 
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">Top 10 Paesi per nodi</p>

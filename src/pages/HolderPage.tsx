@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
@@ -18,9 +18,33 @@ const HOLDERS = [
   { rank: 10, address: "1AC4fMwgY8j9onSbXEWeH6Zan8QGMSdmtA", btc: 66452.00, lastMove: "5 anni fa", label: "Hodler storico" },
 ];
 
+function parseLastMove(s: string): number {
+  if (s.includes("giorn")) return parseInt(s) || 1;
+  if (s.includes("mes")) return (parseInt(s) || 1) * 30;
+  if (s.includes("ann")) return (parseInt(s) || 1) * 365;
+  return 9999;
+}
+
 const HolderPage = () => {
+  const [filterLabel, setFilterLabel] = useState("Tutti");
+  const [sortBy, setSortBy] = useState("btc_desc");
+
   const totalBtc = useMemo(() => HOLDERS.reduce((s, h) => s + h.btc, 0), []);
   const percentSupply = ((totalBtc / MAX_SUPPLY) * 100).toFixed(2);
+
+  const filteredHolders = useMemo(() => {
+    let result = [...HOLDERS];
+    if (filterLabel !== "Tutti") {
+      result = result.filter((h) => h.label === filterLabel);
+    }
+    switch (sortBy) {
+      case "btc_desc": result.sort((a, b) => b.btc - a.btc); break;
+      case "btc_asc": result.sort((a, b) => a.btc - b.btc); break;
+      case "move_recent": result.sort((a, b) => parseLastMove(a.lastMove) - parseLastMove(b.lastMove)); break;
+      case "move_old": result.sort((a, b) => parseLastMove(b.lastMove) - parseLastMove(a.lastMove)); break;
+    }
+    return result;
+  }, [filterLabel, sortBy]);
 
   return (
     <motion.div
@@ -64,6 +88,34 @@ const HolderPage = () => {
           <p className="text-sm text-muted-foreground/70 italic mt-4">"Se si muovesse, il mondo lo saprebbe."</p>
         </div>
 
+        {/* Filters */}
+        <div className="space-y-2">
+          <div className="flex flex-wrap gap-3">
+            <select
+              value={filterLabel}
+              onChange={(e) => setFilterLabel(e.target.value)}
+              className="bg-card border border-border rounded-lg px-3 py-2 text-sm text-foreground font-mono focus:outline-none focus:border-primary/50"
+            >
+              <option value="Tutti">Tutti</option>
+              <option value="Balena">Balena</option>
+              <option value="Hodler storico">Hodler storico</option>
+            </select>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="bg-card border border-border rounded-lg px-3 py-2 text-sm text-foreground font-mono focus:outline-none focus:border-primary/50"
+            >
+              <option value="btc_desc">BTC (decrescente)</option>
+              <option value="btc_asc">BTC (crescente)</option>
+              <option value="move_recent">Ultimo movimento (recente)</option>
+              <option value="move_old">Ultimo movimento (storico)</option>
+            </select>
+          </div>
+          <p className="text-[13px] text-muted-foreground">
+            {filteredHolders.length} indirizzi{filterLabel !== "Tutti" ? ` · filtro: ${filterLabel}` : ""}
+          </p>
+        </div>
+
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -78,7 +130,7 @@ const HolderPage = () => {
               </tr>
             </thead>
             <tbody>
-              {HOLDERS.map((h) => {
+              {filteredHolders.map((h) => {
                 const pct = ((h.btc / MAX_SUPPLY) * 100).toFixed(3);
                 return (
                   <tr key={h.address} className="border-b border-border/50 hover:bg-muted/10 transition-colors">
