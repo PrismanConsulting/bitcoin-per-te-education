@@ -23,6 +23,7 @@ import OracoloPage from "@/pages/OracoloPage";
 import HolderPage from "@/pages/HolderPage";
 import NotizePage from "@/pages/NotizePage";
 import PreferenzePage from "@/pages/PreferenzePage";
+import IniziaPage from "@/pages/IniziaPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const AnimatedRoutes = () => {
           <Route path="/holder" element={<HolderPage />} />
           <Route path="/notizie" element={<NotizePage />} />
           <Route path="/preferenze" element={<PreferenzePage />} />
+          <Route path="/inizia" element={<IniziaPage />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/glossario" element={<GlossarioPage />} />
           <Route path="/community" element={<CommunityPage />} />

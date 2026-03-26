@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import AuthModal from "@/components/AuthModal";
 
 const imparaLinks = [
+  { label: "Inizia da Zero →", href: "/inizia", highlight: true },
+  { label: "separator", href: "" },
   { label: "Cos'è Bitcoin", href: "/bitcoin" },
   { label: "Blockchain", href: "/blockchain" },
   { label: "Mining & Halving", href: "/mining" },
@@ -37,6 +39,7 @@ const dropdowns = [
 
 const mobileGroups = [
   { label: "IMPARA", links: [
+    { label: "Inizia da Zero →", href: "/inizia", highlight: true },
     { label: "Cos'è Bitcoin", href: "/bitcoin" },
     { label: "Blockchain", href: "/blockchain" },
     { label: "Mining & Halving", href: "/mining" },
@@ -282,7 +285,7 @@ const Navbar = () => {
   );
 };
 
-const DropdownPanel = ({ links, pathname }: { links: { label: string; href: string }[]; pathname: string }) => (
+const DropdownPanel = ({ links, pathname }: { links: { label: string; href: string; highlight?: boolean }[]; pathname: string }) => (
   <motion.div
     initial={{ opacity: 0, y: -8 }}
     animate={{ opacity: 1, y: 0 }}
@@ -298,9 +301,11 @@ const DropdownPanel = ({ links, pathname }: { links: { label: string; href: stri
           key={l.href}
           to={l.href}
           className={`block px-4 py-2.5 text-[14px] transition-colors whitespace-nowrap ${
-            pathname === l.href
-              ? "text-primary"
-              : "text-muted-foreground hover:text-foreground hover:bg-card"
+            l.highlight
+              ? "text-primary font-semibold"
+              : pathname === l.href
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground hover:bg-card"
           }`}
         >
           {l.label}
