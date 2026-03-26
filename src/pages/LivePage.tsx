@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
@@ -501,6 +501,16 @@ const LivePage = () => {
             <p className="text-sm text-muted-foreground italic">{poeticText(fee)}</p>
           </div>
         </section>
+
+        {/* ═══ DIVIDER 2 ═══ */}
+        <div className="flex items-center gap-4">
+          <div className="flex-1 border-t border-border" />
+          <span className="text-muted-foreground text-sm font-heading">· e adesso guarda il denaro muoversi ·</span>
+          <div className="flex-1 border-t border-border" />
+        </div>
+
+        {/* ═══ SEZIONE 3 — TRANSAZIONI IN VOLO ═══ */}
+        <MempoolTxSection />
 
         {/* DISCLAIMER */}
         <p className="text-center text-[12px] text-muted-foreground/60 pb-4">
