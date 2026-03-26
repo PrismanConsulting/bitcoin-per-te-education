@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import SEO from "@/components/SEO";
+import AuthModal from "@/components/AuthModal";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const RSS2JSON = "https://api.rss2json.com/v1/api.json?rss_url=";
 
@@ -35,6 +38,15 @@ interface NewsPost {
   published_at: Date;
 }
 
+interface Comment {
+  id: string;
+  nickname: string;
+  content: string;
+  created_at: string;
+  user_id: string;
+  news_url: string;
+}
+
 function relativeTime(date: Date): string {
   const diff = Date.now() - date.getTime();
   const mins = Math.floor(diff / 60_000);
@@ -56,6 +68,14 @@ const NotizePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+
+  const { user, profile } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [expandedUrl, setExpandedUrl] = useState<string | null>(null);
+  const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+  const [comments, setComments] = useState<Record<string, Comment[]>>({});
+  const [commentInputs, setCommentInputs] = useState<Record<string, string>>({});
+  const [commentSending, setCommentSending] = useState(false);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -99,6 +119,66 @@ const NotizePage = () => {
     () => posts.filter((p) => passesFilter(p.title)).slice(0, 20),
     [posts]
   );
+
+  // Load comment counts after posts load
+  useEffect(() => {
+    if (filtered.length === 0) return;
+    const urls = filtered.map((p) => p.url).filter(Boolean);
+    if (urls.length === 0) return;
+    supabase
+      .from("news_comments")
+      .select("news_url")
+      .in("news_url", urls)
+      .eq("is_visible", true)
+      .then(({ data }) => {
+        if (!data) return;
+        const counts: Record<string, number> = {};
+        data.forEach((row: any) => {
+          counts[row.news_url] = (counts[row.news_url] || 0) + 1;
+        });
+        setCommentCounts(counts);
+      });
+  }, [filtered]);
+
+  async function toggleComments(url: string) {
+    if (expandedUrl === url) {
+      setExpandedUrl(null);
+      return;
+    }
+    setExpandedUrl(url);
+    if (!comments[url]) {
+      const { data } = await supabase
+        .from("news_comments")
+        .select("*")
+        .eq("news_url", url)
+        .eq("is_visible", true)
+        .order("created_at", { ascending: true });
+      setComments((prev) => ({ ...prev, [url]: (data as Comment[]) || [] }));
+    }
+  }
+
+  async function submitComment(url: string, title: string) {
+    const content = commentInputs[url];
+    if (!content?.trim() || !user || !profile) return;
+    setCommentSending(true);
+    const { data, error: err } = await supabase
+      .from("news_comments")
+      .insert({
+        user_id: user.id,
+        nickname: profile.nickname,
+        news_url: url,
+        news_title: title,
+        content: content.trim(),
+      })
+      .select()
+      .single();
+    if (!err && data) {
+      setComments((prev) => ({ ...prev, [url]: [...(prev[url] || []), data as Comment] }));
+      setCommentCounts((prev) => ({ ...prev, [url]: (prev[url] || 0) + 1 }));
+      setCommentInputs((prev) => ({ ...prev, [url]: "" }));
+    }
+    setCommentSending(false);
+  }
 
   return (
     <motion.div
@@ -167,6 +247,74 @@ const NotizePage = () => {
                 >
                   {post.title}
                 </a>
+
+                {/* Comments toggle */}
+                <button
+                  onClick={() => toggleComments(post.url)}
+                  className="text-[12px] text-muted-foreground/60 hover:text-primary transition-colors mt-1 flex items-center gap-1"
+                >
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 2h12v9H9l-3 3v-3H2z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+                  </svg>
+                  {commentCounts[post.url] || 0} commenti
+                </button>
+
+                {/* Expanded comments */}
+                <AnimatePresence>
+                  {expandedUrl === post.url && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden mt-3 pl-4 border-l-2 border-border space-y-3"
+                    >
+                      {(comments[post.url] || []).map((c) => (
+                        <div key={c.id} className="space-y-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-xs text-primary">₿ {c.nickname}</span>
+                            <span className="text-[10px] text-muted-foreground/50">
+                              {relativeTime(new Date(c.created_at))}
+                            </span>
+                          </div>
+                          <p className="text-sm text-foreground leading-relaxed">{c.content}</p>
+                        </div>
+                      ))}
+                      {(comments[post.url] || []).length === 0 && (
+                        <p className="text-xs text-muted-foreground/50">Nessun commento ancora.</p>
+                      )}
+
+                      {user && profile ? (
+                        <div className="flex gap-2 pt-1">
+                          <input
+                            type="text"
+                            placeholder="Il tuo commento..."
+                            maxLength={500}
+                            value={commentInputs[post.url] || ""}
+                            onChange={(e) =>
+                              setCommentInputs((prev) => ({ ...prev, [post.url]: e.target.value }))
+                            }
+                            className="flex-1 bg-transparent border border-border rounded-lg px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50"
+                          />
+                          <button
+                            onClick={() => submitComment(post.url, post.title)}
+                            disabled={!commentInputs[post.url]?.trim() || commentSending}
+                            className="bg-primary text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-heading hover:bg-primary/90 transition-colors disabled:opacity-50"
+                          >
+                            Pubblica
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setAuthOpen(true)}
+                          className="text-xs text-primary hover:underline"
+                        >
+                          Accedi per commentare →
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
@@ -184,6 +332,8 @@ const NotizePage = () => {
           Dati da RSS feed pubblici via rss2json.com · Filtro automatico client-side · Solo uso divulgativo
         </p>
       </div>
+
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </motion.div>
   );
 };
