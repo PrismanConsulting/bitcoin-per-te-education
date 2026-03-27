@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import SEO from "@/components/SEO";
 
-interface PriceData { eur: number; eur_24h_change: number }
+interface PriceData { usd: number; usd_24h_change: number }
 interface FeeData { fastestFee: number; halfHourFee: number; hourFee: number; economyFee: number }
 interface DiffData { progressPercent: number; difficultyChange: number; remainingBlocks: number }
 interface MempoolData { count: number; vsize: number }
@@ -97,9 +97,9 @@ const TerminalePage = () => {
 
   const fetchPrice = useCallback(async () => {
     try {
-      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur&include_24hr_change=true");
+      const r = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true");
       const d = await r.json();
-      if (d.bitcoin) setPrice(d.bitcoin);
+      if (d.bitcoin) setPrice({ usd: d.bitcoin.usd, usd_24h_change: d.bitcoin.usd_24h_change });
       setLastFetchTime(Date.now());
       setError(false);
     } catch { /* keep last value */ }
@@ -148,7 +148,7 @@ const TerminalePage = () => {
   const halvingSeconds = halvingRemaining ? Math.floor((halvingRemaining % 60_000) / 1000) : null;
   const supplyPercent = supply ? (supply / 21_000_000) * 100 : 0;
 
-  const flashPrice = useFlash(price?.eur);
+  const flashPrice = useFlash(price?.usd);
   const flashBlock = useFlash(blockHeight);
   const flashDiff = useFlash(diff?.difficultyChange);
   const flashFee = useFlash(fees?.halfHourFee);
@@ -169,7 +169,7 @@ const TerminalePage = () => {
     >
       <SEO
         title="Terminale Bitcoin — Dati Live: Blocchi, Fee, Mempool | BitcoinPerTe"
-        description="Dati in tempo reale dalla rete Bitcoin: prezzo BTC/EUR, blocchi live, fee consigliate, stato mempool, countdown halving. Aggiornamento automatico."
+        description="Dati in tempo reale dalla rete Bitcoin: prezzo BTC/USD, blocchi live, fee consigliate, stato mempool, countdown halving. Aggiornamento automatico."
         path="/terminale"
       />
       <div className="container mx-auto px-4 max-w-6xl py-8">
@@ -201,14 +201,14 @@ const TerminalePage = () => {
         <div className="bg-card border-y border-border py-4 px-4 mb-8 rounded-lg grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Price */}
           <div>
-            <p className="text-[13px] text-muted-foreground mb-0.5">BTC/EUR</p>
+            <p className="text-[13px] text-muted-foreground mb-0.5">BTC/USD</p>
             {price ? (
               <>
                 <p className="font-mono font-bold text-[31px] text-foreground leading-tight">
-                  <FlashValue flash={flashPrice}>€{price.eur.toLocaleString("it-IT")}</FlashValue>
+                  <FlashValue flash={flashPrice}>${price.usd.toLocaleString("en-US")}</FlashValue>
                 </p>
-                <p className={`text-[14px] font-mono ${price.eur_24h_change >= 0 ? "text-green-500" : "text-red-500"}`}>
-                  {price.eur_24h_change >= 0 ? "+" : ""}{price.eur_24h_change.toFixed(1)}% 24h
+                <p className={`text-[14px] font-mono ${price.usd_24h_change >= 0 ? "text-green-500" : "text-red-500"}`}>
+                  {price.usd_24h_change >= 0 ? "+" : ""}{price.usd_24h_change.toFixed(1)}% 24h
                 </p>
                 <p className="text-[13px] mt-0.5" style={{ color: '#AAAAAA' }}>Fonte: CoinGecko · Solo informativo</p>
               </>

@@ -92,7 +92,7 @@ const PrivacyModal = ({ open, onClose }: PrivacyModalProps) => {
                 <p>Alcune pagine recuperano dati da API pubbliche esterne per scopi puramente informativi e divulgativi:</p>
                 <ul className="list-disc list-inside space-y-1 ml-2 mt-2">
                   <li><strong className="text-foreground">mempool.space</strong> — dati tecnici sulla rete Bitcoin (blocchi, fee, mempool). Nessun dato personale trasmesso.</li>
-                  <li><strong className="text-foreground">CoinGecko</strong> — prezzo di riferimento BTC/EUR. Solo lettura, nessun dato personale.</li>
+                  <li><strong className="text-foreground">CoinGecko</strong> — prezzo di riferimento BTC/USD. Solo lettura, nessun dato personale.</li>
                   <li><strong className="text-foreground">Blockchair</strong> — dati pubblici on-chain sugli indirizzi Bitcoin più ricchi. Nessun dato personale.</li>
                   <li><strong className="text-foreground">CryptoPanic</strong> — feed notizie Bitcoin filtrato. Nessun dato personale trasmesso.</li>
                   <li><strong className="text-foreground">bitnodes.io</strong> — mappa nodi Bitcoin attivi. Nessun dato personale trasmesso.</li>
