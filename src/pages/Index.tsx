@@ -52,15 +52,13 @@ const AnimatedNumber = () => {
 };
 
 const LiveWidget = () => {
-  const { priceEur, blockHeight, halfHourFee } = useLiveStats();
-  const flashPrice = useFlash(priceEur);
+  const { priceUsd, blockHeight } = useLiveStats();
+  const flashPrice = useFlash(priceUsd);
   const flashBlock = useFlash(blockHeight);
-  const flashFee = useFlash(halfHourFee);
 
   const items = [
-    { label: "BTC/EUR", value: priceEur ? `€${priceEur.toLocaleString("it-IT")}` : null, flash: flashPrice },
-    { label: "Blocco", value: blockHeight ? blockHeight.toLocaleString("it-IT") : null, flash: flashBlock },
-    { label: "Fee ~30m", value: halfHourFee ? `${halfHourFee} sat/vB` : null, flash: flashFee },
+    { label: "BTC/USD", value: priceUsd ? `$${priceUsd.toLocaleString("en-US")}` : null, flash: flashPrice },
+    { label: "Blocco", value: blockHeight ? `#${blockHeight.toLocaleString("it-IT")}` : null, flash: flashBlock },
   ];
 
   return (
@@ -72,7 +70,7 @@ const LiveWidget = () => {
           live
         </span>
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         {items.map((item) => (
           <div key={item.label} className="card-surface p-2.5 text-center">
             <p className="text-[11px] text-muted-foreground mb-1">{item.label}</p>
@@ -94,7 +92,7 @@ const LiveWidget = () => {
 };
 
 const IlPulse = () => {
-  const { priceEur, blockHeight, halfHourFee } = useLiveStats();
+  const { halfHourFee, blockHeight } = useLiveStats();
 
   const [news, setNews] = useState<{
     title: string; link: string; source: string; timeAgo: string;
@@ -233,13 +231,15 @@ const IlPulse = () => {
           <div className="p-0">
             <p className="text-[8px] tracking-[2px] text-muted-foreground/20 px-4 pt-3 pb-2 font-semibold">RETE LIVE</p>
             {[
-              { label: "BTC/EUR", value: priceEur ? `€${priceEur.toLocaleString('it-IT')}` : null, sub: null as string | null, subColor: undefined as string | undefined },
-              { label: "BLOCCO", value: blockHeight ? `#${blockHeight.toLocaleString('it-IT')}` : null, sub: null as string | null, subColor: undefined as string | undefined },
               { label: "FEE ~30m", value: halfHourFee ? `${halfHourFee} sat/vB` : null,
-                sub: halfHourFee ? (halfHourFee <= 5 ? "bassa" : halfHourFee <= 20 ? "media" : "alta") : null,
+                sub: halfHourFee ? (halfHourFee <= 5 ? "conferma rapida" : halfHourFee <= 20 ? "attesa media" : "coda lunga") : null,
                 subColor: halfHourFee ? (halfHourFee <= 5 ? "#1D9E75" : halfHourFee <= 20 ? "#F7931A" : "#D85A30") : undefined },
+              { label: "FEE URGENTE", value: null as string | null,
+                sub: "dati da mempool.space", subColor: "#333" },
               { label: "MEMPOOL", value: mempool ? `${(mempool.count / 1000).toFixed(1)}K tx` : null,
                 sub: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null, subColor: undefined as string | undefined },
+              { label: "HALVING TRA", value: halvingDays !== null ? `${halvingDays.toLocaleString('it-IT')} gg` : null,
+                sub: "aprile 2028", subColor: "#F7931A" },
             ].map((item) => (
               <div key={item.label} className="flex justify-between items-center px-4 py-2.5 border-t border-border/50">
                 <span className="text-[9px] tracking-wider text-muted-foreground/30">{item.label}</span>
@@ -307,34 +307,14 @@ const IlPulse = () => {
             </div>
           </div>
 
-          {/* COL 3: Volume + Halving */}
-          <div className="p-4 space-y-4">
+          {/* COL 3: Volume 24h */}
+          <div className="p-4 flex flex-col justify-center">
             <div>
               <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">VOLUME GLOBALE 24H</p>
               {volume24h ? (
                 <>
-                  <p className="font-mono text-2xl font-bold text-purple-400">{volume24h}</p>
-                  <p className="text-[9px] text-muted-foreground/20 mt-1">scambi globali · fonte CoinGecko</p>
-                </>
-              ) : (
-                <div className="h-8 rounded bg-muted animate-pulse" />
-              )}
-            </div>
-
-            <div>
-              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">PROSSIMO HALVING</p>
-              {halvingDays !== null ? (
-                <>
-                  <p className="font-mono text-xl font-bold text-foreground">
-                    {halvingDays.toLocaleString('it-IT')}
-                    <span className="text-[11px] text-muted-foreground/40 ml-1">giorni</span>
-                  </p>
-                  <p className="text-[9px] text-muted-foreground/20 mt-1 mb-2">aprile 2028 · blocco 1.050.000</p>
-                  <div className="h-1 rounded-full bg-border overflow-hidden">
-                    <div className="h-full rounded-full bg-primary transition-all"
-                      style={{ width: `${Math.min(halvingPct, 100)}%` }} />
-                  </div>
-                  <p className="text-[8px] text-muted-foreground/20 mt-1">{Math.round(halvingPct)}% del ciclo completato</p>
+                  <p className="font-mono text-4xl font-bold text-purple-400">{volume24h}</p>
+                  <p className="text-[9px] text-muted-foreground/20 mt-2">scambi globali · fonte CoinGecko</p>
                 </>
               ) : (
                 <div className="h-12 rounded bg-muted animate-pulse" />

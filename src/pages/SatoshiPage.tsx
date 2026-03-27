@@ -7,14 +7,14 @@ import { Share2 } from "lucide-react";
 const SATS_PER_BTC = 100_000_000;
 
 const SatoshiPage = () => {
-  const [euros, setEuros] = useState("");
+  const [dollars, setDollars] = useState("");
   const [btcPrice, setBtcPrice] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchPrice = () => {
-      fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur")
+      fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd")
         .then((r) => r.json())
-        .then((d) => setBtcPrice(d.bitcoin.eur))
+        .then((d) => setBtcPrice(d.bitcoin.usd))
         .catch(() => {});
     };
     fetchPrice();
@@ -24,15 +24,15 @@ const SatoshiPage = () => {
 
   const result = useMemo(() => {
     if (!btcPrice) return null;
-    const val = parseFloat(euros);
+    const val = parseFloat(dollars);
     if (isNaN(val) || val <= 0) return null;
     const sats = Math.round((val / btcPrice) * SATS_PER_BTC);
     return {
       sats,
-      formula: `€${val.toLocaleString("it-IT")} ÷ €${btcPrice.toLocaleString("it-IT")} × 100.000.000 = ${sats.toLocaleString("it-IT")} sat`,
-      shareUrl: `https://twitter.com/intent/tweet?text=Con+€${val.toLocaleString("it-IT")}+compri+${sats.toLocaleString("it-IT")}+satoshi+di+Bitcoin+📊+%23Bitcoin+%23Satoshi+→+bitcoinperte.it/satoshi`,
+      formula: `$${val.toLocaleString("en-US")} ÷ $${btcPrice.toLocaleString("en-US")} × 100,000,000 = ${sats.toLocaleString("it-IT")} sat`,
+      shareUrl: `https://twitter.com/intent/tweet?text=Con+$${val.toLocaleString("en-US")}+compri+${sats.toLocaleString("it-IT")}+satoshi+di+Bitcoin+📊+%23Bitcoin+%23Satoshi+→+bitcoinperte.it/satoshi`,
     };
-  }, [euros, btcPrice]);
+  }, [dollars, btcPrice]);
 
   return (
     <motion.div
@@ -76,23 +76,23 @@ const SatoshiPage = () => {
               <h3 className="text-xl font-bold font-heading text-foreground mb-1">Calcolatore Didattico</h3>
               <p className="text-[15px] text-muted-foreground mb-5">
                 {btcPrice
-                  ? `Prezzo live da CoinGecko: 1 BTC = €${btcPrice.toLocaleString("it-IT")} · Aggiornato ogni 60s · Solo uso educativo`
+                  ? `Prezzo live da CoinGecko: 1 BTC = $${btcPrice.toLocaleString("en-US")} · Aggiornato ogni 60s · Solo uso educativo`
                   : "Caricamento prezzo live da CoinGecko…"}
               </p>
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-muted-foreground mb-1.5 block">Inserisci un importo in €</label>
+                  <label className="text-sm text-muted-foreground mb-1.5 block">Inserisci un importo in $</label>
                   <input
                     type="number"
-                    value={euros}
-                    onChange={(e) => setEuros(e.target.value)}
+                    value={dollars}
+                    onChange={(e) => setDollars(e.target.value)}
                     placeholder="100"
                     className="w-full bg-card-elevated border border-border rounded px-4 py-3 font-mono text-base text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/50"
                   />
                 </div>
 
-                {!btcPrice && euros && (
+                {!btcPrice && dollars && (
                   <div className="space-y-3">
                     <Skeleton className="h-20 w-full rounded" />
                     <Skeleton className="h-4 w-3/4 mx-auto rounded" />

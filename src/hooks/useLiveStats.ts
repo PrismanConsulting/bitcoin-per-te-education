@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 export interface LiveStats {
-  priceEur: number | null;
+  priceUsd: number | null;
   blockHeight: number | null;
   halfHourFee: number | null;
 }
@@ -22,15 +22,15 @@ export function useFlash(value: unknown): boolean {
 }
 
 export function useLiveStats(): LiveStats {
-  const [priceEur, setPriceEur] = useState<number | null>(null);
+  const [priceUsd, setPriceUsd] = useState<number | null>(null);
   const [blockHeight, setBlockHeight] = useState<number | null>(null);
   const [halfHourFee, setHalfHourFee] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchPrice = () =>
-      fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur")
+      fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd")
         .then((r) => r.json())
-        .then((d) => setPriceEur(d.bitcoin.eur))
+        .then((d) => setPriceUsd(d.bitcoin.usd))
         .catch(() => {});
 
     const fetchBlock = () =>
@@ -60,5 +60,5 @@ export function useLiveStats(): LiveStats {
     };
   }, []);
 
-  return { priceEur, blockHeight, halfHourFee };
+  return { priceUsd, blockHeight, halfHourFee };
 }
