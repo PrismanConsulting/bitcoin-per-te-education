@@ -356,10 +356,6 @@ const IlPulse = () => {
     </section>
   );
 };
-
-
-  { testo: "Un nodo Bitcoin completo verifica ogni singola transazione della storia — oltre 800 milioni — ogni volta che si sincronizza da zero.", data: "" },
-  { testo: "Il whitepaper di Bitcoin fu pubblicato il 31 ottobre 2008 — il giorno di Halloween. Una coincidenza? Forse no.", data: "31 ott 2008" },
   { testo: "La difficoltà di mining di Bitcoin si aggiusta automaticamente ogni 2.016 blocchi per mantenere un blocco ogni ~10 minuti, indipendentemente da quanti miner ci sono.", data: "" },
   { testo: "Il primo exchange Bitcoin della storia, Bitcoin Market, aprì nel marzo 2010. Il prezzo iniziale era circa 0,003 dollari per BTC.", data: "mar 2010" },
   { testo: "Andreas Antonopoulos, uno dei divulgatori Bitcoin più noti, perse tutti i suoi Bitcoin in un hack nel 2012. La community raccolse fondi per aiutarlo.", data: "" },
