@@ -15,6 +15,7 @@ const imparaLinks = [
   { label: "Glossario", href: "/glossario" },
   { label: "separator", href: "" },
   { label: "Biblioteca Risorse", href: "/risorse" },
+  { label: "I Divulgatori", href: "/divulgatori" },
 ];
 
 const esploraLinks = [
