@@ -160,6 +160,48 @@ const FattoDelGiorno = () => {
   );
 };
 
+const CosaLeggereOggi = () => {
+  const [articolo, setArticolo] = useState<{ title: string; link: string; source: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://bitcoinops.org/feed.xml")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.items && data.items.length > 0) {
+          const item = data.items[0];
+          setArticolo({ title: item.title, link: item.link, source: "Bitcoin Optech" });
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <section className="container mx-auto px-4 max-w-6xl mb-6 relative z-10">
+      <div className="card-surface rounded-xl p-5">
+        <p className="text-[10px] tracking-widest text-muted-foreground/50 mb-3 font-heading">
+          DALL'ECOSISTEMA — OGGI
+        </p>
+        {loading ? (
+          <Skeleton className="h-12 w-full" />
+        ) : articolo ? (
+          <a href={articolo.link} target="_blank" rel="noopener noreferrer" className="group block">
+            <p className="text-base font-medium text-foreground group-hover:text-primary transition-colors leading-snug mb-1">
+              {articolo.title}
+            </p>
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-[11px] text-muted-foreground/50 font-mono">{articolo.source}</span>
+              <span className="text-muted-foreground/30">·</span>
+              <span className="text-[11px] text-primary group-hover:underline">Leggi →</span>
+            </div>
+          </a>
+        ) : null}
+      </div>
+    </section>
+  );
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
   const [networkActive, setNetworkActive] = useState<boolean | null>(null);
@@ -274,6 +316,9 @@ const HomePage = () => {
 
       {/* Il Fatto del Giorno */}
       <FattoDelGiorno />
+
+      {/* Cosa Leggere Oggi */}
+      <CosaLeggereOggi />
 
       {/* FAQ Section */}
       <section className="container mx-auto px-4 max-w-3xl py-12 relative z-10">
