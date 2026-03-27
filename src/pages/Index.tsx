@@ -246,9 +246,8 @@ const IlPulse = () => {
                 sub: "prossimo blocco", subColor: "#888" },
               { label: "MEMPOOL TX", value: mempool ? `${(mempool.count / 1000).toFixed(1)}K` : null,
                 sub: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null, subColor: undefined as string | undefined },
-              { label: "DIMENSIONE", value: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null,
-                sub: mempool ? (mempool.vsize < 10_000_000 ? "rete libera" : mempool.vsize < 50_000_000 ? "traffico medio" : "alta congestione") : null,
-                subColor: mempool ? (mempool.vsize < 10_000_000 ? "#1D9E75" : mempool.vsize < 50_000_000 ? "#F7931A" : "#D85A30") : undefined },
+              { label: "PROSSIMO BLOCCO", value: "~10 min",
+                sub: "stima media", subColor: "#888" },
             ].map((item) => (
               <div key={item.label} className="flex justify-between items-center px-4 py-3 border-t border-border/50">
                 <span className="text-[11px] tracking-wide text-muted-foreground/60">{item.label}</span>
