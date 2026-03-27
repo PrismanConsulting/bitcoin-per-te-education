@@ -5,13 +5,19 @@ import TermsModal from "@/components/TermsModal";
 
 const navItems = [
   { label: "Home", to: "/" },
+  { label: "Inizia", to: "/inizia" },
   { label: "Bitcoin", to: "/bitcoin" },
   { label: "Blockchain", to: "/blockchain" },
   { label: "Mining", to: "/mining" },
-  { label: "Satoshi", to: "/satoshi" },
-  { label: "Fiat", to: "/fiat" },
   { label: "Terminale", to: "/terminale" },
+  { label: "Live", to: "/live" },
+  { label: "Oracolo", to: "/oracolo" },
+  { label: "Mappa", to: "/mappa" },
+  { label: "Holder", to: "/holder" },
+  { label: "Notizie", to: "/notizie" },
+  { label: "Il Registro", to: "/registro" },
   { label: "Quiz", to: "/quiz" },
+  { label: "Glossario", to: "/glossario" },
   { label: "Community", to: "/community" },
 ];
 

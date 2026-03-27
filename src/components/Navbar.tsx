@@ -11,8 +11,6 @@ const imparaLinks = [
   { label: "Cos'è Bitcoin", href: "/bitcoin" },
   { label: "Blockchain", href: "/blockchain" },
   { label: "Mining & Halving", href: "/mining" },
-  { label: "I Satoshi", href: "/satoshi" },
-  { label: "Bitcoin vs Fiat", href: "/fiat" },
   { label: "separator", href: "" },
   { label: "Glossario", href: "/glossario" },
 ];
@@ -45,8 +43,6 @@ const mobileGroups = [
     { label: "Cos'è Bitcoin", href: "/bitcoin" },
     { label: "Blockchain", href: "/blockchain" },
     { label: "Mining & Halving", href: "/mining" },
-    { label: "I Satoshi", href: "/satoshi" },
-    { label: "Bitcoin vs Fiat", href: "/fiat" },
     { label: "Glossario", href: "/glossario" },
   ]},
   { label: "LIVE", links: [
@@ -105,8 +101,15 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border font-heading">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <Link to="/" className="text-lg font-bold tracking-tight shrink-0">
-          <span className="text-primary">₿</span>
-          <span className="text-foreground">BitcoinPerTe</span>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold tracking-tight leading-none">
+              <span className="text-primary">₿</span>
+              <span className="text-foreground">BitcoinPerTe</span>
+            </span>
+            <span className="hidden xl:block text-[10px] text-muted-foreground/50 tracking-widest leading-none mt-0.5">
+              divulgazione bitcoin in italiano
+            </span>
+          </div>
         </Link>
 
         {/* Desktop */}
