@@ -272,9 +272,6 @@ const HomePage = () => {
                 </p>
               </div>
 
-              <p className="text-muted-foreground text-[14px]" style={{ color: '#BBBBBB' }}>
-                Prisman Consulting · Francavilla al Mare, Abruzzo · Solo cookie tecnici
-              </p>
             </div>
 
             {/* Right column - 40% */}
