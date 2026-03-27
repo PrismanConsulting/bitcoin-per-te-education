@@ -186,12 +186,12 @@ const IlPulse = () => {
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-[10px] tracking-[3px] text-muted-foreground/40 font-heading font-semibold">
+            <span className="text-[11px] tracking-[2px] text-muted-foreground/70 font-heading font-semibold">
               IL PULSE — BITCOIN ADESSO
             </span>
           </div>
           {lastUpdate && (
-            <span className="text-[10px] font-mono text-muted-foreground/20">
+            <span className="text-[11px] font-mono text-muted-foreground/40">
               agg. {lastUpdate}
             </span>
           )}
@@ -206,15 +206,15 @@ const IlPulse = () => {
               <span className="text-[9px] text-primary tracking-widest font-semibold">NEWS</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors leading-snug truncate">
+              <p className="text-[14px] font-medium text-foreground group-hover:text-primary transition-colors leading-snug truncate">
                 {news.title}
               </p>
               <div className="flex items-center gap-1.5 mt-1">
-                <span className="text-[10px] text-muted-foreground/30 font-mono">{news.source}</span>
-                <span className="text-muted-foreground/20 text-[10px]">·</span>
-                <span className="text-[10px] text-muted-foreground/30 font-mono">{news.timeAgo}</span>
-                <span className="text-muted-foreground/20 text-[10px]">·</span>
-                <span className="text-[10px] text-primary group-hover:underline">Leggi →</span>
+                <span className="text-[11px] text-muted-foreground/50 font-mono">{news.source}</span>
+                <span className="text-muted-foreground/40 text-[11px]">·</span>
+                <span className="text-[11px] text-muted-foreground/50 font-mono">{news.timeAgo}</span>
+                <span className="text-muted-foreground/40 text-[11px]">·</span>
+                <span className="text-[11px] text-primary group-hover:underline">Leggi →</span>
               </div>
             </div>
           </a>
@@ -229,26 +229,24 @@ const IlPulse = () => {
 
           {/* COL 1: Metriche live rete */}
           <div className="p-0">
-            <p className="text-[8px] tracking-[2px] text-muted-foreground/20 px-4 pt-3 pb-2 font-semibold">RETE LIVE</p>
+            <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 px-4 pt-3 pb-2 font-semibold">RETE LIVE</p>
             {[
               { label: "FEE ~30m", value: halfHourFee ? `${halfHourFee} sat/vB` : null,
                 sub: halfHourFee ? (halfHourFee <= 5 ? "conferma rapida" : halfHourFee <= 20 ? "attesa media" : "coda lunga") : null,
                 subColor: halfHourFee ? (halfHourFee <= 5 ? "#1D9E75" : halfHourFee <= 20 ? "#F7931A" : "#D85A30") : undefined },
-              { label: "FEE URGENTE", value: null as string | null,
-                sub: "dati da mempool.space", subColor: "#333" },
               { label: "MEMPOOL", value: mempool ? `${(mempool.count / 1000).toFixed(1)}K tx` : null,
                 sub: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null, subColor: undefined as string | undefined },
               { label: "HALVING TRA", value: halvingDays !== null ? `${halvingDays.toLocaleString('it-IT')} gg` : null,
                 sub: "aprile 2028", subColor: "#F7931A" },
             ].map((item) => (
-              <div key={item.label} className="flex justify-between items-center px-4 py-2.5 border-t border-border/50">
-                <span className="text-[9px] tracking-wider text-muted-foreground/30">{item.label}</span>
+              <div key={item.label} className="flex justify-between items-center px-4 py-3.5 border-t border-border/50">
+                <span className="text-[11px] tracking-wide text-muted-foreground/60">{item.label}</span>
                 <div className="text-right">
                   {item.value ? (
                     <>
-                      <p className="font-mono text-[13px] font-bold text-primary">{item.value}</p>
+                      <p className="font-mono text-[15px] font-bold text-primary">{item.value}</p>
                       {item.sub && (
-                        <p className="text-[9px] font-mono" style={{ color: item.subColor || '#444' }}>{item.sub}</p>
+                        <p className="text-[11px] font-mono" style={{ color: item.subColor || '#666' }}>{item.sub}</p>
                       )}
                     </>
                   ) : (
@@ -262,7 +260,7 @@ const IlPulse = () => {
           {/* COL 2: Sentiment + Fear & Greed */}
           <div className="p-4 space-y-4">
             <div>
-              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">SENTIMENT RETE</p>
+              <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 mb-3 font-semibold">SENTIMENT RETE</p>
               <div className="h-1 rounded-full bg-border mb-2 overflow-hidden">
                 <div className="h-full rounded-full transition-all duration-1000"
                   style={{ width: `${sentiment.pct}%`, background: sentiment.color }} />
@@ -271,21 +269,21 @@ const IlPulse = () => {
                 <span className="text-[12px] font-bold font-mono" style={{ color: sentiment.color }}>
                   ● {sentiment.label}
                 </span>
-                <span className="text-[9px] text-muted-foreground/20 font-mono">
+                <span className="text-[11px] text-muted-foreground/50 font-mono">
                   {halfHourFee ? `${halfHourFee} sat/vB` : "—"}
                 </span>
               </div>
             </div>
 
             <div>
-              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">FEAR & GREED INDEX</p>
+              <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 mb-3 font-semibold">FEAR & GREED INDEX</p>
               {fearGreed ? (
                 <>
                   <div className="flex items-baseline gap-2 mb-2">
                     <span className="font-mono text-3xl font-bold" style={{ color: getFGColor(fearGreed.value) }}>
                       {fearGreed.value}
                     </span>
-                    <span className="text-[10px] font-bold tracking-wider" style={{ color: getFGColor(fearGreed.value) }}>
+                    <span className="text-[11px] font-bold tracking-wider" style={{ color: getFGColor(fearGreed.value) }}>
                       {fearGreed.label}
                     </span>
                   </div>
@@ -297,8 +295,8 @@ const IlPulse = () => {
                     </div>
                   </div>
                   <div className="flex justify-between mt-1">
-                    <span className="text-[8px] text-muted-foreground/20">Paura</span>
-                    <span className="text-[8px] text-muted-foreground/20">Avidità</span>
+                    <span className="text-[9px] text-muted-foreground/50">Paura</span>
+                    <span className="text-[9px] text-muted-foreground/50">Avidità</span>
                   </div>
                 </>
               ) : (
@@ -307,14 +305,34 @@ const IlPulse = () => {
             </div>
           </div>
 
-          {/* COL 3: Volume 24h */}
-          <div className="p-4 flex flex-col justify-center">
+          {/* COL 3: Volume + Halving */}
+          <div className="p-4 space-y-4">
             <div>
-              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">VOLUME GLOBALE 24H</p>
+              <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 mb-3 font-semibold">VOLUME GLOBALE 24H</p>
               {volume24h ? (
                 <>
-                  <p className="font-mono text-4xl font-bold text-purple-400">{volume24h}</p>
-                  <p className="text-[9px] text-muted-foreground/20 mt-2">scambi globali · fonte CoinGecko</p>
+                  <p className="font-mono text-2xl font-bold" style={{ color: "#7F77DD" }}>{volume24h}</p>
+                  <p className="text-[11px] text-muted-foreground/50 mt-1">scambi globali · CoinGecko</p>
+                </>
+              ) : (
+                <div className="h-8 rounded bg-muted animate-pulse" />
+              )}
+            </div>
+
+            <div>
+              <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 mb-3 font-semibold">PROSSIMO HALVING</p>
+              {halvingDays !== null ? (
+                <>
+                  <p className="font-mono text-xl font-bold text-foreground">
+                    {halvingDays.toLocaleString('it-IT')}
+                    <span className="text-[11px] text-muted-foreground/40 ml-1">giorni</span>
+                  </p>
+                  <p className="text-[10px] text-muted-foreground/40 mt-1 mb-2">aprile 2028 · blocco 1.050.000</p>
+                  <div className="h-1 rounded-full bg-border overflow-hidden">
+                    <div className="h-full rounded-full bg-primary transition-all"
+                      style={{ width: `${Math.min(halvingPct, 100)}%` }} />
+                  </div>
+                  <p className="text-[9px] text-muted-foreground/30 mt-1">{Math.round(halvingPct)}% del ciclo</p>
                 </>
               ) : (
                 <div className="h-12 rounded bg-muted animate-pulse" />
@@ -325,10 +343,10 @@ const IlPulse = () => {
 
         {/* FOOTER */}
         <div className="flex items-center justify-between px-4 py-2 border-t border-border">
-          <span className="text-[8px] text-muted-foreground/15 tracking-wide">
+          <span className="text-[10px] text-muted-foreground/40 tracking-wide">
             mempool.space · CoinGecko · alternative.me · Bitcoin Optech · aggiornamento ogni 15 min
           </span>
-          <Link to="/terminale" className="text-[10px] text-primary hover:underline whitespace-nowrap">
+          <Link to="/terminale" className="text-[11px] text-primary hover:underline whitespace-nowrap">
             → Terminale completo
           </Link>
         </div>
