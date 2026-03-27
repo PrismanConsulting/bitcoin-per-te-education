@@ -108,6 +108,8 @@ const IlPulse = () => {
     count: number; vsize: number;
   } | null>(null);
 
+  const [fastestFee, setFastestFee] = useState<number | null>(null);
+
   const [lastUpdate, setLastUpdate] = useState<string>("");
 
   useEffect(() => {
@@ -152,6 +154,12 @@ const IlPulse = () => {
         setMempool({ count: d.count, vsize: d.vsize });
       } catch {}
 
+      try {
+        const r = await fetch("https://mempool.space/api/v1/fees/recommended");
+        const d = await r.json();
+        setFastestFee(d.fastestFee);
+      } catch {}
+
       setLastUpdate(new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }));
     };
 
@@ -171,7 +179,7 @@ const IlPulse = () => {
   const sentiment = getSentiment();
 
   const getFGColor = (v: number) =>
-    v <= 30 ? "#D85A30" : v <= 50 ? "#EF9F27" : v <= 70 ? "#F7931A" : "#1D9E75";
+    v <= 20 ? "#E24B4A" : v <= 40 ? "#D85A30" : v <= 60 ? "#888780" : v <= 80 ? "#F7931A" : "#1D9E75";
 
   const NEXT_HALVING = 1_050_000;
   const halvingBlocks = blockHeight ? Math.max(0, NEXT_HALVING - blockHeight) : null;
@@ -231,15 +239,18 @@ const IlPulse = () => {
           <div className="p-0">
             <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 px-4 pt-3 pb-2 font-semibold">RETE LIVE</p>
             {[
-              { label: "FEE ~30m", value: halfHourFee ? `${halfHourFee} sat/vB` : null,
+              { label: "FEE ~30 MIN", value: halfHourFee ? `${halfHourFee} sat/vB` : null,
                 sub: halfHourFee ? (halfHourFee <= 5 ? "conferma rapida" : halfHourFee <= 20 ? "attesa media" : "coda lunga") : null,
                 subColor: halfHourFee ? (halfHourFee <= 5 ? "#1D9E75" : halfHourFee <= 20 ? "#F7931A" : "#D85A30") : undefined },
-              { label: "MEMPOOL", value: mempool ? `${(mempool.count / 1000).toFixed(1)}K tx` : null,
+              { label: "FEE URGENTE", value: fastestFee ? `${fastestFee} sat/vB` : null,
+                sub: "prossimo blocco", subColor: "#888" },
+              { label: "MEMPOOL TX", value: mempool ? `${(mempool.count / 1000).toFixed(1)}K` : null,
                 sub: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null, subColor: undefined as string | undefined },
-              { label: "HALVING TRA", value: halvingDays !== null ? `${halvingDays.toLocaleString('it-IT')} gg` : null,
-                sub: "aprile 2028", subColor: "#F7931A" },
+              { label: "DIMENSIONE", value: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null,
+                sub: mempool ? (mempool.vsize < 10_000_000 ? "rete libera" : mempool.vsize < 50_000_000 ? "traffico medio" : "alta congestione") : null,
+                subColor: mempool ? (mempool.vsize < 10_000_000 ? "#1D9E75" : mempool.vsize < 50_000_000 ? "#F7931A" : "#D85A30") : undefined },
             ].map((item) => (
-              <div key={item.label} className="flex justify-between items-center px-4 py-3.5 border-t border-border/50">
+              <div key={item.label} className="flex justify-between items-center px-4 py-3 border-t border-border/50">
                 <span className="text-[11px] tracking-wide text-muted-foreground/60">{item.label}</span>
                 <div className="text-right">
                   {item.value ? (
@@ -280,7 +291,7 @@ const IlPulse = () => {
               {fearGreed ? (
                 <>
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="font-mono text-3xl font-bold" style={{ color: getFGColor(fearGreed.value) }}>
+                    <span className="font-mono text-4xl font-bold" style={{ color: getFGColor(fearGreed.value) }}>
                       {fearGreed.value}
                     </span>
                     <span className="text-[11px] font-bold tracking-wider" style={{ color: getFGColor(fearGreed.value) }}>
@@ -295,8 +306,8 @@ const IlPulse = () => {
                     </div>
                   </div>
                   <div className="flex justify-between mt-1">
-                    <span className="text-[9px] text-muted-foreground/50">Paura</span>
-                    <span className="text-[9px] text-muted-foreground/50">Avidità</span>
+                    <span className="text-[10px] text-muted-foreground/50">Paura</span>
+                    <span className="text-[10px] text-muted-foreground/50">Avidità</span>
                   </div>
                 </>
               ) : (
@@ -311,7 +322,7 @@ const IlPulse = () => {
               <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 mb-3 font-semibold">VOLUME GLOBALE 24H</p>
               {volume24h ? (
                 <>
-                  <p className="font-mono text-2xl font-bold" style={{ color: "#7F77DD" }}>{volume24h}</p>
+                  <p className="font-mono text-3xl font-bold" style={{ color: "#7F77DD" }}>{volume24h}</p>
                   <p className="text-[11px] text-muted-foreground/50 mt-1">scambi globali · CoinGecko</p>
                 </>
               ) : (
@@ -323,16 +334,16 @@ const IlPulse = () => {
               <p className="text-[10px] tracking-[1.5px] text-muted-foreground/60 mb-3 font-semibold">PROSSIMO HALVING</p>
               {halvingDays !== null ? (
                 <>
-                  <p className="font-mono text-xl font-bold text-foreground">
+                  <p className="font-mono text-2xl font-bold text-foreground">
                     {halvingDays.toLocaleString('it-IT')}
                     <span className="text-[11px] text-muted-foreground/40 ml-1">giorni</span>
                   </p>
-                  <p className="text-[10px] text-muted-foreground/40 mt-1 mb-2">aprile 2028 · blocco 1.050.000</p>
+                  <p className="text-[11px] text-muted-foreground/50 mt-1 mb-2">aprile 2028 · blocco 1.050.000</p>
                   <div className="h-1 rounded-full bg-border overflow-hidden">
                     <div className="h-full rounded-full bg-primary transition-all"
                       style={{ width: `${Math.min(halvingPct, 100)}%` }} />
                   </div>
-                  <p className="text-[9px] text-muted-foreground/30 mt-1">{Math.round(halvingPct)}% del ciclo</p>
+                  <p className="text-[10px] text-muted-foreground/40 mt-1">{Math.round(halvingPct)}% del ciclo</p>
                 </>
               ) : (
                 <div className="h-12 rounded bg-muted animate-pulse" />
