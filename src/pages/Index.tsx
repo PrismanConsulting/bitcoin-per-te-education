@@ -233,13 +233,13 @@ const IlPulse = () => {
           <div className="p-0">
             <p className="text-[8px] tracking-[2px] text-muted-foreground/20 px-4 pt-3 pb-2 font-semibold">RETE LIVE</p>
             {[
-              { label: "BTC/EUR", value: priceEur ? `€${priceEur.toLocaleString('it-IT')}` : null, sub: null, subColor: undefined },
-              { label: "BLOCCO", value: blockHeight ? `#${blockHeight.toLocaleString('it-IT')}` : null, sub: null, subColor: undefined },
+              { label: "BTC/EUR", value: priceEur ? `€${priceEur.toLocaleString('it-IT')}` : null, sub: null as string | null, subColor: undefined as string | undefined },
+              { label: "BLOCCO", value: blockHeight ? `#${blockHeight.toLocaleString('it-IT')}` : null, sub: null as string | null, subColor: undefined as string | undefined },
               { label: "FEE ~30m", value: halfHourFee ? `${halfHourFee} sat/vB` : null,
                 sub: halfHourFee ? (halfHourFee <= 5 ? "bassa" : halfHourFee <= 20 ? "media" : "alta") : null,
                 subColor: halfHourFee ? (halfHourFee <= 5 ? "#1D9E75" : halfHourFee <= 20 ? "#F7931A" : "#D85A30") : undefined },
               { label: "MEMPOOL", value: mempool ? `${(mempool.count / 1000).toFixed(1)}K tx` : null,
-                sub: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null, subColor: undefined },
+                sub: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null, subColor: undefined as string | undefined },
             ].map((item) => (
               <div key={item.label} className="flex justify-between items-center px-4 py-2.5 border-t border-border/50">
                 <span className="text-[9px] tracking-wider text-muted-foreground/30">{item.label}</span>
@@ -352,105 +352,6 @@ const IlPulse = () => {
             → Terminale completo
           </Link>
         </div>
-      </div>
-    </section>
-  );
-};
-  { testo: "La difficoltà di mining di Bitcoin si aggiusta automaticamente ogni 2.016 blocchi per mantenere un blocco ogni ~10 minuti, indipendentemente da quanti miner ci sono.", data: "" },
-  { testo: "Il primo exchange Bitcoin della storia, Bitcoin Market, aprì nel marzo 2010. Il prezzo iniziale era circa 0,003 dollari per BTC.", data: "mar 2010" },
-  { testo: "Andreas Antonopoulos, uno dei divulgatori Bitcoin più noti, perse tutti i suoi Bitcoin in un hack nel 2012. La community raccolse fondi per aiutarlo.", data: "" },
-  { testo: "La rete Bitcoin ha un uptime del 99.98% dal 2009 — più affidabile di qualsiasi sistema bancario al mondo.", data: "" },
-  { testo: "L'ultimo Bitcoin sarà minato intorno all'anno 2140. Da quel momento i miner saranno ricompensati solo dalle fee delle transazioni.", data: "~2140" },
-  { testo: "Un attacco del 51% alla rete Bitcoin richiederebbe oggi una spesa energetica superiore a quella di molti paesi. È economicamente irrazionale tentarlo.", data: "" },
-  { testo: "Il codice originale di Bitcoin scritto da Satoshi conteneva un bug che avrebbe potuto creare Bitcoin infiniti. Fu scoperto e corretto nel 2010.", data: "2010" },
-  { testo: "Lightning Network, il layer 2 di Bitcoin per micropagamenti, può teoricamente processare milioni di transazioni al secondo.", data: "" },
-  { testo: "Il primo blocco dopo il Genesis contiene una transazione da Satoshi a Hal Finney — crittografo e cypherpunk che morì nel 2014.", data: "12 gen 2009" },
-  { testo: "Bitcoin consuma energia, ma circa il 52% proviene da fonti rinnovabili — la percentuale più alta di qualsiasi industria energivora al mondo.", data: "" },
-  { testo: "Ogni indirizzo Bitcoin è derivato matematicamente da una chiave privata. Non esiste un registro centrale — chiunque può generarne uno offline.", data: "" },
-  { testo: "Il termine HODL nacque nel 2013 da un messaggio di forum scritto male ('I AM HODLING'). Diventò il simbolo della filosofia del lungo termine.", data: "18 dic 2013" },
-  { testo: "Satoshi Nakamoto è il 14° nome più comune in Giappone. Nessuno sa se sia giapponese, americano, britannico o un gruppo di persone.", data: "" },
-  { testo: "La prima transazione Bitcoin mai inclusa in un blocco fu quella del blocco Genesis — una 'coinbase transaction' che non può essere spesa.", data: "3 gen 2009" },
-  { testo: "Il codice di Bitcoin è open source. Chiunque può leggerlo, copiarlo, modificarlo. La sua forza non è nel segreto — è nella matematica.", data: "" },
-  { testo: "Ross Ulbricht, creatore di Silk Road, fu arrestato nel 2013. I Bitcoin sequestrati — circa 144.000 — furono venduti all'asta dal governo USA.", data: "2013" },
-  { testo: "Il primo ATM Bitcoin della storia fu installato a Vancouver, Canada, nell'ottobre 2013. Oggi ne esistono oltre 40.000 nel mondo.", data: "ott 2013" },
-  { testo: "Taproot, l'aggiornamento Bitcoin del 2021, ha migliorato la privacy e l'efficienza delle transazioni complesse senza modificare il limite dei 21 milioni.", data: "nov 2021" },
-  { testo: "Gli 'Zombie coins' — Bitcoin che non si muovono da oltre 10 anni — rappresentano circa il 20% di tutti i BTC esistenti.", data: "" },
-  { testo: "Il mempool di Bitcoin può contenere decine di migliaia di transazioni in attesa. Nei momenti di congestione, le fee possono aumentare di 100 volte.", data: "" },
-  { testo: "SegWit, attivato nel 2017, ha raddoppiato la capacità effettiva dei blocchi Bitcoin senza aumentare il limite di 1MB — con un'elegante soluzione matematica.", data: "ago 2017" },
-  { testo: "Il valore intrinseco di Bitcoin non dipende da nessuna azienda, governo o persona. Dipende dalla matematica, dall'energia e dal consenso distribuito.", data: "" },
-];
-
-const FattoDelGiorno = () => {
-  const dayIndex = Math.floor(
-    (Date.now() - new Date('2025-01-01').getTime()) / 86400000
-  ) % FATTI.length;
-  const fattoOggi = FATTI[dayIndex];
-
-  return (
-    <section className="container mx-auto px-4 max-w-6xl mb-6 relative z-10">
-      <div className="card-surface rounded-xl p-5 border-l-4 border-primary">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <p className="text-[10px] tracking-widest text-primary mb-2 font-heading">
-              IL FATTO DI OGGI
-            </p>
-            <p className="text-base text-foreground leading-relaxed font-medium">
-              {fattoOggi.testo}
-            </p>
-            {fattoOggi.data && (
-              <p className="text-[12px] text-muted-foreground/50 mt-2 font-mono">
-                {fattoOggi.data}
-              </p>
-            )}
-          </div>
-          <div className="shrink-0 text-right">
-            <p className="text-[10px] text-muted-foreground/30 font-mono whitespace-nowrap">
-              {new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long' })}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const CosaLeggereOggi = () => {
-  const [articolo, setArticolo] = useState<{ title: string; link: string; source: string } | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://bitcoinops.org/feed.xml")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.items && data.items.length > 0) {
-          const item = data.items[0];
-          setArticolo({ title: item.title, link: item.link, source: "Bitcoin Optech" });
-        }
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  return (
-    <section className="container mx-auto px-4 max-w-6xl mb-6 relative z-10">
-      <div className="card-surface rounded-xl p-5">
-        <p className="text-[10px] tracking-widest text-muted-foreground/50 mb-3 font-heading">
-          DALL'ECOSISTEMA — OGGI
-        </p>
-        {loading ? (
-          <Skeleton className="h-12 w-full" />
-        ) : articolo ? (
-          <a href={articolo.link} target="_blank" rel="noopener noreferrer" className="group block">
-            <p className="text-base font-medium text-foreground group-hover:text-primary transition-colors leading-snug mb-1">
-              {articolo.title}
-            </p>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-[11px] text-muted-foreground/50 font-mono">{articolo.source}</span>
-              <span className="text-muted-foreground/30">·</span>
-              <span className="text-[11px] text-primary group-hover:underline">Leggi →</span>
-            </div>
-          </a>
-        ) : null}
       </div>
     </section>
   );
