@@ -13,6 +13,8 @@ const imparaLinks = [
   { label: "Mining & Halving", href: "/mining" },
   { label: "separator", href: "" },
   { label: "Glossario", href: "/glossario" },
+  { label: "separator", href: "" },
+  { label: "Biblioteca Risorse", href: "/risorse" },
 ];
 
 const esploraLinks = [
@@ -44,6 +46,7 @@ const mobileGroups = [
     { label: "Blockchain", href: "/blockchain" },
     { label: "Mining & Halving", href: "/mining" },
     { label: "Glossario", href: "/glossario" },
+    { label: "Biblioteca Risorse", href: "/risorse" },
   ]},
   { label: "LIVE", links: [
     { label: "Live", href: "/live", live: true },

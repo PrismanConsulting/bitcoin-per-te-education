@@ -25,6 +25,7 @@ import NotizePage from "@/pages/NotizePage";
 import PreferenzePage from "@/pages/PreferenzePage";
 import IniziaPage from "@/pages/IniziaPage";
 import RegistroPage from "@/pages/RegistroPage";
+import RisorsePage from "@/pages/RisorsePage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const AnimatedRoutes = () => {
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/glossario" element={<GlossarioPage />} />
           <Route path="/community" element={<CommunityPage />} />
+          <Route path="/risorse" element={<RisorsePage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
