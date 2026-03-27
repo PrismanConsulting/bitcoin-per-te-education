@@ -197,6 +197,11 @@ const IlPulse = () => {
         </div>
         <p className="text-[11px] text-muted-foreground/40">
           Lo stato della rete in questo momento
+          {lastUpdate && (
+            <span className="font-mono ml-2 text-muted-foreground/30">
+              · agg. {lastUpdate}
+            </span>
+          )}
         </p>
       </div>
       <div className="rounded-2xl overflow-hidden border border-border" style={{ background: "#0a0a0a" }}>
