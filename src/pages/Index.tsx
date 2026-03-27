@@ -356,8 +356,8 @@ const IlPulse = () => {
     </section>
   );
 };
-  { testo: "La parola 'blockchain' non appare mai nel whitepaper originale di Satoshi Nakamoto. Lui la chiamava semplicemente 'chain of blocks'.", data: "" },
-  { testo: "Esistono più combinazioni possibili di chiavi private Bitcoin che atomi nell'universo osservabile. È matematicamente impossibile indovinarne una.", data: "" },
+
+
   { testo: "Il limite di 21 milioni di BTC non è scritto in modo esplicito nel codice — emerge dalla combinazione di regole sull'halving e sulla riduzione delle ricompense.", data: "" },
   { testo: "Satoshi Nakamoto ha lasciato il progetto nel 2010 senza mai spiegare il perché. I suoi Bitcoin — circa 1 milione — non si sono mai mossi.", data: "" },
   { testo: "Un nodo Bitcoin completo verifica ogni singola transazione della storia — oltre 800 milioni — ogni volta che si sincronizza da zero.", data: "" },
