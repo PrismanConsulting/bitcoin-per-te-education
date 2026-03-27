@@ -188,6 +188,17 @@ const IlPulse = () => {
 
   return (
     <section className="container mx-auto px-4 max-w-6xl mb-8 relative z-10">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-4 bg-primary rounded-full" />
+          <p className="text-[11px] font-heading font-semibold tracking-[2px] text-muted-foreground/60 uppercase">
+            Il Pulse
+          </p>
+        </div>
+        <p className="text-[11px] text-muted-foreground/40">
+          Lo stato della rete in questo momento
+        </p>
+      </div>
       <div className="rounded-2xl overflow-hidden border border-border" style={{ background: "#0a0a0a" }}>
 
         {/* HEADER */}
