@@ -205,6 +205,9 @@ const HomePage = () => {
         </div>
       </div>
 
+      {/* Il Fatto del Giorno */}
+      <FattoDelGiorno />
+
       {/* FAQ Section */}
       <section className="container mx-auto px-4 max-w-3xl py-12 relative z-10">
         <p className="label-section">DOMANDE FREQUENTI</p>
