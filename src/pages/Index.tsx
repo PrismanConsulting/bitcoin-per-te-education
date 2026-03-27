@@ -93,110 +93,265 @@ const LiveWidget = () => {
   );
 };
 
-const FATTI = [
-  { testo: "Il 3 gennaio 2009 Satoshi Nakamoto minò il blocco Genesis con un messaggio nascosto: 'Chancellor on brink of second bailout for banks'. Non fu un caso.", data: "3 gen 2009" },
-  { testo: "Il 22 maggio 2010 Laszlo Hanyecz pagò 10.000 BTC per due pizze. Oggi si celebra come il 'Bitcoin Pizza Day'.", data: "22 mag 2010" },
-  { testo: "La parola 'blockchain' non appare mai nel whitepaper originale di Satoshi Nakamoto. Lui la chiamava semplicemente 'chain of blocks'.", data: "" },
-  { testo: "Esistono più combinazioni possibili di chiavi private Bitcoin che atomi nell'universo osservabile. È matematicamente impossibile indovinarne una.", data: "" },
-  { testo: "Il limite di 21 milioni di BTC non è scritto in modo esplicito nel codice — emerge dalla combinazione di regole sull'halving e sulla riduzione delle ricompense.", data: "" },
-  { testo: "Satoshi Nakamoto ha lasciato il progetto nel 2010 senza mai spiegare il perché. I suoi Bitcoin — circa 1 milione — non si sono mai mossi.", data: "" },
-  { testo: "Un nodo Bitcoin completo verifica ogni singola transazione della storia — oltre 800 milioni — ogni volta che si sincronizza da zero.", data: "" },
-  { testo: "Il whitepaper di Bitcoin fu pubblicato il 31 ottobre 2008 — il giorno di Halloween. Una coincidenza? Forse no.", data: "31 ott 2008" },
-  { testo: "La difficoltà di mining di Bitcoin si aggiusta automaticamente ogni 2.016 blocchi per mantenere un blocco ogni ~10 minuti, indipendentemente da quanti miner ci sono.", data: "" },
-  { testo: "Il primo exchange Bitcoin della storia, Bitcoin Market, aprì nel marzo 2010. Il prezzo iniziale era circa 0,003 dollari per BTC.", data: "mar 2010" },
-  { testo: "Andreas Antonopoulos, uno dei divulgatori Bitcoin più noti, perse tutti i suoi Bitcoin in un hack nel 2012. La community raccolse fondi per aiutarlo.", data: "" },
-  { testo: "La rete Bitcoin ha un uptime del 99.98% dal 2009 — più affidabile di qualsiasi sistema bancario al mondo.", data: "" },
-  { testo: "L'ultimo Bitcoin sarà minato intorno all'anno 2140. Da quel momento i miner saranno ricompensati solo dalle fee delle transazioni.", data: "~2140" },
-  { testo: "Un attacco del 51% alla rete Bitcoin richiederebbe oggi una spesa energetica superiore a quella di molti paesi. È economicamente irrazionale tentarlo.", data: "" },
-  { testo: "Il codice originale di Bitcoin scritto da Satoshi conteneva un bug che avrebbe potuto creare Bitcoin infiniti. Fu scoperto e corretto nel 2010.", data: "2010" },
-  { testo: "Lightning Network, il layer 2 di Bitcoin per micropagamenti, può teoricamente processare milioni di transazioni al secondo.", data: "" },
-  { testo: "Il primo blocco dopo il Genesis contiene una transazione da Satoshi a Hal Finney — crittografo e cypherpunk che morì nel 2014.", data: "12 gen 2009" },
-  { testo: "Bitcoin consuma energia, ma circa il 52% proviene da fonti rinnovabili — la percentuale più alta di qualsiasi industria energivora al mondo.", data: "" },
-  { testo: "Ogni indirizzo Bitcoin è derivato matematicamente da una chiave privata. Non esiste un registro centrale — chiunque può generarne uno offline.", data: "" },
-  { testo: "Il termine HODL nacque nel 2013 da un messaggio di forum scritto male ('I AM HODLING'). Diventò il simbolo della filosofia del lungo termine.", data: "18 dic 2013" },
-  { testo: "Satoshi Nakamoto è il 14° nome più comune in Giappone. Nessuno sa se sia giapponese, americano, britannico o un gruppo di persone.", data: "" },
-  { testo: "La prima transazione Bitcoin mai inclusa in un blocco fu quella del blocco Genesis — una 'coinbase transaction' che non può essere spesa.", data: "3 gen 2009" },
-  { testo: "Il codice di Bitcoin è open source. Chiunque può leggerlo, copiarlo, modificarlo. La sua forza non è nel segreto — è nella matematica.", data: "" },
-  { testo: "Ross Ulbricht, creatore di Silk Road, fu arrestato nel 2013. I Bitcoin sequestrati — circa 144.000 — furono venduti all'asta dal governo USA.", data: "2013" },
-  { testo: "Il primo ATM Bitcoin della storia fu installato a Vancouver, Canada, nell'ottobre 2013. Oggi ne esistono oltre 40.000 nel mondo.", data: "ott 2013" },
-  { testo: "Taproot, l'aggiornamento Bitcoin del 2021, ha migliorato la privacy e l'efficienza delle transazioni complesse senza modificare il limite dei 21 milioni.", data: "nov 2021" },
-  { testo: "Gli 'Zombie coins' — Bitcoin che non si muovono da oltre 10 anni — rappresentano circa il 20% di tutti i BTC esistenti.", data: "" },
-  { testo: "Il mempool di Bitcoin può contenere decine di migliaia di transazioni in attesa. Nei momenti di congestione, le fee possono aumentare di 100 volte.", data: "" },
-  { testo: "SegWit, attivato nel 2017, ha raddoppiato la capacità effettiva dei blocchi Bitcoin senza aumentare il limite di 1MB — con un'elegante soluzione matematica.", data: "ago 2017" },
-  { testo: "Il valore intrinseco di Bitcoin non dipende da nessuna azienda, governo o persona. Dipende dalla matematica, dall'energia e dal consenso distribuito.", data: "" },
-];
+const IlPulse = () => {
+  const { priceEur, blockHeight, halfHourFee } = useLiveStats();
 
-const FattoDelGiorno = () => {
-  const dayIndex = Math.floor(
-    (Date.now() - new Date('2025-01-01').getTime()) / 86400000
-  ) % FATTI.length;
-  const fattoOggi = FATTI[dayIndex];
+  const [news, setNews] = useState<{
+    title: string; link: string; source: string; timeAgo: string;
+  } | null>(null);
 
-  return (
-    <section className="container mx-auto px-4 max-w-6xl mb-6 relative z-10">
-      <div className="card-surface rounded-xl p-5 border-l-4 border-primary">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <p className="text-[10px] tracking-widest text-primary mb-2 font-heading">
-              IL FATTO DI OGGI
-            </p>
-            <p className="text-base text-foreground leading-relaxed font-medium">
-              {fattoOggi.testo}
-            </p>
-            {fattoOggi.data && (
-              <p className="text-[12px] text-muted-foreground/50 mt-2 font-mono">
-                {fattoOggi.data}
-              </p>
-            )}
-          </div>
-          <div className="shrink-0 text-right">
-            <p className="text-[10px] text-muted-foreground/30 font-mono whitespace-nowrap">
-              {new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long' })}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+  const [fearGreed, setFearGreed] = useState<{
+    value: number; label: string;
+  } | null>(null);
 
-const CosaLeggereOggi = () => {
-  const [articolo, setArticolo] = useState<{ title: string; link: string; source: string } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [volume24h, setVolume24h] = useState<string | null>(null);
+
+  const [mempool, setMempool] = useState<{
+    count: number; vsize: number;
+  } | null>(null);
+
+  const [lastUpdate, setLastUpdate] = useState<string>("");
 
   useEffect(() => {
-    fetch("https://api.rss2json.com/v1/api.json?rss_url=https://bitcoinops.org/feed.xml")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.items && data.items.length > 0) {
-          const item = data.items[0];
-          setArticolo({ title: item.title, link: item.link, source: "Bitcoin Optech" });
+    const fetchAll = async () => {
+      try {
+        const r = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://bitcoinops.org/feed.xml");
+        const d = await r.json();
+        if (d.items?.[0]) {
+          const item = d.items[0];
+          const pub = new Date(item.pubDate);
+          const diff = Date.now() - pub.getTime();
+          const hrs = Math.floor(diff / 3600000);
+          const days = Math.floor(diff / 86400000);
+          const timeAgo = hrs < 1 ? "adesso" : hrs < 24 ? `${hrs}h fa` : days === 1 ? "ieri" : `${days} giorni fa`;
+          setNews({ title: item.title, link: item.link, source: "Bitcoin Optech", timeAgo });
         }
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      } catch {}
+
+      try {
+        const r = await fetch("https://api.alternative.me/fng/?limit=1");
+        const d = await r.json();
+        if (d.data?.[0]) {
+          const v = parseInt(d.data[0].value);
+          const label = v <= 20 ? "PAURA ESTREMA" : v <= 40 ? "PAURA" : v <= 60 ? "NEUTRALE" : v <= 80 ? "GREED" : "GREED ESTREMA";
+          setFearGreed({ value: v, label });
+        }
+      } catch {}
+
+      try {
+        const r = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&market_data=true&community_data=false");
+        const d = await r.json();
+        const vol = d.market_data?.total_volume?.usd;
+        if (vol) {
+          const b = vol / 1_000_000_000;
+          setVolume24h(`$${b.toFixed(1)}B`);
+        }
+      } catch {}
+
+      try {
+        const r = await fetch("https://mempool.space/api/mempool");
+        const d = await r.json();
+        setMempool({ count: d.count, vsize: d.vsize });
+      } catch {}
+
+      setLastUpdate(new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }));
+    };
+
+    fetchAll();
+    const interval = setInterval(fetchAll, 15 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
+  const getSentiment = () => {
+    const fee = halfHourFee || 0;
+    const mb = mempool ? mempool.vsize / 1_000_000 : 0;
+    if (fee <= 5 && mb < 20) return { label: "Tranquilla", color: "#1D9E75", pct: 25 };
+    if (fee <= 15 && mb < 60) return { label: "Attiva", color: "#F7931A", pct: 55 };
+    if (fee <= 40) return { label: "Congestionata", color: "#EF9F27", pct: 75 };
+    return { label: "In fiamme", color: "#D85A30", pct: 95 };
+  };
+  const sentiment = getSentiment();
+
+  const getFGColor = (v: number) =>
+    v <= 30 ? "#D85A30" : v <= 50 ? "#EF9F27" : v <= 70 ? "#F7931A" : "#1D9E75";
+
+  const NEXT_HALVING = 1_050_000;
+  const halvingBlocks = blockHeight ? Math.max(0, NEXT_HALVING - blockHeight) : null;
+  const halvingDays = halvingBlocks ? Math.round(halvingBlocks * 10 / 60 / 24) : null;
+  const halvingPct = blockHeight ? Math.min(100, ((blockHeight - 840_000) / (NEXT_HALVING - 840_000)) * 100) : 0;
+
   return (
-    <section className="container mx-auto px-4 max-w-6xl mb-6 relative z-10">
-      <div className="card-surface rounded-xl p-5">
-        <p className="text-[10px] tracking-widest text-muted-foreground/50 mb-3 font-heading">
-          DALL'ECOSISTEMA — OGGI
-        </p>
-        {loading ? (
-          <Skeleton className="h-12 w-full" />
-        ) : articolo ? (
-          <a href={articolo.link} target="_blank" rel="noopener noreferrer" className="group block">
-            <p className="text-base font-medium text-foreground group-hover:text-primary transition-colors leading-snug mb-1">
-              {articolo.title}
-            </p>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-[11px] text-muted-foreground/50 font-mono">{articolo.source}</span>
-              <span className="text-muted-foreground/30">·</span>
-              <span className="text-[11px] text-primary group-hover:underline">Leggi →</span>
+    <section className="container mx-auto px-4 max-w-6xl mb-8 relative z-10">
+      <div className="rounded-2xl overflow-hidden border border-border" style={{ background: "#0a0a0a" }}>
+
+        {/* HEADER */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] tracking-[3px] text-muted-foreground/40 font-heading font-semibold">
+              IL PULSE — BITCOIN ADESSO
+            </span>
+          </div>
+          {lastUpdate && (
+            <span className="text-[10px] font-mono text-muted-foreground/20">
+              agg. {lastUpdate}
+            </span>
+          )}
+        </div>
+
+        {/* NEWS ROW */}
+        {news ? (
+          <a href={news.link} target="_blank" rel="noopener noreferrer"
+            className="flex items-start gap-3 px-4 py-3 border-b border-border hover:bg-card/50 transition-colors cursor-pointer group block">
+            <div className="flex items-center gap-1.5 shrink-0 mt-0.5 bg-primary/10 border border-primary/20 rounded px-2 py-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="text-[9px] text-primary tracking-widest font-semibold">NEWS</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors leading-snug truncate">
+                {news.title}
+              </p>
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className="text-[10px] text-muted-foreground/30 font-mono">{news.source}</span>
+                <span className="text-muted-foreground/20 text-[10px]">·</span>
+                <span className="text-[10px] text-muted-foreground/30 font-mono">{news.timeAgo}</span>
+                <span className="text-muted-foreground/20 text-[10px]">·</span>
+                <span className="text-[10px] text-primary group-hover:underline">Leggi →</span>
+              </div>
             </div>
           </a>
-        ) : null}
+        ) : (
+          <div className="px-4 py-3 border-b border-border">
+            <div className="h-8 rounded bg-muted animate-pulse" />
+          </div>
+        )}
+
+        {/* MAIN 3-COLUMN GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border">
+
+          {/* COL 1: Metriche live rete */}
+          <div className="p-0">
+            <p className="text-[8px] tracking-[2px] text-muted-foreground/20 px-4 pt-3 pb-2 font-semibold">RETE LIVE</p>
+            {[
+              { label: "BTC/EUR", value: priceEur ? `€${priceEur.toLocaleString('it-IT')}` : null, sub: null as string | null, subColor: undefined as string | undefined },
+              { label: "BLOCCO", value: blockHeight ? `#${blockHeight.toLocaleString('it-IT')}` : null, sub: null as string | null, subColor: undefined as string | undefined },
+              { label: "FEE ~30m", value: halfHourFee ? `${halfHourFee} sat/vB` : null,
+                sub: halfHourFee ? (halfHourFee <= 5 ? "bassa" : halfHourFee <= 20 ? "media" : "alta") : null,
+                subColor: halfHourFee ? (halfHourFee <= 5 ? "#1D9E75" : halfHourFee <= 20 ? "#F7931A" : "#D85A30") : undefined },
+              { label: "MEMPOOL", value: mempool ? `${(mempool.count / 1000).toFixed(1)}K tx` : null,
+                sub: mempool ? `${(mempool.vsize / 1_000_000).toFixed(1)} MB` : null, subColor: undefined as string | undefined },
+            ].map((item) => (
+              <div key={item.label} className="flex justify-between items-center px-4 py-2.5 border-t border-border/50">
+                <span className="text-[9px] tracking-wider text-muted-foreground/30">{item.label}</span>
+                <div className="text-right">
+                  {item.value ? (
+                    <>
+                      <p className="font-mono text-[13px] font-bold text-primary">{item.value}</p>
+                      {item.sub && (
+                        <p className="text-[9px] font-mono" style={{ color: item.subColor || '#444' }}>{item.sub}</p>
+                      )}
+                    </>
+                  ) : (
+                    <div className="h-4 w-16 rounded bg-muted animate-pulse" />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* COL 2: Sentiment + Fear & Greed */}
+          <div className="p-4 space-y-4">
+            <div>
+              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">SENTIMENT RETE</p>
+              <div className="h-1 rounded-full bg-border mb-2 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-1000"
+                  style={{ width: `${sentiment.pct}%`, background: sentiment.color }} />
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[12px] font-bold font-mono" style={{ color: sentiment.color }}>
+                  ● {sentiment.label}
+                </span>
+                <span className="text-[9px] text-muted-foreground/20 font-mono">
+                  {halfHourFee ? `${halfHourFee} sat/vB` : "—"}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">FEAR & GREED INDEX</p>
+              {fearGreed ? (
+                <>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="font-mono text-3xl font-bold" style={{ color: getFGColor(fearGreed.value) }}>
+                      {fearGreed.value}
+                    </span>
+                    <span className="text-[10px] font-bold tracking-wider" style={{ color: getFGColor(fearGreed.value) }}>
+                      {fearGreed.label}
+                    </span>
+                  </div>
+                  <div className="h-1 rounded-full overflow-hidden"
+                    style={{ background: "linear-gradient(to right, #D85A30, #EF9F27, #1D9E75)" }}>
+                    <div className="relative">
+                      <div className="absolute top-0 w-2 h-2 rounded-full -translate-y-0.5 bg-white border-2 border-primary"
+                        style={{ left: `calc(${fearGreed.value}% - 4px)`, marginTop: '-2px' }} />
+                    </div>
+                  </div>
+                  <div className="flex justify-between mt-1">
+                    <span className="text-[8px] text-muted-foreground/20">Paura</span>
+                    <span className="text-[8px] text-muted-foreground/20">Avidità</span>
+                  </div>
+                </>
+              ) : (
+                <div className="h-12 rounded bg-muted animate-pulse" />
+              )}
+            </div>
+          </div>
+
+          {/* COL 3: Volume + Halving */}
+          <div className="p-4 space-y-4">
+            <div>
+              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">VOLUME GLOBALE 24H</p>
+              {volume24h ? (
+                <>
+                  <p className="font-mono text-2xl font-bold text-purple-400">{volume24h}</p>
+                  <p className="text-[9px] text-muted-foreground/20 mt-1">scambi globali · fonte CoinGecko</p>
+                </>
+              ) : (
+                <div className="h-8 rounded bg-muted animate-pulse" />
+              )}
+            </div>
+
+            <div>
+              <p className="text-[8px] tracking-[2px] text-muted-foreground/20 mb-3 font-semibold">PROSSIMO HALVING</p>
+              {halvingDays !== null ? (
+                <>
+                  <p className="font-mono text-xl font-bold text-foreground">
+                    {halvingDays.toLocaleString('it-IT')}
+                    <span className="text-[11px] text-muted-foreground/40 ml-1">giorni</span>
+                  </p>
+                  <p className="text-[9px] text-muted-foreground/20 mt-1 mb-2">aprile 2028 · blocco 1.050.000</p>
+                  <div className="h-1 rounded-full bg-border overflow-hidden">
+                    <div className="h-full rounded-full bg-primary transition-all"
+                      style={{ width: `${Math.min(halvingPct, 100)}%` }} />
+                  </div>
+                  <p className="text-[8px] text-muted-foreground/20 mt-1">{Math.round(halvingPct)}% del ciclo completato</p>
+                </>
+              ) : (
+                <div className="h-12 rounded bg-muted animate-pulse" />
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* FOOTER */}
+        <div className="flex items-center justify-between px-4 py-2 border-t border-border">
+          <span className="text-[8px] text-muted-foreground/15 tracking-wide">
+            mempool.space · CoinGecko · alternative.me · Bitcoin Optech · aggiornamento ogni 15 min
+          </span>
+          <Link to="/terminale" className="text-[10px] text-primary hover:underline whitespace-nowrap">
+            → Terminale completo
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -311,11 +466,8 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Il Fatto del Giorno */}
-      <FattoDelGiorno />
-
-      {/* Cosa Leggere Oggi */}
-      <CosaLeggereOggi />
+      {/* Il Pulse */}
+      <IlPulse />
 
       {/* FAQ Section */}
       <section className="container mx-auto px-4 max-w-3xl py-12 relative z-10">
