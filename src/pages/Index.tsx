@@ -311,11 +311,8 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Il Fatto del Giorno */}
-      <FattoDelGiorno />
-
-      {/* Cosa Leggere Oggi */}
-      <CosaLeggereOggi />
+      {/* Il Pulse */}
+      <IlPulse />
 
       {/* FAQ Section */}
       <section className="container mx-auto px-4 max-w-3xl py-12 relative z-10">
