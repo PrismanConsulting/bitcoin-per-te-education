@@ -206,20 +206,7 @@ const IlPulse = () => {
       </div>
       <div className="rounded-2xl overflow-hidden border border-border" style={{ background: "#0a0a0a" }}>
 
-        {/* HEADER */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            <span className="text-[11px] tracking-[2px] text-muted-foreground/70 font-heading font-semibold">
-              IL PULSE — BITCOIN ADESSO
-            </span>
-          </div>
-          {lastUpdate && (
-            <span className="text-[11px] font-mono text-muted-foreground/40">
-              agg. {lastUpdate}
-            </span>
-          )}
-        </div>
+
 
         {/* NEWS ROW */}
         {news ? (
