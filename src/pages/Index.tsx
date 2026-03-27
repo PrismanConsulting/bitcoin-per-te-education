@@ -93,6 +93,73 @@ const LiveWidget = () => {
   );
 };
 
+const FATTI = [
+  { testo: "Il 3 gennaio 2009 Satoshi Nakamoto minò il blocco Genesis con un messaggio nascosto: 'Chancellor on brink of second bailout for banks'. Non fu un caso.", data: "3 gen 2009" },
+  { testo: "Il 22 maggio 2010 Laszlo Hanyecz pagò 10.000 BTC per due pizze. Oggi si celebra come il 'Bitcoin Pizza Day'.", data: "22 mag 2010" },
+  { testo: "La parola 'blockchain' non appare mai nel whitepaper originale di Satoshi Nakamoto. Lui la chiamava semplicemente 'chain of blocks'.", data: "" },
+  { testo: "Esistono più combinazioni possibili di chiavi private Bitcoin che atomi nell'universo osservabile. È matematicamente impossibile indovinarne una.", data: "" },
+  { testo: "Il limite di 21 milioni di BTC non è scritto in modo esplicito nel codice — emerge dalla combinazione di regole sull'halving e sulla riduzione delle ricompense.", data: "" },
+  { testo: "Satoshi Nakamoto ha lasciato il progetto nel 2010 senza mai spiegare il perché. I suoi Bitcoin — circa 1 milione — non si sono mai mossi.", data: "" },
+  { testo: "Un nodo Bitcoin completo verifica ogni singola transazione della storia — oltre 800 milioni — ogni volta che si sincronizza da zero.", data: "" },
+  { testo: "Il whitepaper di Bitcoin fu pubblicato il 31 ottobre 2008 — il giorno di Halloween. Una coincidenza? Forse no.", data: "31 ott 2008" },
+  { testo: "La difficoltà di mining di Bitcoin si aggiusta automaticamente ogni 2.016 blocchi per mantenere un blocco ogni ~10 minuti, indipendentemente da quanti miner ci sono.", data: "" },
+  { testo: "Il primo exchange Bitcoin della storia, Bitcoin Market, aprì nel marzo 2010. Il prezzo iniziale era circa 0,003 dollari per BTC.", data: "mar 2010" },
+  { testo: "Andreas Antonopoulos, uno dei divulgatori Bitcoin più noti, perse tutti i suoi Bitcoin in un hack nel 2012. La community raccolse fondi per aiutarlo.", data: "" },
+  { testo: "La rete Bitcoin ha un uptime del 99.98% dal 2009 — più affidabile di qualsiasi sistema bancario al mondo.", data: "" },
+  { testo: "L'ultimo Bitcoin sarà minato intorno all'anno 2140. Da quel momento i miner saranno ricompensati solo dalle fee delle transazioni.", data: "~2140" },
+  { testo: "Un attacco del 51% alla rete Bitcoin richiederebbe oggi una spesa energetica superiore a quella di molti paesi. È economicamente irrazionale tentarlo.", data: "" },
+  { testo: "Il codice originale di Bitcoin scritto da Satoshi conteneva un bug che avrebbe potuto creare Bitcoin infiniti. Fu scoperto e corretto nel 2010.", data: "2010" },
+  { testo: "Lightning Network, il layer 2 di Bitcoin per micropagamenti, può teoricamente processare milioni di transazioni al secondo.", data: "" },
+  { testo: "Il primo blocco dopo il Genesis contiene una transazione da Satoshi a Hal Finney — crittografo e cypherpunk che morì nel 2014.", data: "12 gen 2009" },
+  { testo: "Bitcoin consuma energia, ma circa il 52% proviene da fonti rinnovabili — la percentuale più alta di qualsiasi industria energivora al mondo.", data: "" },
+  { testo: "Ogni indirizzo Bitcoin è derivato matematicamente da una chiave privata. Non esiste un registro centrale — chiunque può generarne uno offline.", data: "" },
+  { testo: "Il termine HODL nacque nel 2013 da un messaggio di forum scritto male ('I AM HODLING'). Diventò il simbolo della filosofia del lungo termine.", data: "18 dic 2013" },
+  { testo: "Satoshi Nakamoto è il 14° nome più comune in Giappone. Nessuno sa se sia giapponese, americano, britannico o un gruppo di persone.", data: "" },
+  { testo: "La prima transazione Bitcoin mai inclusa in un blocco fu quella del blocco Genesis — una 'coinbase transaction' che non può essere spesa.", data: "3 gen 2009" },
+  { testo: "Il codice di Bitcoin è open source. Chiunque può leggerlo, copiarlo, modificarlo. La sua forza non è nel segreto — è nella matematica.", data: "" },
+  { testo: "Ross Ulbricht, creatore di Silk Road, fu arrestato nel 2013. I Bitcoin sequestrati — circa 144.000 — furono venduti all'asta dal governo USA.", data: "2013" },
+  { testo: "Il primo ATM Bitcoin della storia fu installato a Vancouver, Canada, nell'ottobre 2013. Oggi ne esistono oltre 40.000 nel mondo.", data: "ott 2013" },
+  { testo: "Taproot, l'aggiornamento Bitcoin del 2021, ha migliorato la privacy e l'efficienza delle transazioni complesse senza modificare il limite dei 21 milioni.", data: "nov 2021" },
+  { testo: "Gli 'Zombie coins' — Bitcoin che non si muovono da oltre 10 anni — rappresentano circa il 20% di tutti i BTC esistenti.", data: "" },
+  { testo: "Il mempool di Bitcoin può contenere decine di migliaia di transazioni in attesa. Nei momenti di congestione, le fee possono aumentare di 100 volte.", data: "" },
+  { testo: "SegWit, attivato nel 2017, ha raddoppiato la capacità effettiva dei blocchi Bitcoin senza aumentare il limite di 1MB — con un'elegante soluzione matematica.", data: "ago 2017" },
+  { testo: "Il valore intrinseco di Bitcoin non dipende da nessuna azienda, governo o persona. Dipende dalla matematica, dall'energia e dal consenso distribuito.", data: "" },
+];
+
+const FattoDelGiorno = () => {
+  const dayIndex = Math.floor(
+    (Date.now() - new Date('2025-01-01').getTime()) / 86400000
+  ) % FATTI.length;
+  const fattoOggi = FATTI[dayIndex];
+
+  return (
+    <section className="container mx-auto px-4 max-w-6xl mb-6 relative z-10">
+      <div className="card-surface rounded-xl p-5 border-l-4 border-primary">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <p className="text-[10px] tracking-widest text-primary mb-2 font-heading">
+              IL FATTO DI OGGI
+            </p>
+            <p className="text-base text-foreground leading-relaxed font-medium">
+              {fattoOggi.testo}
+            </p>
+            {fattoOggi.data && (
+              <p className="text-[12px] text-muted-foreground/50 mt-2 font-mono">
+                {fattoOggi.data}
+              </p>
+            )}
+          </div>
+          <div className="shrink-0 text-right">
+            <p className="text-[10px] text-muted-foreground/30 font-mono whitespace-nowrap">
+              {new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long' })}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
   const [networkActive, setNetworkActive] = useState<boolean | null>(null);
@@ -204,6 +271,9 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+
+      {/* Il Fatto del Giorno */}
+      <FattoDelGiorno />
 
       {/* FAQ Section */}
       <section className="container mx-auto px-4 max-w-3xl py-12 relative z-10">
